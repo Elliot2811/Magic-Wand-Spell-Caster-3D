@@ -26,7 +26,7 @@ public class WandBase : MonoBehaviour
     protected bool drawHeld;
     protected bool drawStart;
 
-    protected Queue<Vector3> points = new Queue<Vector3>();
+    protected Queue<Vector2> points = new Queue<Vector2>();
     #endregion
 
     #endregion
@@ -76,7 +76,7 @@ public class WandBase : MonoBehaviour
     {
         lineRenderer.positionCount = points.Count;
 
-        Queue<Vector3>.Enumerator enumerator = points.GetEnumerator();
+        Queue<Vector2>.Enumerator enumerator = points.GetEnumerator();
         enumerator.MoveNext(); // Move to the first element
         for (int i = 0; i < points.Count; i++)
         {
@@ -95,7 +95,7 @@ public class WandBase : MonoBehaviour
 
     protected Vector3 WorldPosOrthographic(Vector2 mousePos)
     {
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 1f));
+        Vector2 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y));
         return worldPos;
     }
 
