@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class WandBasic : MonoBehaviour
+public class WandBase : MonoBehaviour
 {
     #region Global Varaibles
 
@@ -47,17 +47,6 @@ public class WandBasic : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (drawStart)
-        {
-            drawStart = false;
-            //StartCoroutine(LogMousePos());
-        }
-
-        if (points.Count == lineRenderer.positionCount)
-        {
-            return;
-        }
-        UpdateLineRenderer();
     }
 
     private void OnEnable()
@@ -78,6 +67,11 @@ public class WandBasic : MonoBehaviour
     #endregion
 
     #region Other Functions
+    protected virtual bool CheckLineRenedererNeedsUpdate()
+    {
+        return points.Count != lineRenderer.positionCount;
+    }
+
     protected virtual void UpdateLineRenderer()
     {
         lineRenderer.positionCount = points.Count;
@@ -115,6 +109,8 @@ public class WandBasic : MonoBehaviour
         while (drawHeld)
         {
             FindInsertWorldPos();
+            UpdateLineRenderer();
+
             yield return new WaitForSeconds(SampleSpeedSec);
         }
     }

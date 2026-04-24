@@ -1,8 +1,7 @@
-using System.Collections;
-
-public class WandClickRefresh : WandBasic
+public class WandClickRefresh : WandBase
 {
-    protected virtual void Update()
+    #region Monobehvaiour Functions
+    protected override void Update()
     {
         if (drawStart)
         {
@@ -13,11 +12,6 @@ public class WandClickRefresh : WandBasic
 
             StartCoroutine(LogMousePos());
         }
-
-        if (points.Count == lineRenderer.positionCount)
-        {
-            return;
-        }
-        UpdateLineRenderer();
     }
+    #endregion
 }
