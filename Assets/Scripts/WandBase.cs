@@ -18,6 +18,8 @@ public class WandBase : MonoBehaviour
     public float SampleSpeedSec = 0.01f;
 
     public float LineWidth = 0.1f;
+
+    public Transform WandTip;
     #endregion
 
     #region Runtime Variables
@@ -87,10 +89,14 @@ public class WandBase : MonoBehaviour
 
     protected void FindInsertWorldPos()
     {
-        Vector2 mousePosition = inputActions.Wand.Position.ReadValue<Vector2>();
-        //Debug.Log("Mouse Position: " + mousePosition);
+        //Vector2 mousePosition = inputActions.Wand.Position.ReadValue<Vector2>();
+        ////Debug.Log("Mouse Position: " + mousePosition);
 
-        points.Enqueue(ortographicView ? WorldPosOrthographic(mousePosition) : WorldPosPerspective(mousePosition));
+        //points.Enqueue(ortographicView ? WorldPosOrthographic(mousePosition) : WorldPosPerspective(mousePosition));
+        if (WandTip != null)
+        {
+            points.Enqueue(WandTip.position);
+        }
     }
 
     protected Vector3 WorldPosOrthographic(Vector2 mousePos)
