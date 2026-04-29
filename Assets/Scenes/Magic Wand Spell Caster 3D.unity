@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 351309987}
   - component: {fileID: 351309989}
   m_Layer: 0
-  m_Name: Wand Input Controller
+  m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -382,7 +382,7 @@ GameObject:
   - component: {fileID: 878079792}
   - component: {fileID: 878079791}
   m_Layer: 0
-  m_Name: Line Renderer
+  m_Name: Line
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
