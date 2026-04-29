@@ -120,15 +120,6 @@ public class InputResampler
             previousPoint = point;
         }
     }
-    private void CaculateTotalDistance()
-    {
-        Vector2 previousPoint = _originalPoints[0];
-        foreach (Vector2 point in _originalPoints)
-        {
-            _totalDistance += Vector2.Distance(previousPoint, point);
-            previousPoint = point;
-        }
-    }
 
     private void ConvertToDistanceBased()
     {
