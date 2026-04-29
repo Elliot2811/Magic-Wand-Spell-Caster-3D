@@ -33,7 +33,7 @@ public class WandMaxPoints : WandBase
                 
             UpdateLineRenderer();
 
-            yield return new WaitForSeconds(SampleSpeedSec);
+            yield return new WaitForSeconds(sampleSpeedSec);
 
             stopwatch.Stop();
             UnityEngine.Debug.Log("Time taken to log mouse position: " + stopwatch.ElapsedMilliseconds + " ms");
