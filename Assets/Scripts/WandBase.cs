@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class WandBasic : MonoBehaviour
+public class WandBase : MonoBehaviour
 {
     #region Global Varaibles
 
@@ -26,7 +26,7 @@ public class WandBasic : MonoBehaviour
     protected bool drawHeld;
     protected bool drawStart;
 
-    protected Queue<Vector3> points = new Queue<Vector3>();
+    protected Queue<Vector2> points = new Queue<Vector2>();
     #endregion
 
     #endregion
@@ -47,17 +47,6 @@ public class WandBasic : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (drawStart)
-        {
-            drawStart = false;
-            //StartCoroutine(LogMousePos());
-        }
-
-        if (points.Count == lineRenderer.positionCount)
-        {
-            return;
-        }
-        UpdateLineRenderer();
     }
 
     private void OnEnable()
@@ -78,11 +67,16 @@ public class WandBasic : MonoBehaviour
     #endregion
 
     #region Other Functions
+    protected virtual bool CheckLineRenedererNeedsUpdate()
+    {
+        return points.Count != lineRenderer.positionCount;
+    }
+
     protected virtual void UpdateLineRenderer()
     {
         lineRenderer.positionCount = points.Count;
 
-        Queue<Vector3>.Enumerator enumerator = points.GetEnumerator();
+        Queue<Vector2>.Enumerator enumerator = points.GetEnumerator();
         enumerator.MoveNext(); // Move to the first element
         for (int i = 0; i < points.Count; i++)
         {
@@ -101,7 +95,7 @@ public class WandBasic : MonoBehaviour
 
     protected Vector3 WorldPosOrthographic(Vector2 mousePos)
     {
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 1f));
+        Vector2 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y));
         return worldPos;
     }
 
@@ -115,6 +109,8 @@ public class WandBasic : MonoBehaviour
         while (drawHeld)
         {
             FindInsertWorldPos();
+            UpdateLineRenderer();
+
             yield return new WaitForSeconds(SampleSpeedSec);
         }
     }

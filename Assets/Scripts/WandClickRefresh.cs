@@ -1,12 +1,16 @@
-using System.Collections;
+using UnityEngine;
 
-public class WandClickRefresh : WandBasic
+public class WandClickRefresh : WandBase
 {
-    protected virtual void Update()
+    private bool resampledPoints = true;
+
+    #region Monobehvaiour Functions
+    protected override void Update()
     {
         if (drawStart)
         {
             drawStart = false;
+            resampledPoints = false;
             
             points.Clear();
             lineRenderer.positionCount = 0;
@@ -14,10 +18,16 @@ public class WandClickRefresh : WandBasic
             StartCoroutine(LogMousePos());
         }
 
-        if (points.Count == lineRenderer.positionCount)
+        if (!resampledPoints && !drawHeld)
         {
-            return;
+            Debug.Log("Starting resampling");
+
+            resampledPoints = true;
+
+            InputResampler inputResampler = new InputResampler(points, 10);
+            inputResampler.ResampleData();
+            inputResampler.PrintResampledPoints();
         }
-        UpdateLineRenderer();
     }
+    #endregion
 }
