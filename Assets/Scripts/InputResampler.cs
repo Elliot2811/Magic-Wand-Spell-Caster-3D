@@ -1,13 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEditor.MPE;
 
-public class CheckDrawingShape
+public class InputResampler
 {
     #region Variables
 
     #region Instantiated Variables
-    private List<Vector2> _originalPoints;
+    private Vector2[] _originalPoints;
     private int _numberOfPoints = 0;
     private float _distanceBetweenPoints = 0;
     #endregion
@@ -17,32 +16,38 @@ public class CheckDrawingShape
     private float _width = 0;
     private float _height = 0;
 
-    private Vector2[] _distanceBasedPoints;
-    private Shape _shape = Shape.Uncaculated;
+    private Vector2[] resampledPoints;
     #endregion
 
-    #endregion
-
-    #region Enums
-    public enum Shape
-    {
-        Uncaculated = 0,
-        Unknown = 1,
-        Line,
-        Circle,
-        Square,
-        Triangle,
-    }
     #endregion
 
     #region Constructors
-    public CheckDrawingShape(Queue<Vector2> TimeBasedSampledpoints, int numPointsRecaculated)
+    public InputResampler(Vector2[] timeBasedSampledPoints)
     {
-        _originalPoints = new List<Vector2>(TimeBasedSampledpoints);
+        //_originalPoints = new Vector2[timeBasedSampledPoints.Length];
+        //Array.Copy(timeBasedSampledPoints, _originalPoints, timeBasedSampledPoints.Length);
+
+        _originalPoints = (Vector2[])timeBasedSampledPoints.Clone();
+    }
+
+    public InputResampler(Queue<Vector2> timeBasedSampledpoints)
+    {
+        _originalPoints = timeBasedSampledpoints.ToArray();
+    }
+
+    public InputResampler(Vector2[] timeBasedSampledPoints, int numPointsRecaculated)
+    {
+        _originalPoints = (Vector2[])timeBasedSampledPoints.Clone();
         _numberOfPoints = numPointsRecaculated;
     }
 
-    //public CheckDrawingShape(Queue<Vector2> TimeBasedSampledpoints, float distanceBetweenPointsRecaculated)
+    public InputResampler(Queue<Vector2> TimeBasedSampledpoints, int numPointsRecaculated)
+    {
+        _originalPoints = TimeBasedSampledpoints.ToArray();
+        _numberOfPoints = numPointsRecaculated;
+    }
+
+    //public InputResampler(Queue<Vector2> TimeBasedSampledpoints, float distanceBetweenPointsRecaculated)
     //{
     //    originalPoints = new Queue<Vector2>(TimeBasedSampledpoints);
     //    distanceBetweenPoints = distanceBetweenPointsRecaculated;
@@ -53,6 +58,7 @@ public class CheckDrawingShape
     public int numberOfPoints
     {
         get { return _numberOfPoints; }
+        set { _numberOfPoints = value; }
     }
     public float distanceBetweenPoints
     {
@@ -66,52 +72,64 @@ public class CheckDrawingShape
     {
         get { return _height; }
     }
-    public Shape shape
+    public Vector2[] getPoints
     {
         get
         {
-            if (_shape == Shape.Uncaculated)
+            if (resampledPoints == null)
             {
-                CaculateShape();
+                ResampleData();
             }
-
-            return shape;
+            return resampledPoints;
         }
     }
     #endregion
 
 
     #region Normal Functions
-
-    public void CaculateShape()
+    public void ResampleData()
     {
-        if (_originalPoints == null || _originalPoints.Count <= 1)
+        if (_originalPoints == null || _originalPoints.Length <= 1)
         {
             return;
         }
 
-        CaculateTotalDistance();
-
-        if (_distanceBetweenPoints == 0)
+        if (_totalDistance == 0)
         {
-            _distanceBetweenPoints = _totalDistance / (_numberOfPoints - 1);
+            CaculateTotalDistance();
         }
+
+        if (numberOfPoints == 0)
+        {
+            return;
+        }
+
+        _distanceBetweenPoints = _totalDistance / (_numberOfPoints - 1);
 
         Debug.Log("Total Distance: " + _totalDistance);
         Debug.Log("Distance Between Points: " + _distanceBetweenPoints);
 
         ConvertTimeBasedToDistanceBased();
     }
+    private void CaculateTotalDistance()
+    {
+        Vector2 previousPoint = _originalPoints[0];
+        foreach (Vector2 point in _originalPoints)
+        {
+            _totalDistance += Vector2.Distance(previousPoint, point);
+            previousPoint = point;
+        }
+    }
 
     private void ConvertTimeBasedToDistanceBased()
     {
-        _distanceBasedPoints = new Vector2[_numberOfPoints];
-        _distanceBasedPoints[0] = _originalPoints[0];
+        resampledPoints = new Vector2[_numberOfPoints];
+        resampledPoints[0] = _originalPoints[0];
 
         float overflowDistance = 0;
         int counter = 1;
 
-        for (int i = 0; i < _originalPoints.Count - 1; i++)
+        for (int i = 0; i < _originalPoints.Length - 1; i++)
         {
             Vector2 pointA = _originalPoints[i];
             Vector2 pointB = _originalPoints[i + 1];
@@ -120,9 +138,9 @@ public class CheckDrawingShape
 
             while (distPointAToB + overflowDistance >= _distanceBetweenPoints)
             {
-                if (counter >= _distanceBasedPoints.Length)
+                if (counter >= resampledPoints.Length)
                 {
-                    Debug.LogError("Reached the maximum number of points: " + _numberOfPoints);
+                    Debug.LogWarning("Reached the maximum number of points: " + _numberOfPoints);
                     return;
                 }
 
@@ -130,7 +148,7 @@ public class CheckDrawingShape
 
                 pointA = FindPosAlongLine(pointA, pointB, distanceToNextPoint);
                 
-                _distanceBasedPoints[counter++] = pointA;
+                resampledPoints[counter++] = pointA;
                 //Debug.Log("Adding Point: " + pointA);
 
                 overflowDistance = 0f;
@@ -141,9 +159,9 @@ public class CheckDrawingShape
             overflowDistance += distPointAToB;
         }
 
-        if (_distanceBasedPoints[_numberOfPoints - 1] == Vector2.zero)
+        if (resampledPoints[_numberOfPoints - 1] == Vector2.zero)
         {
-            _distanceBasedPoints[_numberOfPoints - 1] = _originalPoints[_originalPoints.Count - 1];
+            resampledPoints[_numberOfPoints - 1] = _originalPoints[_originalPoints.Length - 1];
         }
     }
 
@@ -153,7 +171,7 @@ public class CheckDrawingShape
         return (start + direction * distanceAlongLine);
     }
 
-    private void NormalizePoints(ref List<Vector2> points)
+    public void NormalizePoints(ref List<Vector2> points)
     {
         Vector2 firstPoint = points[0];
 
@@ -182,21 +200,22 @@ public class CheckDrawingShape
             points[i] = new Vector2(normalizedX, normalizedY);
         }
 
-        Debug.Log("Normalized Points:");
+        //Debug.Log("Normalized Points:");
 
-        foreach (Vector2 point in points)
-        {
-            Debug.Log(point);
-        }
+        //foreach (Vector2 point in points)
+        //{
+        //    Debug.Log(point);
+        //}
     }
 
-    private void CaculateTotalDistance()
+
+    public void PrintResampledPoints()
     {
-        Vector2 previousPoint = _originalPoints[0];
-        foreach (Vector2 point in _originalPoints)
+        Debug.Log("Printing Resampled Points");
+
+        foreach (var point in resampledPoints)
         {
-            _totalDistance += Vector2.Distance(previousPoint, point);
-            previousPoint = point;
+            Debug.Log(point);
         }
     }
     #endregion
