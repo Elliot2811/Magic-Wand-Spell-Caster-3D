@@ -1,31 +1,51 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+// Controls and has accesable value wand tip pos for new pos
 public class WandCursor : MonoBehaviour
 {
-    public float distanceFromCamera = 5f;
-    public Transform WandTip;
+    #region Global Variables
 
-    private Camera mainCam;
+    #region Inspector Variables
+    public float distanceToCamera = 5f;
+    public Vector3 quatRotation = new Vector3(0, 0, 15);
+
+    public bool cursorVisable = true;
+    #endregion
+
+    #region Runtime Variables
     private WandInputActions inputActions;
+    private Camera mainCam;
+    #endregion
+
+    #endregion
+
+    #region Getter Setters
+    public Vector2 pos2
+    {
+        get { return transform.position;  }
+    }
+    #endregion
+
+    #region MonoBehaviour Functions
     private void Awake()
     {
-        mainCam = Camera.main;
+        Cursor.visible = cursorVisable;
+
         inputActions = new WandInputActions();
-        Cursor.visible = false; //Hide cursor
+        mainCam = Camera.main;
     }
+
     private void OnEnable() => inputActions.Enable();
     private void OnDisable() => inputActions.Disable();
+
     private void Update()
     {
-        //Read mouse position from the input system
         Vector2 mousePos = inputActions.Wand.Position.ReadValue<Vector2>();
-        //Convert screen to world point
-        Vector3 worldPos = mainCam.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, distanceFromCamera));
-        // Update wand position
-        transform.position = worldPos;
 
-        transform.rotation = Quaternion.Euler(0, 0, 15); //tilting the wand slightly
+        Vector3 worldPos = mainCam.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, distanceToCamera));
+
+        transform.position = worldPos;
+        transform.rotation = Quaternion.Euler(0, 0, 15);
     }
+    #endregion
 }
