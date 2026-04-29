@@ -1,6 +1,8 @@
+using UnityEngine;
+
 public class WandClickRefresh : WandBase
 {
-    private bool caculatedShape = true;
+    private bool resampledPoints = true;
 
     #region Monobehvaiour Functions
     protected override void Update()
@@ -8,7 +10,7 @@ public class WandClickRefresh : WandBase
         if (drawStart)
         {
             drawStart = false;
-            caculatedShape = false;
+            resampledPoints = false;
             
             points.Clear();
             lineRenderer.positionCount = 0;
@@ -16,12 +18,15 @@ public class WandClickRefresh : WandBase
             StartCoroutine(LogMousePos());
         }
 
-        if (!caculatedShape && !drawHeld)
+        if (!resampledPoints && !drawHeld)
         {
-            caculatedShape = true;
+            Debug.Log("Starting resampling");
 
-            CheckDrawingShape checkDrawingShape = new CheckDrawingShape(points, 10);
-            checkDrawingShape.CaculateShape();
+            resampledPoints = true;
+
+            InputResampler inputResampler = new InputResampler(points, 10);
+            inputResampler.ResampleData();
+            inputResampler.PrintResampledPoints();
         }
     }
     #endregion
