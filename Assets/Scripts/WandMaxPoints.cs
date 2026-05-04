@@ -4,20 +4,15 @@ using UnityEngine;
 
 public class WandMaxPoints : WandBase
 {
-    #region Inspector Variables
     public int MaxPoints = 100;
-    #endregion
 
-    #region Monobehvaiour Functions
     protected override void Start()
     {
         base.Start();
         
         StartCoroutine(LogMousePos());
     }
-    #endregion
 
-    #region Other Functions
     protected override IEnumerator LogMousePos()
     {
         Stopwatch stopwatch = Stopwatch.StartNew();
@@ -40,5 +35,4 @@ public class WandMaxPoints : WandBase
             stopwatch.Reset();
         }
     }
-    #endregion
 }

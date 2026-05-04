@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class WandClickRefresh : WandBase
 {
-    private bool resampledPoints = true;
+    private bool newData = false;
+    private bool dataConsumed = true;
 
     #region Monobehvaiour Functions
     protected override void Update()
@@ -10,7 +11,8 @@ public class WandClickRefresh : WandBase
         if (drawStart)
         {
             drawStart = false;
-            resampledPoints = false;
+            newData = false;
+            dataConsumed = false;
             
             points.Clear();
             lineRenderer.positionCount = 0;
@@ -18,16 +20,45 @@ public class WandClickRefresh : WandBase
             StartCoroutine(LogMousePos());
         }
 
-        if (!resampledPoints && !drawHeld)
+        if (!newData && !drawHeld && !dataConsumed)
         {
-            Debug.Log("Starting resampling");
-
-            resampledPoints = true;
-
-            InputResampler inputResampler = new InputResampler(points, 10);
-            inputResampler.ResampleData();
-            inputResampler.PrintResampledPoints();
+            newData = true;
         }
+    }
+    #endregion
+
+    #region Normal Functions
+    public override bool dataReady()
+    {
+        return newData;
+    }
+
+    public override Vector2[] RequestData()
+    {
+        return RequestData(false, 0);
+    }
+
+    public override Vector2[] RequestData(bool dataIsResampled, int numPoints)
+    {
+        if (!newData)
+        {
+            return new Vector2[0];
+        }
+
+        newData = false;
+        dataConsumed = true;
+
+        if (dataIsResampled)
+        {
+            InputResampler inputResampler = new InputResampler(points, numPoints);
+            inputResampler.ResampleData();
+            inputResampler.NormalizePoints();
+
+            return inputResampler.getPoints;
+        }
+
+        return points.ToArray();
+
     }
     #endregion
 }

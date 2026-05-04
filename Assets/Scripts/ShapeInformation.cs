@@ -14,24 +14,26 @@ public class ShapeInformation : MonoBehaviour
 
     //private int realNumOfVariants = 0;
 
-    public string getShapeName
+    public string GetShapeName
     {
         get { return shapeName; }
     }
 
-    public Vector2[][] getShapeData
+    public Vector2[][] GetShapeData()
     {
-        get
+        return this.GetShapeData(false, 0);
+    }
+
+    public Vector2[][] GetShapeData(bool dataIsResampled, int numPoints)
+    {
+        Vector2[][] shapeData = new Vector2[numberOfVariants][];
+
+        for (int i = 0; i < numberOfVariants; i++)
         {
-            Vector2[][] shapeData = new Vector2[numberOfVariants][];
-
-            for (int i = 0; i < numberOfVariants; i++)
-            {
-                shapeData[i] = variants[i].getPoints;
-            }
-
-            return shapeData;
+            shapeData[i] = variants[i].getPoints(dataIsResampled, numPoints);
         }
+
+        return shapeData;
     }
 
     //private void updateRealNumOfVariants()

@@ -3,24 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class WandBase : MonoBehaviour
+public abstract class WandBase : MonoBehaviour
 {
-    #region Global Varaibles
-
-    #region Component References
-
-    public LineRenderer lineRenderer;
-    protected WandInputActions inputActions;
-
-    #endregion
+    #region Global Variables
 
     #region Inspector Variables
+    public LineRenderer lineRenderer;
     public float SampleSpeedSec = 0.01f;
 
     public float LineWidth = 0.1f;
     #endregion
 
     #region Runtime Variables
+    protected WandInputActions inputActions;
+
     protected bool ortographicView = true;
 
     protected bool drawHeld;
@@ -29,6 +25,13 @@ public class WandBase : MonoBehaviour
     protected Queue<Vector2> points = new Queue<Vector2>();
     #endregion
 
+    #endregion
+
+    #region Getter Setters
+    public Queue<Vector2> GetPoints
+    {
+        get {  return points; }
+    }
     #endregion
 
     #region MonoBehaviour Functions
@@ -66,7 +69,7 @@ public class WandBase : MonoBehaviour
     }
     #endregion
 
-    #region Other Functions
+    #region Normal Functions
     protected virtual bool CheckLineRenedererNeedsUpdate()
     {
         return points.Count != lineRenderer.positionCount;
@@ -102,6 +105,27 @@ public class WandBase : MonoBehaviour
     protected Vector3 WorldPosPerspective(Vector2 mousePos)
     {
         return new Vector3(0f, 0f, 0f);
+    }
+
+    public virtual bool dataReady()
+    {
+        return !drawHeld && points.Count > 1;
+    }
+
+    public virtual Vector2[] RequestData()
+    {
+        return points.ToArray();
+    }
+
+    public virtual Vector2[] RequestData(bool dataResampled, int numPoints)
+    {
+        if (!dataResampled)
+            return points.ToArray();
+
+        InputResampler inputResampler = new InputResampler(points, numPoints);
+        inputResampler.ResampleData();
+        inputResampler.NormalizePoints();
+        return inputResampler.getPoints;
     }
 
     protected virtual IEnumerator LogMousePos()
