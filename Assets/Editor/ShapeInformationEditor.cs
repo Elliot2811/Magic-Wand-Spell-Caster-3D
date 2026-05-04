@@ -1,4 +1,5 @@
 using UnityEditor;
+using UnityEngine;
 
 [CustomEditor(typeof(ShapeInformation))]
 public class ShapeInformationEditor : Editor
@@ -11,14 +12,18 @@ public class ShapeInformationEditor : Editor
         SerializedProperty numVariantsProp = serializedObject.FindProperty("numberOfVariants");
         SerializedProperty variantsProp = serializedObject.FindProperty("variants");
 
-
         EditorGUILayout.PropertyField(shapeNameProp);
-        EditorGUILayout.PropertyField(numVariantsProp);
 
-        if (numVariantsProp.intValue != 0 && variantsProp.arraySize != numVariantsProp.intValue)
+        int newValue = EditorGUILayout.DelayedIntField("Number Of Variants", variantsProp.arraySize);
+        newValue = Mathf.Max(0, newValue);
+
+        if (newValue != variantsProp.arraySize)
         {
-            variantsProp.arraySize = (numVariantsProp.intValue > 0) ? numVariantsProp.intValue : 1;
+            variantsProp.arraySize = newValue;
         }
+
+        // Sync count to array
+        numVariantsProp.intValue = variantsProp.arraySize;
 
         EditorGUILayout.PropertyField(variantsProp, true);
 
