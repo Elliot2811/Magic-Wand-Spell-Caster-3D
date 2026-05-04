@@ -12,7 +12,7 @@ public class WandBase : MonoBehaviour
     public float sampleSpeedSec = 0.01f;
     public float lineWidth = 0.1f;
 
-    public WandCursor wandCursor;
+    public WandCursorInitialise wandCursor;
     #endregion
 
     #region Runtime Variables
@@ -42,7 +42,7 @@ public class WandBase : MonoBehaviour
 
         if (wandCursor != null)
         {
-            wandCursor = GetComponent<WandCursor>();
+            wandCursor = GetComponent<WandCursorInitialise>();
         }
 
         ortographicView = Camera.main.orthographic;

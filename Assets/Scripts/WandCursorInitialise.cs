@@ -1,7 +1,7 @@
 using UnityEngine;
 
 // Controls and has accesable value wand tip pos for new pos
-public class WandCursor : MonoBehaviour
+public class WandCursorInitialise : MonoBehaviour
 {
     #region Global Variables
 
