@@ -9,14 +9,15 @@ public abstract class WandBase : MonoBehaviour
 
     #region Inspector Variables
     public LineRenderer lineRenderer;
-    public float SampleSpeedSec = 0.01f;
+    public float sampleSpeedSec = 0.01f;
+    public float lineWidth = 0.1f;
 
-    public float LineWidth = 0.1f;
+    public WandCursorInitialise wandCursor;
     #endregion
 
     #region Runtime Variables
     protected WandInputActions inputActions;
-
+    protected Camera mainCam;
     protected bool ortographicView = true;
 
     protected bool drawHeld;
@@ -38,12 +39,18 @@ public abstract class WandBase : MonoBehaviour
     private void Awake()
     {
         inputActions = new WandInputActions();
+        mainCam = Camera.main;
     }
 
     protected virtual void Start()
     {
-        lineRenderer.startWidth = LineWidth;
-        lineRenderer.endWidth = LineWidth;
+        lineRenderer.startWidth = lineWidth;
+        lineRenderer.endWidth = lineWidth;
+
+        if (wandCursor != null)
+        {
+            wandCursor = GetComponent<WandCursorInitialise>();
+        }
 
         ortographicView = Camera.main.orthographic;
     }
@@ -90,6 +97,12 @@ public abstract class WandBase : MonoBehaviour
 
     protected void FindInsertWorldPos()
     {
+        if (wandCursor != null)
+        {
+            // Do something 
+            points.Enqueue(wandCursor.pos2);
+        }
+
         Vector2 mousePosition = inputActions.Wand.Position.ReadValue<Vector2>();
         //Debug.Log("Mouse Position: " + mousePosition);
 
@@ -98,7 +111,7 @@ public abstract class WandBase : MonoBehaviour
 
     protected Vector3 WorldPosOrthographic(Vector2 mousePos)
     {
-        Vector2 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y));
+        Vector2 worldPos = mainCam.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y));
         return worldPos;
     }
 
@@ -135,7 +148,7 @@ public abstract class WandBase : MonoBehaviour
             FindInsertWorldPos();
             UpdateLineRenderer();
 
-            yield return new WaitForSeconds(SampleSpeedSec);
+            yield return new WaitForSeconds(sampleSpeedSec);
         }
     }
     #endregion  
