@@ -1,26 +1,20 @@
 using UnityEditor;
-using UnityEngine;
 
-[CustomEditor(typeof(ShapeVariantInformation))]
-public class ShapeVariantInformationEditor : Editor
+[CustomEditor(typeof(ShapeVariantSO))]
+public class ShapeVariantSOEditor : Editor
 {
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
 
-        SerializedProperty numPointsProp = serializedObject.FindProperty("numberOfPoints");
         SerializedProperty pointsProp = serializedObject.FindProperty("points");
 
         int newValue = EditorGUILayout.DelayedIntField("Number Of Points", pointsProp.arraySize);
-        newValue = Mathf.Max(0, newValue);
+
+        if (newValue < 0) newValue = 0;
 
         if (newValue != pointsProp.arraySize)
-        {
             pointsProp.arraySize = newValue;
-        }
-
-        // Sync count to array
-        numPointsProp.intValue = pointsProp.arraySize;
 
         EditorGUILayout.PropertyField(pointsProp, true);
 
