@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,9 +13,7 @@ public class Temp : MonoBehaviour
         points.Enqueue(new Vector2(0, 1));
         points.Enqueue(new Vector2(0, 0));
 
-        InputResampler input = new InputResampler(points, 9);
-
-        input.ResampleData();
-        input.PrintResampledPoints();
+        Vector2[] newPoints = PointsManipulation.ResampleAndNormalize(points, 9, true);
+        PointsManipulation.PrintPoints(newPoints);
     }
 }
