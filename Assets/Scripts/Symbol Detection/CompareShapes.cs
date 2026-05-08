@@ -46,6 +46,7 @@ public static class CompareShapes
             }
         }
 
+        Debug.Log($"Best shape accuracy of {bestShapeAccuracy} from {bestMatch.ShapeName}");
         return PassedMinAccuracy(bestShapeAccuracy) ? bestMatch : null;
     }
         
@@ -74,7 +75,7 @@ public static class CompareShapes
         }
 
         //Debug.Log($"totalAcc: {totalAcc}");
-        Debug.Log($"AverageAcc: {totalAcc / shapePoints.Length}");
+        //Debug.Log($"AverageAcc: {totalAcc / shapePoints.Length}");
 
         return (totalAcc / shapePoints.Length);
     }

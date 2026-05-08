@@ -4,20 +4,28 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    [SerializeField] private ShapesStorageSO shapesCollection; 
-    [SerializeField] [Min(2)]private int pointCount = 64;
-    [SerializeField] private bool conserveScale = true;
+    [Header("Shapes to compare")]
+    [SerializeField] private ShapesStorageSO shapesCollection;
 
-    [Range(0f, 1f)] public static float MinAccuracy = 0.8f;
-    [Min(1)] public static int DeviationPower = 4;
+    [Space]
+    [Header("Display matched shape")]
+    [SerializeField] private bool displayClosestShape = false;
+    [SerializeField] private LineRenderer lineRenderer;
+    [SerializeField] private float lineWidth = 0.1f;
+    [SerializeField] private float displayPercentage = 0.5f;
 
-    //[SerializeField] [Range(0f, 1f)] private float minAccuracy = 0.8f;
-    //[SerializeField] [Min(1)] private int deviationPower = 1;
+    [Space]
+    [Header("Points matching options")]
+    [SerializeField][Min(2)] private int pointCount = 64;
+
+    [Space]
+    [Header("Shapes comparision options")]
+    [SerializeField][Range(0f, 1f)] private float minAccuracy = 0.8f;
+    [SerializeField][Min(1)] private int deviationPower = 4;
 
     public static int PointCount { get; private set; }
-    public static bool ConserveScale { get; private set; }
-    //public static float MinAccuracy { get; private set; }
-    //public static int DeviationPower { get; private set; }
+    public static float MinAccuracy { get; private set; }
+    public static int DeviationPower { get; private set; }
 
     private Vector2[] points;
     private bool newDrawingData = false;
@@ -40,9 +48,8 @@ public class GameManager : MonoBehaviour
         }
 
         PointCount = pointCount;
-        //ConserveScale = conserveScale;
-        //MinAccuracy = minAccuracy;
-        //DeviationPower = deviationPower;
+        MinAccuracy = minAccuracy;
+        DeviationPower = deviationPower;
     }
 
     private void Update()
@@ -52,7 +59,7 @@ public class GameManager : MonoBehaviour
 
         newDrawingData = false;
 
-        points = PointsManipulation.ResampleAndNormalize(points, pointCount, conserveScale);
+        points = PointsManipulation.ResampleAndNormalize(points, PointCount);
 
         ShapeInfoSO shapeInfo = CompareShapes.FindBestMatch(points, shapesCollection);
 
@@ -72,12 +79,13 @@ public class GameManager : MonoBehaviour
 
     private void UpdateDrawing(Vector2[] receivedPoints) 
     {
-        Debug.Log("GameManager: Recieved data");
+        //Debug.Log("GameManager: Recieved data");
         points = receivedPoints;
         newDrawingData = true;
     }
     #endregion
 
+    #region Display / Print Shape
     private void PrintBestShape(ShapeInfoSO shapeInfo)
     {
         if (shapeInfo == null)
@@ -85,4 +93,5 @@ public class GameManager : MonoBehaviour
         else
             Debug.Log($"Shape is: {shapeInfo.ShapeName}");
     }
+    #endregion
 }

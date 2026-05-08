@@ -14,6 +14,17 @@ public class ShapeInfoSO : ScriptableObject, IEnumerable<ShapeVariantSO>
 
     public IEnumerable<ShapeVariantSO> Variants => variantsSet;
 
+    public bool ValidShape
+    {
+        get
+        {
+            if (variantsSet == null)
+                BuildVariantSet();
+
+            return variantsSet.Count > 0;
+        }
+    }
+
     private void OnEnable()
     {
         BuildVariantSet();
@@ -33,21 +44,13 @@ public class ShapeInfoSO : ScriptableObject, IEnumerable<ShapeVariantSO>
                 continue;
             }
 
-            if (variant.CheckValidDrawing())
+            if (variant.ValidDrawing)
                 if (!variantsSet.Add(variant))
                     Debug.LogWarning($"[{name}]: Duplicate variant in {shapeName}");
         }
 
         if (variantsSet.Count == 0)
             Debug.LogWarning($"[{name}]: No valid variants in {shapeName}.");
-    }
-
-    public bool CheckValidShape()
-    {
-        if (variantsSet == null)
-            BuildVariantSet();
-
-        return variantsSet.Count > 0;
     }
 
     public IEnumerator<ShapeVariantSO> GetEnumerator() => variantsSet.GetEnumerator();
