@@ -19,7 +19,7 @@ public class ShapeVariantSO : ScriptableObject
         {
             if (!isInitialized)
             {
-                if (!CheckValidDrawing())
+                if (!ValidDrawing)
                     return null;
 
                 CaculateNewPoints();
@@ -27,30 +27,32 @@ public class ShapeVariantSO : ScriptableObject
             return recalcAndNormPoints;
         }
     }
+    public bool ValidDrawing
+    {
+        get
+        {
+            if (points.Length <= 1)
+            {
+                Debug.LogWarning($"[{name}]: Not enough points to resample");
+                return false;
+            }
+
+            Vector2 firstPoint = points[0];
+            for (int i = 1; i < points.Length; i++)
+            {
+                if (firstPoint != points[i])
+                    return true;
+            }
+
+            Debug.LogWarning($"[{name}]: Variant points should not be in the same place.");
+            return false;
+        }
+    }
 
     private void OnEnable()
     {
         isInitialized = false;
         recalcAndNormPoints = null;
-    }
-
-    public bool CheckValidDrawing()
-    {
-        if (points.Length <= 1)
-        {
-            Debug.LogWarning($"[{name}]: Not enough points to resample");
-            return false;
-        }
-
-        Vector2 firstPoint = points[0];
-        for (int i = 1; i < points.Length; i++)
-        {
-            if (firstPoint != points[i])
-                return true;
-        }
-
-        Debug.LogWarning($"[{name}]: Variant points should not be in the same place.");
-        return false;
     }
 
     /// <summary>
@@ -68,12 +70,7 @@ public class ShapeVariantSO : ScriptableObject
             Debug.LogWarning($"[{name}]: GameManager Point Count must be greater than 1.");
         }
 
-        recalcAndNormPoints =
-            PointsManipulation.ResampleAndNormalize(
-                points,
-                GameManager.PointCount,
-                GameManager.ConserveScale
-                );
+        recalcAndNormPoints = PointsManipulation.ResampleAndNormalize(points, GameManager.PointCount);
 
         isInitialized = true;
     }

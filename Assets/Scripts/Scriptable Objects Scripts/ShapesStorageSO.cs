@@ -27,7 +27,7 @@ public class ShapesStorageSO : ScriptableObject, IEnumerable<ShapeInfoSO>
                 continue;
             }
 
-            if (shape.CheckValidShape())
+            if (shape.ValidShape)
                 if (!shapesSet.Add(shape))
                     Debug.LogWarning($"[{name}]: Duplicate {shape.ShapeName} shape in ShapesStorage");
         }

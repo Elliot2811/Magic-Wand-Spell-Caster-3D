@@ -165,10 +165,10 @@ public static class PointsManipulation
     /// <param name="preserveScale">
     /// Drawing keeps scale (true). Drawing is stretched (false).
     /// </param>
-    public static Vector2[] NormalizePoints(Queue<Vector2> points, bool preserveScale)
+    public static Vector2[] NormalizePoints(Queue<Vector2> points)
     {
         if (points != null)
-            return NormalizePoints(points.ToArray(), preserveScale);
+            return NormalizePoints(points.ToArray());
 
         Debug.LogWarning("[PointsManipulation.NormalizePoints]: points not found.");
         return null;
@@ -179,7 +179,7 @@ public static class PointsManipulation
     /// <param name="preserveScale">
     /// Drawing keeps scale (true). Drawing is stretched (false).
     /// </param>
-    public static Vector2[] NormalizePoints(Vector2[] points, bool preserveScale)
+    public static Vector2[] NormalizePoints(Vector2[] points)
     {
         if (points == null)
         {
@@ -195,20 +195,6 @@ public static class PointsManipulation
 
         PointBounds bounds = GetBounds(points);
 
-        return (preserveScale) ?
-            NormalizeKeepScale(points, bounds) :
-            NormalizeStretch(points, bounds);
-    }
-
-    /// <summary>
-    /// Normalize the Vector2 x and y values to be between 0 to 1.
-    /// Keep proportions of drawing.
-    /// </summary>
-    /// <param name="points"></param>
-    /// <param name="bounds"></param>
-    /// <returns></returns>
-    private static Vector2[] NormalizeKeepScale(Vector2[] points, PointBounds bounds)
-    {
         float scale = Mathf.Max(bounds.Width, bounds.Height);
 
         if (scale == 0)
@@ -217,44 +203,23 @@ public static class PointsManipulation
             return null;
         }
 
+        bool flatX = bounds.Width == 0;
+        bool flatY = bounds.Height == 0;
+
+        float offsetX = flatX ? 0f : (scale - bounds.Width) / (2f * scale);
+        float offsetY = flatY ? 0f : (scale - bounds.Height) / (2f * scale);
+
         Vector2[] results = new Vector2[points.Length];
         for (int i = 0; i < points.Length; i++)
         {
             Vector2 point = points[i];
             results[i] = new Vector2(
-                (point.x - bounds.MinX) / scale,
-                (point.y - bounds.MinY) / scale
+                flatX ? 0.5f : offsetX + (point.x - bounds.MinX) / scale,
+                flatY ? 0.5f : offsetY + (point.y - bounds.MinY) / scale
                 );
         }
 
-        return results;
-    }
-
-    /// <summary>
-    /// Normalize the Vector2 x and y values to be between 0 to 1.
-    /// Stretches drawing.  
-    /// </summary>
-    private static Vector2[] NormalizeStretch(Vector2[] points, PointBounds bounds)
-    {
-        if (bounds.Width == 0 && bounds.Height == 0)
-        {
-            Debug.LogWarning("[PointsManipulation.NormalizeStretch]: width or height should not be 0.");
-            return null;
-        }
-
-        float scaleX = (bounds.Width == 0 ? 1f : bounds.Width);
-        float scaleY = (bounds.Height == 0 ? 1f : bounds.Height);
-
-        Vector2[] results = new Vector2[points.Length];
-
-        for (int i = 0; i < points.Length; i++)
-        {
-            Vector2 point = points[i];
-            results[i] = new Vector2(
-                (point.x - bounds.MinX) / scaleX,
-                (point.y - bounds.MinY) / scaleY
-                );
-        }
+        PrintPoints(results);
 
         return results;
     }
@@ -271,7 +236,7 @@ public static class PointsManipulation
     /// <param name="preserveScale">
     /// Drawing keeps scale (true). Drawing is stretched (false).
     /// </param>
-    public static Vector2[] ResampleAndNormalize(Queue<Vector2> points, int newNumberOfPoints, bool preserveScale)
+    public static Vector2[] ResampleAndNormalize(Queue<Vector2> points, int newNumberOfPoints)
     {
         if (points == null)
         {
@@ -279,7 +244,7 @@ public static class PointsManipulation
             return null;
         }
 
-        return ResampleAndNormalize(points.ToArray(), newNumberOfPoints, preserveScale);
+        return ResampleAndNormalize(points.ToArray(), newNumberOfPoints);
     }
     /// <summary>
     /// Resamples original points to
@@ -289,7 +254,7 @@ public static class PointsManipulation
     /// <param name="preserveScale">
     /// Drawing keeps scale (true). Drawing is stretched (false).
     /// </param>
-    public static Vector2[] ResampleAndNormalize(Vector2[] points, int newNumberOfPoints, bool preserveScale)
+    public static Vector2[] ResampleAndNormalize(Vector2[] points, int newNumberOfPoints)
     {
         if (points == null)
         {
@@ -298,7 +263,7 @@ public static class PointsManipulation
         }
 
         Vector2[] newPoints = ResamplePoints(points, newNumberOfPoints);
-        return NormalizePoints(newPoints, preserveScale);
+        return NormalizePoints(newPoints);
     }
 
     /// <summary>
@@ -368,7 +333,7 @@ public static class PointsManipulation
 
             Vector2 point = points[i];
 
-            result += $"({point.x}, {point.y}),\t ";
+            result += $"({point.x}, {point.y})".PadRight(10);
         }
 
         Debug.Log(result);

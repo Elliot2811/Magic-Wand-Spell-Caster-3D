@@ -13,7 +13,7 @@ public class Temp : MonoBehaviour
         points.Enqueue(new Vector2(0, 1));
         points.Enqueue(new Vector2(0, 0));
 
-        Vector2[] newPoints = PointsManipulation.ResampleAndNormalize(points, 9, true);
+        Vector2[] newPoints = PointsManipulation.ResampleAndNormalize(points, 9);
         PointsManipulation.PrintPoints(newPoints);
     }
 }

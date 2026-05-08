@@ -472,9 +472,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shapesCollection: {fileID: 11400000, guid: fc964e86218201a4098d0a9826b939c0, type: 2}
+  displayClosestShape: 0
+  lineRenderer: {fileID: 0}
+  lineWidth: 0.1
+  displayPercentage: 0.5
   pointCount: 64
-  conserveScale: 1
-  minAccuracy: 0.6
+  conserveScale: 0
+  minAccuracy: 0.8
+  deviationPower: 4
 --- !u!4 &1118966180
 Transform:
   m_ObjectHideFlags: 0

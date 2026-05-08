@@ -15,3 +15,4 @@ MonoBehaviour:
   shapeName: Line
   variants:
   - {fileID: 11400000, guid: 9b37b6cd27d690741af076bd08df1efd, type: 2}
+  - {fileID: 11400000, guid: 669b3b2f37260a44b8d80146ba13c41e, type: 2}
