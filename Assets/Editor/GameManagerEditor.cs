@@ -19,9 +19,10 @@ public class GameManagerEditor : Editor
             if ((
                 prop.name == "lineRenderer" ||
                 prop.name == "lineWidth" ||
-                prop.name == "displayPercentage"
+                prop.name == "displayPercentage" ||
+                prop.name == "offset"
                 ) &&
-                !serializedObject.FindProperty("displayClosestShape").boolValue
+                !serializedObject.FindProperty("displayBestShape").boolValue
                 )
                 continue;
 

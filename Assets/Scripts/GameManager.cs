@@ -9,10 +9,11 @@ public class GameManager : MonoBehaviour
 
     [Space]
     [Header("Display matched shape")]
-    [SerializeField] private bool displayClosestShape = false;
+    [SerializeField] private bool displayBestShape = false;
     [SerializeField] private LineRenderer lineRenderer;
     [SerializeField] private float lineWidth = 0.1f;
     [SerializeField] private float displayPercentage = 0.5f;
+    [SerializeField] private Vector2 offset = new Vector2(0f, 0f); 
 
     [Space]
     [Header("Points matching options")]
@@ -26,6 +27,8 @@ public class GameManager : MonoBehaviour
     public static int PointCount { get; private set; }
     public static float MinAccuracy { get; private set; }
     public static int DeviationPower { get; private set; }
+
+    private Camera mainCamera;
 
     private Vector2[] points;
     private bool newDrawingData = false;
@@ -43,8 +46,19 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         if (shapesCollection == null)
+            Debug.LogError("[GameManager]: shapesCollection not found.");
+
+        if (displayBestShape)
         {
-            Debug.LogError("[GameManager]: shapes collection not found");
+            if (lineRenderer == null)
+                Debug.LogError("[GameManager]: lineRenderer not found.");
+            else
+            {
+                lineRenderer.startWidth = lineWidth;
+                lineRenderer.endWidth = lineWidth;
+
+                mainCamera = Camera.main;
+            }
         }
 
         PointCount = pointCount;
@@ -64,6 +78,9 @@ public class GameManager : MonoBehaviour
         ShapeInfoSO shapeInfo = CompareShapes.FindBestMatch(points, shapesCollection);
 
         PrintBestShape(shapeInfo);
+
+        if (displayBestShape)
+            DisplayBestShape(shapeInfo);
     }
 
     #region Subscribe to wand and drawing data sent
@@ -86,6 +103,32 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Display / Print Shape
+    private void DisplayBestShape(ShapeInfoSO shapeInfo)
+    {
+        if (shapeInfo == null)
+        {
+            lineRenderer.positionCount = 0;
+            return;
+        }
+
+        Vector2[] shapeData = shapeInfo.RandomVariantData;
+
+        if (shapeData == null || shapeData.Length <= 1)
+        {
+            lineRenderer.positionCount = 0;
+            return;
+        }
+
+        Vector2[] rescaledData = PointsManipulation.ScaleToScreen(shapeData, mainCamera, displayPercentage, offset);
+
+        lineRenderer.positionCount = rescaledData.Length;
+        
+        for (int i = 0; i < rescaledData.Length; i++)
+        {
+            lineRenderer.SetPosition(i, rescaledData[i]);
+        }
+    }
+
     private void PrintBestShape(ShapeInfoSO shapeInfo)
     {
         if (shapeInfo == null)
