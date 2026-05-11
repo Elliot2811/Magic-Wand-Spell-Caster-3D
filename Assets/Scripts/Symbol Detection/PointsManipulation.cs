@@ -161,10 +161,8 @@ public static class PointsManipulation
     #region Normalizing Points
     /// <summary>
     /// Normalize the Vector2 x and y values to be between 0 to 1.
+    /// If axis not spanning 0-1, centers the drawing.
     /// </summary>
-    /// <param name="preserveScale">
-    /// Drawing keeps scale (true). Drawing is stretched (false).
-    /// </param>
     public static Vector2[] NormalizePoints(Queue<Vector2> points)
     {
         if (points != null)
@@ -175,10 +173,8 @@ public static class PointsManipulation
     }
     /// <summary>
     /// Normalize the Vector2 x and y values to be between 0 to 1.
+    /// If axis not spanning 0-1, centers the drawing.
     /// </summary>
-    /// <param name="preserveScale">
-    /// Drawing keeps scale (true). Drawing is stretched (false).
-    /// </param>
     public static Vector2[] NormalizePoints(Vector2[] points)
     {
         if (points == null)
@@ -219,7 +215,7 @@ public static class PointsManipulation
                 );
         }
 
-        PrintPoints(results);
+        //PrintPoints(results);
 
         return results;
     }
@@ -312,7 +308,88 @@ public static class PointsManipulation
     }
 
     /// <summary>
-    /// Prints points in rows of 5 
+    /// Move the center of the points to (0.5, 0.5).
+    /// </summary>
+    public static Vector2[] CenterPoints(Vector2[] points)
+    {
+        if (points == null || points.Length == 0)
+            return null;
+
+        PointBounds bounds = GetBounds(points);
+        Vector2 center = new Vector2(
+            (bounds.MinX + bounds.MaxX) / 2,
+            (bounds.MinY + bounds.MaxY) / 2
+            );
+
+        Vector2 offset = new Vector2(0.5f, 0.5f) - center;
+
+        Vector2[] results = new Vector2[points.Length];
+
+        for (int i = 0; i <  points.Length; i++)
+        {
+            results[i] = points[i] + offset;
+        }
+
+        return results;
+    }
+
+    #region Scale To Screen Functions
+    /// <summary>
+    /// Rescales the points to a percentage of the screen size.
+    /// </summary>
+    public static Vector2[] ScaleToScreen(Vector2[] points, Camera mainCamera, float percentage)
+    {
+        return ScaleToScreen(points, mainCamera.orthographicSize, mainCamera.aspect, percentage, new(0, 0));
+    }
+
+    /// <summary>
+    /// Rescales the points to a percentage of the screen size.
+    /// </summary>
+    public static Vector2[] ScaleToScreen(Vector2[] points, Camera mainCamera, float percentage, Vector2 offset)
+    {
+        return ScaleToScreen(points, mainCamera.orthographicSize, mainCamera.aspect, percentage, offset);
+    }
+
+    /// <summary>
+    /// Rescales the points to a percentage of the screen size.
+    /// </summary>
+    public static Vector2[] ScaleToScreen(Vector2[] points, float orthographicSize, float aspectRatio, float percentage)
+    {
+        return ScaleToScreen(points, orthographicSize, aspectRatio, percentage, new(0, 0));
+    }
+
+    /// <summary>
+    /// Rescales the points to a percentage of the screen size.
+    /// </summary>
+    public static Vector2[] ScaleToScreen(Vector2[] points, float orthographicSize, float aspectRatio, float percentage, Vector2 offset)
+    {
+        if (points == null || points.Length <= 1)
+            return null;
+
+        float halfHeight = orthographicSize;
+        float halfWidth = aspectRatio * orthographicSize;
+        float halfScale = Mathf.Min(halfWidth, halfHeight);
+
+        Vector2[] centred = CenterPoints(points);
+
+        Vector2[] results = new Vector2[points.Length];
+
+        for (int i = 0; i < points.Length; i++)
+        {
+            Vector2 point = centred[i];
+
+            results[i] = new Vector2(
+                (point.x - 0.5f) * halfScale * 2 * percentage + offset.x,
+                (point.y - 0.5f) * halfScale * 2 * percentage + offset.y
+                );
+        }
+
+        return results;
+    }
+    #endregion
+
+    /// <summary>
+    /// Prints points to the console in rows of 5 
     /// </summary>
     public static void PrintPoints(Vector2[] points)
     {

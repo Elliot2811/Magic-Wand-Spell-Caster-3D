@@ -9,11 +9,23 @@ public class Temp : MonoBehaviour
     {
         points.Enqueue(new Vector2(0, 0));
         points.Enqueue(new Vector2(1, 0));
-        points.Enqueue(new Vector2(1, 1));
-        points.Enqueue(new Vector2(0, 1));
-        points.Enqueue(new Vector2(0, 0));
 
-        Vector2[] newPoints = PointsManipulation.ResampleAndNormalize(points, 9);
-        PointsManipulation.PrintPoints(newPoints);
+        PointsManipulation.PrintPoints(points.ToArray());
+
+        Vector2[] resampledPoints = PointsManipulation.ResamplePoints(points, 10);
+
+        PointsManipulation.PrintPoints(resampledPoints);
+
+        Vector2[] normalizedPoints = PointsManipulation.NormalizePoints(resampledPoints);
+
+        PointsManipulation.PrintPoints(normalizedPoints);
+
+        Vector2[] scaledUpPoints = PointsManipulation.ScaleToScreen(normalizedPoints, Camera.main, 0.5f);
+
+        PointsManipulation.PrintPoints(scaledUpPoints);
+
+        scaledUpPoints = PointsManipulation.ScaleToScreen(normalizedPoints, Camera.main, 0.75f);
+
+        PointsManipulation.PrintPoints(scaledUpPoints);
     }
 }

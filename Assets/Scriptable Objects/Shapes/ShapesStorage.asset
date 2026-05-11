@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shapes:
   - {fileID: 11400000, guid: fc4c27c7d368ac2458bacd70dd726664, type: 2}
+  - {fileID: 11400000, guid: 8afbf38d9c1d493418f5343165dad675, type: 2}
+  - {fileID: 11400000, guid: b0f17c183a9d1a9458e9a64a8aa14202, type: 2}

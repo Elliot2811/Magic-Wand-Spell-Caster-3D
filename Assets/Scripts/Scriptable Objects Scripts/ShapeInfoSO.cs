@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewShape", menuName = "Shapes/Shape Info")]
@@ -14,6 +15,11 @@ public class ShapeInfoSO : ScriptableObject, IEnumerable<ShapeVariantSO>
 
     public IEnumerable<ShapeVariantSO> Variants => variantsSet;
 
+    private void OnEnable()
+    {
+        BuildVariantSet();
+    }
+
     public bool ValidShape
     {
         get
@@ -25,9 +31,17 @@ public class ShapeInfoSO : ScriptableObject, IEnumerable<ShapeVariantSO>
         }
     }
 
-    private void OnEnable()
+    public Vector2[] RandomVariantData
     {
-        BuildVariantSet();
+        get
+        {
+            if (variantsSet == null)
+                BuildVariantSet();
+
+            if (variantsSet.Count > 0)
+                return variantsSet.First().OriginalPoints;
+            return null;
+        }
     }
 
     public void BuildVariantSet()
