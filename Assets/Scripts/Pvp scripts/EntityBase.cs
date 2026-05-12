@@ -8,14 +8,8 @@ using static UnityEngine.GraphicsBuffer;
 public abstract class EntityBase : MonoBehaviour
 {
     #region Variables
-    protected bool playerAlive = true;
-    protected float playerHealth = 100.0F;
-    protected int playerMana = 100;
-    protected float playerDMG = 10.00F;
-    protected float playerHaste = 10.00F;
-    protected int playerManaRegenRate = 10;
-
     public GameObject prefab;
+    public GameObject currentObject;
     public BasicBulletSpell projectileScript1;
     public enum playerID
     {
@@ -26,36 +20,42 @@ public abstract class EntityBase : MonoBehaviour
         none
     }
     public playerID playerIDCurrentSet;
+
+    protected bool playerAlive = true;
+    protected float playerHealth = 100.0F;
+    protected int playerMana = 100;
+    protected float playerDMG = 10.00F;
+    protected float playerHaste = 10.00F;
+    protected int playerManaRegenRate = 10;
     #endregion
 
-    #region Player Functions
+    #region Entity Functions
     public void InitialisePlayerNBots()
     {
         switch (playerIDCurrentSet)
         {
             case playerID.none:
                 gameObject.SetActive(false);
-                Debug.Log("Object is hidden");
                 break;
             case playerID.playerLeft:
                 gameObject.SetActive(true);
                 transform.position = new Vector3(-5.5F, 1, 0);
-                Debug.Log("Player1 is set left");
+                transform.Rotate(0, 90F, 0);
                 break;
             case playerID.botLeft:
                 gameObject.SetActive(true);
                 transform.position = new Vector3(-5.5F, 1, 0);
-                Debug.Log("Bot1 is set left");
+                transform.Rotate(0, 90F, 0);
                 break;
             case playerID.playerRight:
                 gameObject.SetActive(true);
                 transform.position = new Vector3(5.5F, 1, 0);
-                Debug.Log("Player2 is set right");
+                transform.Rotate(0, -90F, 0);
                 break;
             case playerID.botRight:
                 gameObject.SetActive(true);
                 transform.position = new Vector3(5.5F, 1, 0);
-                Debug.Log("Bot2 is set right");
+                transform.Rotate(0, -90F, 0);
                 break;
 
         }
@@ -82,23 +82,19 @@ public abstract class EntityBase : MonoBehaviour
         switch (playerIDCurrentSet)
         {
             case playerID.none:
-                Debug.Log("Error - Player ID when firing spell is incorrect and doesn't exist");
+                Debug.Log("Error - Player ID when firing spell is incorrect and is set to None");
                 break;
             case playerID.playerLeft:
-                spellProjectileScript1.projectileDir = BasicBulletSpell.ProjectileDirections.left;
-                Debug.Log($"Bullet from {projectileScript1.projectileDir} side");
+                spellProjectileScript1.SetOwner(currentObject);
                 break;
             case playerID.botLeft:
-                spellProjectileScript1.projectileDir = BasicBulletSpell.ProjectileDirections.left;
-                Debug.Log($"Bullet from {projectileScript1.projectileDir} side");
+                spellProjectileScript1.SetOwner(currentObject);
                 break;
             case playerID.playerRight:
-                spellProjectileScript1.projectileDir = BasicBulletSpell.ProjectileDirections.right;
-                Debug.Log($"Bullet from {projectileScript1.projectileDir} side");
+                spellProjectileScript1.SetOwner(currentObject);
                 break;
             case playerID.botRight:
-                spellProjectileScript1.projectileDir = BasicBulletSpell.ProjectileDirections.right;
-                Debug.Log($"Bullet from {projectileScript1.projectileDir} side");
+                spellProjectileScript1.SetOwner(currentObject);
                 break;
         }
         Debug.Log($"{playerIDCurrentSet} launched spell");
@@ -118,12 +114,12 @@ public abstract class EntityBase : MonoBehaviour
     //    }
     //}
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (!other.CompareTag("Projectile"))
-            return;
-        //PlayerPVP.bulletHitPlayer1Event?.Invoke();
-        projectileScript1.destroyProjectile();
-    }
+    //void OnTriggerEnter(Collider other)
+    //{
+    //    if (!other.CompareTag("Projectile"))
+    //        return;
+    //    //PlayerPVP.bulletHitPlayer1Event?.Invoke();
+    //    projectileScript1.DestroyProjectile();
+    //}
     #endregion
 }

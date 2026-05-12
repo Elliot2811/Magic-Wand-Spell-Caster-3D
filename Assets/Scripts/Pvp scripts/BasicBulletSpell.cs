@@ -4,62 +4,58 @@ using UnityEngine;
 
 public class BasicBulletSpell : MonoBehaviour
 {
-    private int bulletSpeed = 10;
-    public enum ProjectileDirections
-    {
-        left,
-        right
-    }
-    public ProjectileDirections projectileDir;
-
-    //void OnTriggerEnter(Collider other)
-    //{
-    //    if (!other.CompareTag("Player"))
-    //        return;
-    //    //PlayerPVP.bulletHitPlayer1Event?.Invoke();
-    //    Destroy(gameObject);
-    //}
-
-    public void destroyProjectile()
-    {
-        Destroy(gameObject);
-    }
-
+    private int projectileSpeed = 10;
+    private GameObject SpellSpawnPosRot;
+    //public TempGameManager TempGameManagerScript;
     private void Start()
     {
-        //--------Original method where projectile determines its direction based of where it got instanciated-------
-        //if (transform.position.x < 0 )
-        //{
-        //    projectileDir = ProjectileDirections.left;
-        //    Debug.Log("Player is Left");
-        //}
-        //else if (transform.position.x > 0)
-        //{
-        //    projectileDir = ProjectileDirections.right;
-        //    Debug.Log("Player is Right");
-        //}
-        //else
-        //{
-        //    Debug.Log("Error - cannot determine target because prefab is at x = 0");
-        //}
-
-        switch (projectileDir)
-        {
-            case ProjectileDirections.left:
-                transform.position = new Vector3(-4.8F, 1.2F, 0);
-                break;
-            case ProjectileDirections.right:
-                transform.position = new Vector3(4.8F, 1.2F, 0);
-                break;
-        }
+        //TempGameManagerScript = TempGameManager2.GetComponent<TempGameManager>();
+        transform.SetPositionAndRotation(
+            SpellSpawnPosRot.transform.position,
+            SpellSpawnPosRot.transform.rotation
+        );
     }
-
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.C))
         {
-            destroyProjectile();
+            Destroy(gameObject);
             Debug.Log("Removed all the projectiles");
+        }
+
+        //Make the projectile travel at a constant speed forward
+        transform.position += transform.forward * projectileSpeed * Time.deltaTime;
+    }
+
+    public void SetOwner(GameObject objectRef)
+    {
+        SpellSpawnPosRot = objectRef;
+    }
+
+    //protected void OnTriggerEnter(Collider other)
+    //{
+    //    var target = other.GetComponent<EntityBase>();
+    //    if (target != null)
+    //    {
+    //        target.TakeDamage(20);
+    //    }
+    //}
+
+    void OnTriggerEnter(Collider other)
+    {
+        //if (!(other.CompareTag("Player") || other.CompareTag("Border")))
+        //    return;
+        Debug.Log("test");
+
+        if (other.CompareTag("Player"))
+        {
+            Destroy(gameObject);
+            Debug.Log("Player hit the opponent!");
+        }
+        else if (other.CompareTag("Border"))
+        {
+            Destroy(gameObject);
+            Debug.Log("Projectile missed!");
         }
     }
 }

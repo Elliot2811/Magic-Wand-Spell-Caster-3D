@@ -10,6 +10,7 @@ public class PlayerPVP : EntityBase
     void Start()
     {
         //bulletHitPlayer1Event += bulletHitPlayer1Event;
+        currentObject = transform.GetChild(0).gameObject;
     }
     void Update()
     {

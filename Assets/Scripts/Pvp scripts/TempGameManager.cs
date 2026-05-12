@@ -17,6 +17,7 @@ public class TempGameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            //Setting each script to their roles(enum values) in the script
             leftPlayerScript = leftPlayer.GetComponent<PlayerPVP>();
             rightPlayerScript = rightPlayer.GetComponent<PlayerPVP>();
             player3Script = player3.GetComponent<PlayerPVP>();
