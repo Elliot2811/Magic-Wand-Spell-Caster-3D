@@ -1,9 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using static BasicBulletSpell;
-using static UnityEngine.GraphicsBuffer;
 
 public abstract class EntityBase : MonoBehaviour
 {
