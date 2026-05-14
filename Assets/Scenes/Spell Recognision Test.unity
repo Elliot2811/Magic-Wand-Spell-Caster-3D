@@ -579,7 +579,7 @@ MonoBehaviour:
   displayPercentage: 0.5
   offset: {x: 0, y: 0}
   pointCount: 64
-  minAccuracy: 0.7
+  minAccuracy: 0.65
   deviationPower: 2
 --- !u!4 &1118966180
 Transform:
