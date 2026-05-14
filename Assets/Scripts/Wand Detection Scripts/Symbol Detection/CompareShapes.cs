@@ -71,7 +71,7 @@ public static class CompareShapes
         float totalAcc = 0;
         for (int i = 0; i < shapePoints.Length; i++)
         {
-            totalAcc += CaculatePointAcc(playerPoints[i], shapePoints[i], GameManager.DeviationPower);
+            totalAcc += CaculatePointAcc(playerPoints[i], shapePoints[i], GameConstants.DeviationPower);
         }
 
         //Debug.Log($"totalAcc: {totalAcc}");
@@ -96,6 +96,6 @@ public static class CompareShapes
 
     private static bool PassedMinAccuracy(float acc)
     {
-        return (acc >= GameManager.MinAccuracy);
+        return (acc >= GameConstants.MinAccuracy);
     }
 }

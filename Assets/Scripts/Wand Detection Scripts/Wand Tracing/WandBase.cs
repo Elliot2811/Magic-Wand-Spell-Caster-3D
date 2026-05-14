@@ -7,8 +7,6 @@ using UnityEngine.InputSystem;
 public abstract class WandBase : MonoBehaviour
 {
     public LineRenderer lineRenderer;
-    public float sampleSpeedSec = 0.01f;
-    public float lineWidth = 0.1f;
 
     public WandCursorInitialise wandCursor;
 
@@ -42,8 +40,8 @@ public abstract class WandBase : MonoBehaviour
             return;
         }
 
-        lineRenderer.startWidth = lineWidth;
-        lineRenderer.endWidth = lineWidth;
+        lineRenderer.startWidth = GameConstants.LineWidth;
+        lineRenderer.endWidth = GameConstants.LineWidth;
 
         if (wandCursor == null)
         {
@@ -53,9 +51,9 @@ public abstract class WandBase : MonoBehaviour
 
     private void Update()
     {
-        if (CheckPointsHaveChanged())
+        if (points.Count != lineRenderer.positionCount)
         {
-            UpdateLineRenderer();
+            LineRendererInterface.UpdateLineRenderer(lineRenderer, points.ToArray());
         }
     }
 
@@ -71,26 +69,6 @@ public abstract class WandBase : MonoBehaviour
         inputActions.Wand.Drawing.started -= DrawStarted;
         inputActions.Wand.Drawing.canceled -= DrawCanceled;
         inputActions.Disable();
-    }
-    #endregion
-
-
-    #region LineRenderer interface
-    private bool CheckPointsHaveChanged()
-    {
-        return points.Count != lineRenderer.positionCount;
-    }
-
-    private void UpdateLineRenderer()
-    {
-        // A point could be added while this function is running
-        Vector2[] snapshot = points.ToArray();
-        lineRenderer.positionCount = snapshot.Length;
-
-        for (int i = 0; i < snapshot.Length; i++)
-        {
-            lineRenderer.SetPosition(i, snapshot[i]);
-        }
     }
     #endregion
 
@@ -134,7 +112,7 @@ public abstract class WandBase : MonoBehaviour
         {
             RecordCurrentPos();
 
-            yield return new WaitForSeconds(sampleSpeedSec);
+            yield return new WaitForSeconds(GameConstants.sampleSpeedSec);
         }
     }
     #endregion

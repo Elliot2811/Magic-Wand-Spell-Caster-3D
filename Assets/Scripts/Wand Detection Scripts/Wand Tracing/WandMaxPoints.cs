@@ -1,5 +1,7 @@
 using UnityEngine.InputSystem;
 
+
+// TODO fix script
 public class WandMaxPoints : WandBase
 {
     public int MaxPoints = 100;

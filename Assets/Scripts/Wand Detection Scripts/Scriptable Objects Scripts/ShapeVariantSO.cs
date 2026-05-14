@@ -65,12 +65,12 @@ public class ShapeVariantSO : ScriptableObject
             Debug.LogWarning($"[{name}]: GameManager Instance not found.");
             return;
         }
-        if (GameManager.PointCount <= 1)
+        if (GameConstants.PointCount <= 1)
         {
             Debug.LogWarning($"[{name}]: GameManager Point Count must be greater than 1.");
         }
 
-        recalcAndNormPoints = PointsManipulation.ResampleAndNormalize(points, GameManager.PointCount);
+        recalcAndNormPoints = PointsManipulation.ResampleAndNormalize(points, GameConstants.PointCount);
 
         isInitialized = true;
     }
