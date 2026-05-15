@@ -3,12 +3,12 @@ using UnityEngine;
 
 public class Temp : MonoBehaviour
 {
-    private Queue<Vector2> points = new Queue<Vector2>();
+    private List<Vector2> points = new List<Vector2>();
 
     public void Start()
     {
-        points.Enqueue(new Vector2(0, 0));
-        points.Enqueue(new Vector2(1, 0));
+        points.Add(new Vector2(0, 0));
+        points.Add(new Vector2(1, 0));
 
         PointsManipulation.PrintPoints(points.ToArray());
 

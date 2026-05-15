@@ -31,7 +31,7 @@ public static class PointsManipulation
     /// Resamples original points to
     /// new points of equal distances along segments of the original points.
     /// </summary>
-    public static Vector2[] ResamplePoints(Queue<Vector2> points, int newNumberOfPoints)
+    public static Vector2[] ResamplePoints(List<Vector2> points, int newNumberOfPoints)
     {
         if (points != null)
             return ResamplePoints(points.ToArray(), newNumberOfPoints);
@@ -163,7 +163,7 @@ public static class PointsManipulation
     /// Normalize the Vector2 x and y values to be between 0 to 1.
     /// If axis not spanning 0-1, centers the drawing.
     /// </summary>
-    public static Vector2[] NormalizePoints(Queue<Vector2> points)
+    public static Vector2[] NormalizePoints(List<Vector2> points)
     {
         if (points != null)
             return NormalizePoints(points.ToArray());
@@ -222,6 +222,44 @@ public static class PointsManipulation
     #endregion
 
 
+    #region CatmullRom Points
+    /// <summary>
+    /// Evaluates A Catmull-Rom segment
+    /// </summary>
+    public static Vector2[] EvaluateCatmullSegment(Vector2 p0, Vector2 p1, Vector2 p2, Vector3 p3, int resolution)
+    {
+        if (p1 == p2)
+            return new Vector2[]{p1};
+
+        Vector2[] segment = new Vector2[resolution];
+
+        for (int step = 0; step < resolution; step++)
+        {
+            float t = step / (float)resolution;
+            segment[step] = CatmullRomPoint(p0, p1, p2, p3, t);
+        }
+
+        return segment;
+    }
+
+    /// <summary>
+    /// Finds a single Catmull-Rom point at t between p1 and p2.
+    /// </summary>
+    public static Vector2 CatmullRomPoint(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3, float t)
+    {
+        if (p1 == p2)
+            return p1;
+
+        return 0.5f * (
+            2f * p1                             +
+            (-p0 + p2)                          * t +
+            (2f * p0 - 5f * p1 + 4f * p2 - p3)  * t * t +
+            (-p0 + 3f * p1 - 3f * p2 + p3)      * t * t * t
+            );
+    }
+    #endregion
+
+
     #region Miscalleneous Functions
 
     /// <summary>
@@ -232,7 +270,7 @@ public static class PointsManipulation
     /// <param name="preserveScale">
     /// Drawing keeps scale (true). Drawing is stretched (false).
     /// </param>
-    public static Vector2[] ResampleAndNormalize(Queue<Vector2> points, int newNumberOfPoints)
+    public static Vector2[] ResampleAndNormalize(List<Vector2> points, int newNumberOfPoints)
     {
         if (points == null)
         {

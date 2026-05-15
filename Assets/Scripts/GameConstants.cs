@@ -4,9 +4,9 @@ public static class GameConstants
 {
     #region Shape Matching settings
     public const float sampleSpeedSec = 0.01f;
-    public const int PointCount = 64;
+    public const int PointCount = 128;
     public const float MinAccuracy = 0.8f;
-    public const int DeviationPower = 2;
+    public const int DeviationPower = 4;
     #endregion
 
     #region Display settings
