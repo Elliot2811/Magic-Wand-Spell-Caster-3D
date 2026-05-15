@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerPVP : EntityBase
@@ -10,10 +7,12 @@ public class PlayerPVP : EntityBase
     void Start()
     {
         //bulletHitPlayer1Event += bulletHitPlayer1Event;
-        currentObject = transform.GetChild(0).gameObject;
+        //Gets a reference to the child of the current player to get its position and rotation for spawning future spells
+        spellSpawnPosAndRot = transform.GetChild(0).gameObject;
     }
     void Update()
     {
+        //Developer controls where pressing "W" and "I" button summons a spell for the left and right player respectively
         if (Input.GetKeyDown(KeyCode.W) && (playerIDCurrentSet == playerID.playerLeft))
         {
             Debug.Log($"{playerIDCurrentSet} pressed the W key!");
@@ -24,10 +23,5 @@ public class PlayerPVP : EntityBase
             Debug.Log($"{playerIDCurrentSet} pressed the I key!");
             StartCoroutine(CastAndFireSpell(3.0F));
         }
-    }
-
-    void bulletHitPlayer1()
-    {
-        TakeDamage(20);
     }
 }

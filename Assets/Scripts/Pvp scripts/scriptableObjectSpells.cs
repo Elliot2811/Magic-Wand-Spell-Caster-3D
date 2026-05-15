@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Basic Spell", menuName = "Spells/Basic/BasicSpell")]
+[CreateAssetMenu(fileName = "Basic Spell", menuName = "Spells/BasicSpell")]
 public class scriptableObjectSpells : ScriptableObject
 {
     [Header("Spell settings")]

@@ -1,16 +1,11 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using static BasicBulletSpell;
-using static UnityEngine.GraphicsBuffer;
 
 public abstract class EntityBase : MonoBehaviour
 {
-    #region Variables
+    #region Public Variables
     public GameObject prefab;
-    public GameObject currentObject;
-    public BasicBulletSpell projectileScript1;
+    public GameObject spellSpawnPosAndRot;
     public enum playerID
     {
         playerLeft,
@@ -20,13 +15,13 @@ public abstract class EntityBase : MonoBehaviour
         none
     }
     public playerID playerIDCurrentSet;
+    #endregion
 
+    #region Protected Variables
     protected bool playerAlive = true;
-    protected float playerHealth = 100.0F;
-    protected int playerMana = 100;
-    protected float playerDMG = 10.00F;
-    protected float playerHaste = 10.00F;
-    protected int playerManaRegenRate = 10;
+    protected float playerDmgTaken = 0F;
+    protected float playerDMG = 1F;
+    protected float playerHaste = 1F;
     #endregion
 
     #region Entity Functions
@@ -85,41 +80,25 @@ public abstract class EntityBase : MonoBehaviour
                 Debug.Log("Error - Player ID when firing spell is incorrect and is set to None");
                 break;
             case playerID.playerLeft:
-                spellProjectileScript1.SetOwner(currentObject);
+                spellProjectileScript1.SetProjectilePosAndRot(spellSpawnPosAndRot);
                 break;
             case playerID.botLeft:
-                spellProjectileScript1.SetOwner(currentObject);
+                spellProjectileScript1.SetProjectilePosAndRot(spellSpawnPosAndRot);
                 break;
             case playerID.playerRight:
-                spellProjectileScript1.SetOwner(currentObject);
+                spellProjectileScript1.SetProjectilePosAndRot(spellSpawnPosAndRot);
                 break;
             case playerID.botRight:
-                spellProjectileScript1.SetOwner(currentObject);
+                spellProjectileScript1.SetProjectilePosAndRot(spellSpawnPosAndRot);
                 break;
         }
         Debug.Log($"{playerIDCurrentSet} launched spell");
     }
 
-    protected void TakeDamage(int dmgTaken)
+    public void TakeDamage(int amount)
     {
-        Debug.Log($"Mage {playerIDCurrentSet} lost {dmgTaken} health");
+        playerDmgTaken += amount;
+        Debug.Log($"{gameObject} Total Damage Taken: {playerDmgTaken}");
     }
-
-    //protected void OnTriggerEnter(Collider other)
-    //{
-    //    var target = other.GetComponent<EntityBase>();
-    //    if (target != null)
-    //    {
-    //        target.TakeDamage(20);
-    //    }
-    //}
-
-    //void OnTriggerEnter(Collider other)
-    //{
-    //    if (!other.CompareTag("Projectile"))
-    //        return;
-    //    //PlayerPVP.bulletHitPlayer1Event?.Invoke();
-    //    projectileScript1.DestroyProjectile();
-    //}
     #endregion
 }

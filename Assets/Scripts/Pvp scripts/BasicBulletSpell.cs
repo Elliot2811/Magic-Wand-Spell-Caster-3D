@@ -1,61 +1,66 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BasicBulletSpell : MonoBehaviour
 {
-    private int projectileSpeed = 10;
-    private GameObject SpellSpawnPosRot;
-    //public TempGameManager TempGameManagerScript;
+    private int projectileSpeed = 5;
+    private GameObject spellSpawnPosAndRot;
+
+    #region Start and Update Function
     private void Start()
     {
-        //TempGameManagerScript = TempGameManager2.GetComponent<TempGameManager>();
         transform.SetPositionAndRotation(
-            SpellSpawnPosRot.transform.position,
-            SpellSpawnPosRot.transform.rotation
+            spellSpawnPosAndRot.transform.position,
+            spellSpawnPosAndRot.transform.rotation
         );
     }
     private void Update()
+    {
+        //Developer function to clear all projectiles in the scene
+        ClearProjectiles();
+
+        //Make the projectile travel at a constant speed forward
+        transform.position += transform.forward * projectileSpeed * Time.deltaTime;
+    }
+    #endregion
+
+    #region Projectile Called Functions
+    private void ClearProjectiles()
     {
         if (Input.GetKeyDown(KeyCode.C))
         {
             Destroy(gameObject);
             Debug.Log("Removed all the projectiles");
         }
-
-        //Make the projectile travel at a constant speed forward
-        transform.position += transform.forward * projectileSpeed * Time.deltaTime;
     }
 
-    public void SetOwner(GameObject objectRef)
+    public void SetProjectilePosAndRot(GameObject objectRef)
     {
-        SpellSpawnPosRot = objectRef;
+        spellSpawnPosAndRot = objectRef;
     }
 
-    //protected void OnTriggerEnter(Collider other)
-    //{
-    //    var target = other.GetComponent<EntityBase>();
-    //    if (target != null)
-    //    {
-    //        target.TakeDamage(20);
-    //    }
-    //}
-
+    /// <summary>
+    /// When the projectile collides with the opposing player, it calls a function to deal damage to
+    /// the player before deleting itself. Upon hitting border it deletes itself and does nothing.
+    /// </summary>
+    /// <param name="other">
+    /// The gameObject the projectile collided with.
+    /// </param>
     void OnTriggerEnter(Collider other)
     {
-        //if (!(other.CompareTag("Player") || other.CompareTag("Border")))
-        //    return;
-        Debug.Log("test");
+        if (!(other.CompareTag("Player") || other.CompareTag("Border")))
+            return;
 
         if (other.CompareTag("Player"))
         {
+            PlayerPVP playerPVPScript = other.GetComponent<PlayerPVP>();
+            playerPVPScript.TakeDamage(10);
             Destroy(gameObject);
-            Debug.Log("Player hit the opponent!");
         }
         else if (other.CompareTag("Border"))
         {
             Destroy(gameObject);
-            Debug.Log("Projectile missed!");
+            Debug.Log($"Projectile missed!");
         }
     }
+    #endregion
 }
