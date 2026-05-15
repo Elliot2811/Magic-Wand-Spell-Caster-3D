@@ -97,7 +97,7 @@ public class GameManager : MonoBehaviour
 
         Vector2[] rescaledData = PointsManipulation.ScaleToScreen(shapeData, mainCamera, GameConstants.DisplayShapePercentage, GameConstants.DisplayShapeOffset);
 
-        LineRendererInterface.UpdateLineRenderer(lineRenderer, rescaledData);
+        LineRendererInterface.Points(lineRenderer, rescaledData);
     }
 
     private void PrintBestShape(ShapeInfoSO shapeInfo)
@@ -108,4 +108,4 @@ public class GameManager : MonoBehaviour
             Debug.Log($"Shape is: {shapeInfo.ShapeName}");
     }
     #endregion
-}
+}   
