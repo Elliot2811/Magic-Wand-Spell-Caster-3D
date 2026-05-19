@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public static class CompareShapes
 {
@@ -16,11 +17,6 @@ public static class CompareShapes
     {
         //Debug.Log("CompareShapes.FindBestMatch is called");
 
-        if (GameManager.Instance == null)
-        {
-            Debug.LogError("CompareShapes: GameManager instance not found");
-        }
-
         if (
             playerPoints == null ||
             availableShapes == null ||
@@ -36,7 +32,7 @@ public static class CompareShapes
 
             foreach (ShapeVariantSO variant in shape)
             {
-                float averageAcc = CaculateAverageAcc(playerPoints, variant);
+                float averageAcc = CaculateScore(playerPoints, variant, shape.RotSymmetries);
 
                 if (averageAcc > bestShapeAccuracy)
                 {
@@ -46,56 +42,153 @@ public static class CompareShapes
             }
         }
 
-        Debug.Log($"Best shape accuracy of {bestShapeAccuracy} from {bestMatch.ShapeName}");
+        if (bestMatch != null)
+            Debug.Log($"Best shape accuracy of {bestShapeAccuracy} from {bestMatch.ShapeName}");
+
         return PassedMinAccuracy(bestShapeAccuracy) ? bestMatch : null;
     }
+    
+    /// <summary>
+    /// Parrses through player drawing, getting total accuracy of points
+    /// Acc: Dollar Score + Length Score
+    /// </summary>
+    private static float CaculateScore(Vector2[] playerPoints, ShapeVariantSO variant, int rotSymmetries)
+    {
+        Vector2[] shapePoints = variant.Points;
+        if (shapePoints == null || playerPoints.Length != shapePoints.Length)
+        {
+            Debug.LogError($"[CompareShapes]: point count mismatch on {variant.name} (Player: {playerPoints.Length}, Shape: {shapePoints.Length})");
+            return 0f;
+        }
+
+        float dollarScore = DollarScore(playerPoints, shapePoints, rotSymmetries);
+        float lengthScore = LengthScore(playerPoints, shapePoints);
+
+        return (dollarScore * GameConstants.DollarPercent) + (lengthScore * (1 - GameConstants.DollarPercent));
+    }
+
+
+    #region Dollar Recognizer
+    /// <summary>
+    /// Within range of 45deg and -45deg, does binary search for the best accuracy.
+    /// </summary>
+    private static float DollarScore(Vector2[] player, Vector2[] shape, int rotSymmetries)
+    {
+        if (rotSymmetries == 0)
+            return 0f;
+
+        float symmetricAngle = (2 * Mathf.PI) / rotSymmetries;
+        float angleBounds = (rotSymmetries < 8) ? Mathf.PI / 4 : symmetricAngle;
+
+        float bestDist = float.MaxValue;
+
+        for (int i = 0; i < rotSymmetries; i++)
+        {
+            bestDist = Mathf.Min(
+                bestDist,
+                GoldenSectionSearch(player, RotateBy(shape, i * symmetricAngle), -angleBounds, angleBounds)
+                );
+        }
+
+
+        return 1f - (float)(bestDist / (0.5 * sqrt2));
+    }
+
+    // The binary search function to check closer to a or b
+    private static float GoldenSectionSearch(Vector2[] player, Vector2[] shape, float a, float b)
+    {
+        float phi = 0.5f * (-1 + Mathf.Sqrt(5f));
+        float x1 = phi * a + (1f - phi) * b;
+        float x2 = (1 - phi) * a + (1f - phi) * b;
+        float f1 = PathDistance(RotateBy(player, x1), shape);
+        float f2 = PathDistance(RotateBy(player, x2), shape);
+
+        while (Mathf.Abs(b - a) > 0.0001f) // Check diff, escape if tiny
+        {
+            if (f1 < f2)
+            {
+                b = x2;
+                x2 = x1;
+                f2 = f1;
+
+                x1 = phi * a + (1f - phi) * b;
+                f1 = PathDistance(RotateBy(player, x1), shape);
+            }
+            else
+            {
+                a = x1;
+                x1 = x2;
+                f1 = f2;
+
+                x2 = (1f - phi) * a + phi * b;
+                f2 = PathDistance(RotateBy(player, x2), shape);
+            }
+        }
+
+        return Mathf.Min(f1, f2);
+    }
+
+    private static float PathDistance(Vector2[] a, Vector2[] b)
+    {
+        float d = 0f;
         
-    /// <summary>
-    /// Parses throught the array,
-    /// gets total accuracy of playerPoints compared to shapeDrawing.
-    /// Returns average (acc of all points) / (num of points)
-    /// </summary>
-    private static float CaculateAverageAcc(Vector2[] playerPoints, ShapeVariantSO shapeVariant)
+        for (int i = 0; i < a.Length; i++)
+        {
+            d += Vector2.Distance(a[i], b[i]);
+        }
+
+        return d / a.Length;
+    }
+
+    private static Vector2[] RotateBy(Vector2[] points, float angle)
     {
-        Vector2[] shapePoints = shapeVariant.Points;
-        if (shapePoints == null)
+        if (angle == 0)
+            return points;
+
+        Vector2 centroid = Centroid(points);
+        Vector2[] result = new Vector2[points.Length];
+
+        float cos = Mathf.Cos(angle);
+        float sin = Mathf.Sin(angle);
+
+        for (int i = 0; i < points.Length; i++)
+        {
+            Vector2 p = points[i] - centroid;
+            result[i] = new Vector2(
+                p.x * cos - p.y * sin,
+                p.x * sin + p.y * cos
+                ) + centroid;
+        }
+
+        return result;
+    }
+
+    private static Vector2 Centroid(Vector2[] points)
+    {
+        Vector2 c = Vector2.zero;
+
+        foreach (Vector2 point in points)
+        {
+            c += point;
+        }
+
+        return c / points.Length;
+    }
+    #endregion
+
+    /// <summary>
+    /// For both length of drawings, compare shorter to longer drawing.
+    /// If same/close length would return 1.
+    /// </summary>
+    private static float LengthScore(Vector2[] player, Vector2[] shape)
+    {
+        float playerLength = PointsManipulation.TotalDistance(player);
+        float shapeLength = PointsManipulation.TotalDistance(shape);
+
+        if (shapeLength == 0)
             return 0;
-
-        if (playerPoints.Length != shapePoints.Length)
-        {
-            Debug.LogError($"[CompareShapes.caculateTotalAcc]: point count mismatch on {shapeVariant.name}" +
-                $"(Player: {playerPoints.Length}, shape: {shapePoints.Length}).");
-        }
-
-        //Debug.Log("Starting caculation of totalAcc");
-        float totalAcc = 0;
-        for (int i = 0; i < shapePoints.Length; i++)
-        {
-            totalAcc += CaculatePointAcc(playerPoints[i], shapePoints[i], GameConstants.DeviationPower);
-        }
-
-        //Debug.Log($"totalAcc: {totalAcc}");
-        //Debug.Log($"AverageAcc: {totalAcc / shapePoints.Length}");
-
-        return (totalAcc / shapePoints.Length);
+        return Mathf.Min(playerLength, shapeLength) / Mathf.Max(playerLength, shapeLength);
     }
 
-    /// <summary>
-    /// Returns accuracy / deviation of player point compared to its comparision.
-    /// 0 is as far as possible, 1 is same position.
-    /// </summary>
-    /// <param name="pow">
-    /// Changes return by math operation ^pow
-    /// </param>
-    private static float CaculatePointAcc(Vector2 player, Vector2 comparision, int pow)
-    {
-        float dist = Vector2.Distance(player, comparision);
-        float acc = Mathf.Max(0f, 1f - (dist / sqrt2));
-        return Mathf.Pow(acc, pow);
-    }
-
-    private static bool PassedMinAccuracy(float acc)
-    {
-        return (acc >= GameConstants.MinAccuracy);
-    }
+    private static bool PassedMinAccuracy(float acc) => acc >= GameConstants.MinAccuracy;
 }

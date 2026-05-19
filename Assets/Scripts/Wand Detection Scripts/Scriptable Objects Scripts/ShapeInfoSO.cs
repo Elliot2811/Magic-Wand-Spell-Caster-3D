@@ -6,10 +6,15 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewShape", menuName = "Shapes/Shape Info")]
 public class ShapeInfoSO : ScriptableObject, IEnumerable<ShapeVariantSO>
 {
+    [Min(1)]
+    [SerializeField] private int rotSymmetries = 1;
+
     [SerializeField] private string shapeName;
     [SerializeField] private ShapeVariantSO[] variants;
 
     private HashSet<ShapeVariantSO> variantsSet;
+
+    public int RotSymmetries => rotSymmetries;
 
     public string ShapeName => shapeName;
 

@@ -5,8 +5,8 @@ public static class GameConstants
     #region Shape Matching settings
     public const float sampleSpeedSec = 0.01f;
     public const int PointCount = 128;
-    public const float MinAccuracy = 0.8f;
-    public const int DeviationPower = 4;
+    public const float MinAccuracy = 0.7f;
+    public const float DollarPercent = 0.85f; // Orignial dollar %: 80%, original line %: 20%
     #endregion
 
     #region Display settings

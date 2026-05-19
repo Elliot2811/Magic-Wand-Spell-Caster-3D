@@ -15,8 +15,4 @@ MonoBehaviour:
   shapeName: Triangle
   variants:
   - {fileID: 11400000, guid: 86df413a99f89144ba4aa5782a8f69f4, type: 2}
-  - {fileID: 11400000, guid: 3a920de1096fedb46897a62750a6bce5, type: 2}
-  - {fileID: 11400000, guid: b30fb4a538313d4478136e37ae75d32c, type: 2}
-  - {fileID: 11400000, guid: b67eb4e0dacd8f648ac63ab6423052a3, type: 2}
-  - {fileID: 11400000, guid: 69147a68f1a44e947bfdc5f7c83331ba, type: 2}
-  - {fileID: 11400000, guid: 947d0fba90926d849b735ea5610af598, type: 2}
+  - {fileID: 11400000, guid: e963f88c2ba68e84f963ce863d215eaa, type: 2}

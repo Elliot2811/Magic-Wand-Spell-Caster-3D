@@ -7,9 +7,12 @@ public class ShapeInfoSOEditor : Editor
     {
         serializedObject.Update();
 
+        SerializedProperty rotSymmetryProp = serializedObject.FindProperty("rotSymmetries");
         SerializedProperty shapeNameProp = serializedObject.FindProperty("shapeName");
         SerializedProperty variantsProp = serializedObject.FindProperty("variants");
 
+        EditorGUILayout.PropertyField(rotSymmetryProp);
+        EditorGUILayout.Space(EditorGUIUtility.singleLineHeight);
         EditorGUILayout.PropertyField(shapeNameProp);
 
         int newValue = EditorGUILayout.DelayedIntField("Number Of Variants", variantsProp.arraySize);
