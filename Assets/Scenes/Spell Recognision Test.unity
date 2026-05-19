@@ -573,14 +573,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shapesCollection: {fileID: 11400000, guid: fc964e86218201a4098d0a9826b939c0, type: 2}
-  displayBestShape: 1
   lineRenderer: {fileID: 1172991324}
-  lineWidth: 0.1
-  displayPercentage: 0.5
-  offset: {x: 0, y: 0}
-  pointCount: 64
-  minAccuracy: 0.65
-  deviationPower: 2
 --- !u!4 &1118966180
 Transform:
   m_ObjectHideFlags: 0
@@ -860,10 +853,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 5d493a796a678ba4aa08eea685c81c55, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1551068451}
+      addedObject: {fileID: 1551068450}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 5d493a796a678ba4aa08eea685c81c55, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1551068450}
+      addedObject: {fileID: 1551068453}
   m_SourcePrefab: {fileID: 100100000, guid: 5d493a796a678ba4aa08eea685c81c55, type: 3}
 --- !u!1 &1551068449 stripped
 GameObject:
@@ -882,10 +875,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de33c0ed0fc374e4d80dd14a9f23c0c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceToCamera: 5
-  quatRotation: {x: 0, y: 0, z: 15}
-  cursorVisable: 1
---- !u!114 &1551068451
+--- !u!114 &1551068453
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -894,13 +884,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1551068449}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae0e0cba1708b1d4faec7135b3d892f0, type: 3}
+  m_Script: {fileID: 11500000, guid: a2de738713ffcf0458cfe9f0d294eb24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   lineRenderer: {fileID: 878079791}
-  sampleSpeedSec: 0.01
-  lineWidth: 0.1
   wandCursor: {fileID: 1551068450}
+  resolution: 10
+  sharpAngleThreshold: 45
 --- !u!1 &1585138006
 GameObject:
   m_ObjectHideFlags: 0
