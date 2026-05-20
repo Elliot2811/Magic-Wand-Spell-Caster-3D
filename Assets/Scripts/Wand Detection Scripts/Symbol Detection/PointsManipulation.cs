@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public static class PointsManipulation
@@ -223,6 +224,64 @@ public static class PointsManipulation
 
 
     #region CatmullRom Points
+    /// <summary>
+    /// Creates the catmull segments for the entire drawing
+    /// </summary>
+    public static Vector2[] CatmullRomLine(Vector2[] points)
+    {
+        if (points.Length < 4) return points;
+
+        List<Vector2> catmullPoints = new List<Vector2>();
+        List<Vector2[]> renderedPoints = new List<Vector2[]>();
+
+        catmullPoints.Add(points[0]);
+        catmullPoints.Add(points[0]);
+
+        for (int i = 2; i < points.Length;i++)
+        {
+            catmullPoints.Add(points[i - 1]);
+            if (Angle(points[i - 2], points[i - 1], points[i]) > GameConstants.sharpAngleThreshold)
+                catmullPoints.Add(points[i - 1]);
+
+        }
+
+        catmullPoints.Add(points[^1]);
+        catmullPoints.Add(points[^1]);
+
+
+        for (int i = 3; i < catmullPoints.Count; i++)
+        {
+            renderedPoints.Add(
+                EvaluateCatmullSegment(
+                    catmullPoints[i - 3],
+                    catmullPoints[i - 2],
+                    catmullPoints[i - 1],
+                    catmullPoints[i],
+                    GameConstants.CatmullResolution
+                    ));
+        }
+
+        List<Vector2> result = new List<Vector2>();
+
+        foreach (Vector2[] segment in renderedPoints)
+        {
+            foreach (Vector2 point in segment)
+            {
+                result.Add(point);
+            }
+        }
+
+        return result.ToArray();
+    }
+
+    public static float Angle(Vector2 p1, Vector2 p2, Vector2 p3)
+    {
+        Vector2 enterDir = p2 - p1;
+        Vector2 endDir = p3 - p1;
+
+        return Vector2.Angle(enterDir, endDir);
+    }
+
     /// <summary>
     /// Evaluates A Catmull-Rom segment
     /// </summary>

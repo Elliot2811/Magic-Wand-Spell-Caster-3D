@@ -26,6 +26,7 @@ public static class CompareShapes
 
         ShapeInfoSO bestMatch = null;
         float bestShapeAccuracy = 0;
+        float secondBestShapeAccuracy = 0;
         foreach (ShapeInfoSO shape in availableShapes)
         {
             //Debug.Log($"Parsing through {shape.ShapeName}");
@@ -39,13 +40,22 @@ public static class CompareShapes
                     bestMatch = shape;
                     bestShapeAccuracy = averageAcc;
                 }
+                else if (shape != bestMatch && averageAcc > secondBestShapeAccuracy)
+                {
+                    secondBestShapeAccuracy = averageAcc;
+                }
             }
         }
 
         if (bestMatch != null)
             Debug.Log($"Best shape accuracy of {bestShapeAccuracy} from {bestMatch.ShapeName}");
 
-        return PassedMinAccuracy(bestShapeAccuracy) ? bestMatch : null;
+        Debug.Log($"Second best shape accuracy of {secondBestShapeAccuracy}");
+
+        return
+            (PassedMinAccuracy(bestShapeAccuracy) && UniqueEnough(bestShapeAccuracy, secondBestShapeAccuracy)) ?
+            bestMatch :
+            null;
     }
     
     /// <summary>
@@ -62,9 +72,13 @@ public static class CompareShapes
         }
 
         float dollarScore = DollarScore(playerPoints, shapePoints, rotSymmetries);
+        float aspectScore = AspectRatioScore(playerPoints, shapePoints);
         float lengthScore = LengthScore(playerPoints, shapePoints);
 
-        return (dollarScore * GameConstants.DollarPercent) + (lengthScore * (1 - GameConstants.DollarPercent));
+        return
+            (dollarScore * GameConstants.DollarWeightage) +
+            (aspectScore * GameConstants.AspectWeightage) +
+            (lengthScore * GameConstants.LineWeightage);
     }
 
 
@@ -176,6 +190,28 @@ public static class CompareShapes
     }
     #endregion
 
+    private static float AspectRatioScore(Vector2[] player, Vector2[] shape)
+    {
+        PointsManipulation.PointBounds playerBounds = PointsManipulation.GetBounds(player);
+        float playerRatio =
+            (playerBounds.Height != 0) ? 
+            playerBounds.Height / playerBounds.Width :
+            0;
+
+        PointsManipulation.PointBounds shapeBounds = PointsManipulation.GetBounds(shape);
+        float shapeRatio =
+            (shapeBounds.Height != 0) ?
+            shapeBounds.Height / shapeBounds.Width :
+            0;
+
+        if (shapeRatio == 0)
+            return 0;
+
+        return 
+            Mathf.Min(playerRatio, shapeRatio) /
+            Mathf.Max(playerRatio, shapeRatio);
+    }
+
     /// <summary>
     /// For both length of drawings, compare shorter to longer drawing.
     /// If same/close length would return 1.
@@ -187,8 +223,13 @@ public static class CompareShapes
 
         if (shapeLength == 0)
             return 0;
-        return Mathf.Min(playerLength, shapeLength) / Mathf.Max(playerLength, shapeLength);
+
+        return
+            Mathf.Min(playerLength, shapeLength) /
+            Mathf.Max(playerLength, shapeLength);
     }
 
     private static bool PassedMinAccuracy(float acc) => acc >= GameConstants.MinAccuracy;
+
+    private static bool UniqueEnough(float bestAcc, float secondBestAcc) => (bestAcc - secondBestAcc) > GameConstants.MinAccDiff;
 }

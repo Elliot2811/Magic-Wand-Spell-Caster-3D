@@ -17,11 +17,6 @@ public class WandBase : MonoBehaviour
 
     private int lastProcessedIndex = -1;
 
-    [SerializeField]
-    private int resolution = 10;
-    [SerializeField]
-    private float sharpAngleThreshold = 45f;
-
 
     private Coroutine loggingCoroutine;
 
@@ -83,26 +78,22 @@ public class WandBase : MonoBehaviour
 
         if (n < 2) return;
 
-        Vector2 enterDir = points[n - 1] - points[n - 2];
-        Vector2 exitDir = points[n] - points[n - 1];
-        float angle = Vector2.Angle(enterDir, exitDir);
-
         catmullPoints.Add(points[n - 1]);
-        if (angle > sharpAngleThreshold)
+        if (PointsManipulation.Angle(points[n - 2], points[n - 1], points[n]) > GameConstants.sharpAngleThreshold)
             catmullPoints.Add(points[n - 1]);
 
         if (catmullPoints.Count < 4) return;
 
         int m = catmullPoints.Count - 1;
-        Vector2[] segment = PointsManipulation.EvaluateCatmullSegment(
-            catmullPoints[m - 3],
-            catmullPoints[m - 2],
-            catmullPoints[m - 1],
-            catmullPoints[m],
-            resolution
-        );
 
-        renderedPoints.Add(segment);
+        renderedPoints.Add(
+            PointsManipulation.EvaluateCatmullSegment(
+                catmullPoints[m - 3],
+                catmullPoints[m - 2],
+                catmullPoints[m - 1],
+                catmullPoints[m],
+                GameConstants.CatmullResolution
+                ));
     }
 
     private void FlushCatmullTail()
@@ -120,7 +111,7 @@ public class WandBase : MonoBehaviour
             catmullPoints[m - 2],
             catmullPoints[m - 1],
             catmullPoints[m],
-            resolution
+            GameConstants.CatmullResolution
         );
 
         renderedPoints.Add(segment);
