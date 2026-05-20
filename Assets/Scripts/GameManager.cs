@@ -95,6 +95,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        //Vector2[] catmulledData = PointsManipulation.CatmullRomLine(shapeData);
         Vector2[] rescaledData = PointsManipulation.ScaleToScreen(shapeData, mainCamera, GameConstants.DisplayShapePercentage, GameConstants.DisplayShapeOffset);
 
         LineRendererInterface.Points(lineRenderer, rescaledData);

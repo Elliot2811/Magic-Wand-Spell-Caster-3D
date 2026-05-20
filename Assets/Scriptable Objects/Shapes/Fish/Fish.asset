@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0760ecc3818ea764587aa84b3a4e7136, type: 3}
-  m_Name: Triangle
+  m_Name: Fish
   m_EditorClassIdentifier: 
-  rotSymmetries: 3
-  shapeName: Triangle
+  rotSymmetries: 2
+  shapeName: Fish
   variants:
-  - {fileID: 11400000, guid: 86df413a99f89144ba4aa5782a8f69f4, type: 2}
-  - {fileID: 11400000, guid: e963f88c2ba68e84f963ce863d215eaa, type: 2}
+  - {fileID: 11400000, guid: 82401d72b2894fe4981d09aaf0ee7907, type: 2}
+  - {fileID: 11400000, guid: fb0ec24dcd7efcc49aec83157ccea11c, type: 2}
