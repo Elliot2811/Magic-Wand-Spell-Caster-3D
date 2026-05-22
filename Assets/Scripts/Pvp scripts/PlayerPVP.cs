@@ -2,29 +2,19 @@ using UnityEngine;
 
 public class PlayerPVP : EntityBase
 {
-    //public static event Action bulletHitPlayer1Event;
+    private scriptableObjectEntity playerScriptableObject;
 
     void Start()
     {
-        //bulletHitPlayer1Event += bulletHitPlayer1Event;
-        currentObject = transform.GetChild(0).gameObject;
-    }
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.W) && (playerIDCurrentSet == playerID.playerLeft))
-        {
-            Debug.Log($"{playerIDCurrentSet} pressed the W key!");
-            StartCoroutine(CastAndFireSpell(3.0F));
-        }
-        else if (Input.GetKeyDown(KeyCode.I) && (playerIDCurrentSet == playerID.playerRight))
-        {
-            Debug.Log($"{playerIDCurrentSet} pressed the I key!");
-            StartCoroutine(CastAndFireSpell(3.0F));
-        }
+        // Getting the transform from the empty game object ,which is a child of player, for the spells
+        spellSpawnPosAndRot = transform.GetChild(0).gameObject;
     }
 
-    void bulletHitPlayer1()
+    private void Update()
     {
-        TakeDamage(20);
+        if (Input.GetKeyDown(inputKey) && (entityAlive) && (eventActivated == false))
+        {
+            StartCoroutine(CastAndFireSpell(3));
+        }
     }
 }
