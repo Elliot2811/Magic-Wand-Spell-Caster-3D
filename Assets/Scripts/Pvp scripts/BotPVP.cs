@@ -12,27 +12,27 @@ public class BotPVP : EntityBase
 
     void Start()
     {
-        //bulletHitPlayer1Event += bulletHitPlayer1Event;
         //Gets a reference to the child of the current player to get its position and rotation for spawning future spells
         Debug.Log("This is a bot script!!!");
         spellSpawnPosAndRot = transform.GetChild(0).gameObject;
-        //selectRandNum();
+        selectRandNum();
     }
-    //void Update()
-    //{
-    //    timer += Time.deltaTime;
+    void Update()
+    {
+        timer += Time.deltaTime;
 
-    //    if (timer >= timerInterval)
-    //    {
-    //        timer = 0f;
+        if (timer >= timerInterval)
+        {
+            timer = 0f;
 
-    //        StartCoroutine(CastAndFireSpell(3.0F));
-    //        selectRandNum();
-    //    }
-    //}
+            StartCoroutine(CastAndFireSpell(3));
+            selectRandNum();
+        }
+    }
 
-    //private void selectRandNum()
-    //{
-    //    timer = Random.Range(minTimer, maxTimer);
-    //}
+    private void selectRandNum()
+    {
+        timerInterval = Random.Range(minTimer, maxTimer);
+        Debug.Log("Spell will take " + timerInterval);
+    }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 public class scriptableObjectEntity : ScriptableObject
 {
     [Header("Spell settings")]
-    public string spellName = "Entity Base";
-    public float playerDMG = 1F;
-    public float playerHaste = 1F;
+    public string entityName = "Entity Base";
+    public float entityDMG = 1F;
+    public float entityHaste = 1F;
 }

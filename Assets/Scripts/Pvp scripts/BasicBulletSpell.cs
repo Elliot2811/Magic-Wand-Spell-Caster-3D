@@ -52,8 +52,10 @@ public class BasicBulletSpell : MonoBehaviour
 
         if (other.CompareTag("Player"))
         {
-            PlayerPVP playerPVPScript = other.GetComponent<PlayerPVP>();
-            playerPVPScript.TakeDamage(10);
+            //PlayerPVP playerPVPScript = other.GetComponent<PlayerPVP>();
+            //playerPVPScript.TakeDamage(10);
+            EntityBase entityBaseScript = other.GetComponent<EntityBase>();
+            entityBaseScript.TakeDamage(10);
             Destroy(gameObject);
         }
         else if (other.CompareTag("Border"))
