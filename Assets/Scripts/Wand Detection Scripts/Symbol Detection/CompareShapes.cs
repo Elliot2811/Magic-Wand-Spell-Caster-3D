@@ -64,8 +64,21 @@ public static class CompareShapes
     /// </summary>
     private static float CaculateScore(Vector2[] playerPoints, ShapeVariantSO variant, int rotSymmetries)
     {
+        if (variant == null)
+        {
+            Debug.LogError("[CompareShapes]: variant is null");
+            return 0f;
+        }
+
         Vector2[] shapePoints = variant.Points;
-        if (shapePoints == null || playerPoints.Length != shapePoints.Length)
+
+        if (shapePoints == null)
+        {
+            Debug.LogWarning($"[CompareShapes]: {variant.name} has null Points array");
+            return 0f;
+        }
+
+        if (playerPoints.Length != shapePoints.Length)
         {
             Debug.LogError($"[CompareShapes]: point count mismatch on {variant.name} (Player: {playerPoints.Length}, Shape: {shapePoints.Length})");
             return 0f;
