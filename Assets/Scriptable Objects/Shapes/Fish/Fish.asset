@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0760ecc3818ea764587aa84b3a4e7136, type: 3}
   m_Name: Fish
   m_EditorClassIdentifier: 
-  rotSymmetries: 2
+  rotSymmetries: 1
   shapeName: Fish
   variants:
   - {fileID: 11400000, guid: 82401d72b2894fe4981d09aaf0ee7907, type: 2}
-  - {fileID: 11400000, guid: fb0ec24dcd7efcc49aec83157ccea11c, type: 2}
+  - {fileID: 11400000, guid: de22d57a10519ed429cd8aa982e9add0, type: 2}
