@@ -15,5 +15,5 @@ MonoBehaviour:
   rotSymmetries: 1
   shapeName: Fish
   variants:
-  - {fileID: 11400000, guid: 82401d72b2894fe4981d09aaf0ee7907, type: 2}
-  - {fileID: 11400000, guid: de22d57a10519ed429cd8aa982e9add0, type: 2}
+  - {fileID: 11400000, guid: 26041fbc31c7a8e498c8400418893fb9, type: 2}
+  - {fileID: 11400000, guid: 1cc2965ef3e9e3f40bb23a128c02e0cb, type: 2}
