@@ -242,7 +242,6 @@ public static class PointsManipulation
             catmullPoints.Add(points[i - 1]);
             if (Angle(points[i - 2], points[i - 1], points[i]) > GameConstants.sharpAngleThreshold)
                 catmullPoints.Add(points[i - 1]);
-
         }
 
         catmullPoints.Add(points[^1]);
@@ -277,7 +276,7 @@ public static class PointsManipulation
     public static float Angle(Vector2 p1, Vector2 p2, Vector2 p3)
     {
         Vector2 enterDir = p2 - p1;
-        Vector2 endDir = p3 - p1;
+        Vector2 endDir = p3 - p2;
 
         return Vector2.Angle(enterDir, endDir);
     }
@@ -294,7 +293,7 @@ public static class PointsManipulation
 
         for (int step = 0; step < resolution; step++)
         {
-            float t = step / (float)resolution;
+            float t = step / (float)(resolution - 1);
             segment[step] = CatmullRomPoint(p0, p1, p2, p3, t);
         }
 

@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private LineRenderer lineRenderer;
 
+    public WandBase AAA;
+
     private Camera mainCamera;
 
     private Vector2[] points;
@@ -95,8 +97,8 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        //Vector2[] catmulledData = PointsManipulation.CatmullRomLine(shapeData);
-        Vector2[] rescaledData = PointsManipulation.ScaleToScreen(shapeData, mainCamera, GameConstants.DisplayShapePercentage, GameConstants.DisplayShapeOffset);
+        Vector2[] catmulledData = PointsManipulation.CatmullRomLine(shapeData);
+        Vector2[] rescaledData = PointsManipulation.ScaleToScreen(catmulledData, mainCamera, GameConstants.DisplayShapePercentage, GameConstants.DisplayShapeOffset);
 
         LineRendererInterface.Points(lineRenderer, rescaledData);
     }
