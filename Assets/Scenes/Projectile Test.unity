@@ -1004,7 +1004,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 2375220837706918120, guid: a8bc54a7696e3cf4eb42d8e0631e4576, type: 3}
-  playerIDCurrentSet: 0
+  inputKey: 0
+  eventActivated: 0
 --- !u!1001 &1117929790
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1224,12 +1225,11 @@ MonoBehaviour:
   leftPlayer: {fileID: 6191189529261095157, guid: 64fa31cfeca21e343b1bab7c0af0832e, type: 3}
   rightPlayer: {fileID: 190895154334941364, guid: 3476519da4c027541b9170ace70b3a07, type: 3}
   projectilePrefab: {fileID: 2375220837706918120, guid: a8bc54a7696e3cf4eb42d8e0631e4576, type: 3}
-  gameScenario: 0
-  gameStartTimer: 5
   leftPlayerPosition: {x: -5.5, y: 1, z: 0}
   leftPlayerRotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
   rightPlayerPosition: {x: 5.5, y: 1, z: 0}
   rightPlayerRotation: {x: 0, y: -0.70710677, z: 0, w: 0.70710677}
+  gameStartTimer: 5
 --- !u!4 &1533268694
 Transform:
   m_ObjectHideFlags: 0
@@ -1383,7 +1383,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 2375220837706918120, guid: a8bc54a7696e3cf4eb42d8e0631e4576, type: 3}
-  playerIDCurrentSet: 0
+  inputKey: 0
+  eventActivated: 0
 --- !u!136 &1623673686
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1427,7 +1428,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9ff64af041a938d4d8398ae3a42babe2, type: 2}
+  - {fileID: 2100000, guid: 7083bd43f3709f74480474a886601f73, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1854,6 +1855,8 @@ MonoBehaviour:
   sampleSpeedSec: 0.01
   lineWidth: 0.1
   wandCursor: {fileID: 0}
+  drawActive: 0
+  mainCam: {fileID: 0}
 --- !u!114 &1915294878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1866,9 +1869,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de33c0ed0fc374e4d80dd14a9f23c0c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceToCamera: 5
-  quatRotation: {x: 0, y: 0, z: 15}
-  cursorVisable: 0
 --- !u!23 &738839650403415831
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2018,7 +2018,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 427662eb93764ab46b92568f47ed59e4, type: 2}
+  - {fileID: 2100000, guid: 55857f7eb279fe743b7d05ddc1927340, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2091,7 +2091,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 2375220837706918120, guid: a8bc54a7696e3cf4eb42d8e0631e4576, type: 3}
-  playerIDCurrentSet: 0
+  inputKey: 0
+  eventActivated: 0
 --- !u!1 &7077972291542454634
 GameObject:
   m_ObjectHideFlags: 0
@@ -2176,7 +2177,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 2375220837706918120, guid: a8bc54a7696e3cf4eb42d8e0631e4576, type: 3}
-  playerIDCurrentSet: 0
+  inputKey: 0
+  eventActivated: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
