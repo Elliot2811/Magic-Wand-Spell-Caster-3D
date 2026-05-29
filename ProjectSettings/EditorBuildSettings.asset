@@ -17,5 +17,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LakeWorld.unity
     guid: fe01251a85b20a8408c810288da6e5d8
+  - enabled: 1
+    path: Assets/Scenes/MysticalForestWorld.unity
+    guid: f71b9049c3d194b4ebbc77a5a6638039
+  - enabled: 1
+    path: Assets/Scenes/Victory.unity
+    guid: 0a347d4503ef25a40806e35b83601105
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: b52d78a8e3af47141aeb33b1a20e9426, type: 3}
