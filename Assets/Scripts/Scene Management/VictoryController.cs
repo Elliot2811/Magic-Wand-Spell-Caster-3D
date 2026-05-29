@@ -6,6 +6,7 @@ public class VictoryController : MonoBehaviour
 {
     [SerializeField] private VictoryState victoryState;
 
+    [Header("Character")]
     [SerializeField] private GameObject player1CharacterDisplay;
     [SerializeField] private GameObject player2CharacterDisplay;
 

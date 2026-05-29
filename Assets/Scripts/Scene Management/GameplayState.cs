@@ -8,6 +8,11 @@ public class GameplayState : GameState
 {
     [SerializeField] private VictoryState victoryState;
     private string mapToLoad;
+
+    [Header("Music Settings")]
+    [SerializeField] private AudioClip lakeWorldMusic;
+    [SerializeField] private AudioClip mysticalForestWorldMusic;
+
     public void SetMap(string mapName)
     {
         mapToLoad = mapName;
@@ -16,6 +21,23 @@ public class GameplayState : GameState
     public override void EnterState(GameStateManager gameManager)
     {
         SceneManager.LoadScene(mapToLoad);
+
+        AudioClip trackToPlay = null;
+
+        if (mapToLoad == "LakeWorld")
+        {
+            trackToPlay = lakeWorldMusic;
+        }
+        if (mapToLoad == "MysticalForestWorld")
+        {
+            trackToPlay = mysticalForestWorldMusic;
+        }
+
+        if (trackToPlay != null && gameManager.MusicSource != null)
+        {
+            gameManager.MusicSource.clip = trackToPlay;
+            gameManager.MusicSource.Play();
+        }
     }
     public override void UpdateState(GameStateManager gameManager)
     {
@@ -31,7 +53,11 @@ public class GameplayState : GameState
     }
     public override void ExitState(GameStateManager gameManager)
     {
-
+        //Stop battleMusic if exit Gameplay
+        if (gameManager.MusicSource != null)
+        {
+            gameManager.MusicSource.Stop();
+        }
     }
     public void EndMatch(int winningPlayerNumber, GameStateManager gameManager)
     {

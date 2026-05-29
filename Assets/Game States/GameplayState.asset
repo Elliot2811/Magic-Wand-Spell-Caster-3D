@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e27b37bf4b462524bab1ee42fd0f1266, type: 3}
   m_Name: GameplayState
   m_EditorClassIdentifier: 
-  victoryState: {fileID: 11400000, guid: 36637485fecf6a644a06339943410af0, type: 2}
+  victoryState: {fileID: 11400000, guid: 0906c7a63be8b67498640284a402df79, type: 2}
+  lakeWorldMusic: {fileID: 8300000, guid: 0b0c14b1ea3b89a41a9039d98c789b21, type: 3}
+  mysticalForestWorldMusic: {fileID: 8300000, guid: 0a351e52cb60b9e44aa1eb0a14e3a171, type: 3}

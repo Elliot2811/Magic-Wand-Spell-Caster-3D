@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: VictoryState
   m_EditorClassIdentifier: 
   MainMenuState: {fileID: 11400000, guid: a1f3f8bfe5f75fd45ab0bc4ff50e0daf, type: 2}
+  victoryMusic: {fileID: 8300000, guid: 4772620070556e745b6f8595df7ae6e4, type: 3}
