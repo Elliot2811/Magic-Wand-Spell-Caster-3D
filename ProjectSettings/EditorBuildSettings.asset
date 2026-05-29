@@ -4,6 +4,18 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Initialization.unity
+    guid: f1a08b328c649764e92e3c9ccb04b1d5
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 864caccf7d9b4bd45a49c956b1e230ea
+  - enabled: 1
+    path: Assets/Scenes/MapSelection.unity
+    guid: 0aefadf3365c5c847bf79c418ab5b50f
+  - enabled: 1
+    path: Assets/Scenes/LakeWorld.unity
+    guid: fe01251a85b20a8408c810288da6e5d8
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: b52d78a8e3af47141aeb33b1a20e9426, type: 3}
