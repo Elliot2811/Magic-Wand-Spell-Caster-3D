@@ -10,8 +10,8 @@ public class VictoryController : MonoBehaviour
     [SerializeField] private GameObject player2CharacterDisplay;
 
     //Scale of Players (TO BE ADJUSTED)
-    [SerializeField] private Vector3 winnerScale = new Vector3(3f, 3f, 3f);
-    [SerializeField] private Vector3 loserScale = new Vector3(0.5f, 0.5f, 0.5f);
+    [SerializeField] private Vector3 winnerScale = new Vector3(10f, 10f, 10f);
+    [SerializeField] private Vector3 loserScale = new Vector3(3f, 3f, 3f);
 
     void Start()
     {
