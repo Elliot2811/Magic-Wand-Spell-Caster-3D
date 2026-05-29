@@ -53,7 +53,7 @@ public class GameplayState : GameState
     }
     public override void ExitState(GameStateManager gameManager)
     {
-        //Stop BattleMusic if exit Gameplay
+        //Stop battleMusic if exit Gameplay
         if (gameManager.MusicSource != null)
         {
             gameManager.MusicSource.Stop();
