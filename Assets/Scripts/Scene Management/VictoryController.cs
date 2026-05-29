@@ -6,10 +6,12 @@ public class VictoryController : MonoBehaviour
 {
     [SerializeField] private VictoryState victoryState;
 
+    [Header("Character")]
     [SerializeField] private GameObject player1CharacterDisplay;
     [SerializeField] private GameObject player2CharacterDisplay;
 
     //Scale of Players (TO BE ADJUSTED)
+    [Header("Scale of win and lose Characters")]
     [SerializeField] private Vector3 winnerScale = new Vector3(3f, 3f, 3f);
     [SerializeField] private Vector3 loserScale = new Vector3(0.5f, 0.5f, 0.5f);
 

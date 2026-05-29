@@ -6,6 +6,22 @@ public class MainMenuController : MonoBehaviour
 {
     [SerializeField] private GameState MapSelectionState;
 
+    [Header("Music Settings")]
+    [SerializeField] private AudioClip mainMenuMusic;
+
+    private void Start()
+    {
+        //Play MainMenuMusic
+        if (mainMenuMusic != null && GameStateManager.Instance.MusicSource != null)
+        {
+            if (GameStateManager.Instance.MusicSource.clip != mainMenuMusic)
+            {
+                GameStateManager.Instance.MusicSource.clip = mainMenuMusic;
+                GameStateManager.Instance.MusicSource.Play();
+            }
+        }
+    }
+
     void Update()
     {
         //PLACEHOLDERS for actual controller input
