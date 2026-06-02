@@ -6,6 +6,9 @@ public class SpellBook : MonoBehaviour
     private ShapesStorageSO shapesCollection;
 
     [SerializeField]
+    private SpellProjectileLookUpTable spellLookupTable;
+
+    [SerializeField]
     private Wand wand;
 
     [SerializeField]
@@ -28,9 +31,12 @@ public class SpellBook : MonoBehaviour
             this.gameObject.SetActive(false);
         }
 
-        //Temp area to test the lookup table
-        LookUpTable.dict.Add(shape1, spell1);
-        LookUpTable.dict.Add(shape2, spell2);
+        if (spellLookupTable == null)
+        {
+            spellLookupTable = ScriptableObject.CreateInstance<SpellProjectileLookUpTable>();
+            spellLookupTable.AddPair(shape1, spell1);
+            spellLookupTable.AddPair(shape2, spell2);
+        }
     }
 
 
@@ -68,6 +74,8 @@ public class SpellBook : MonoBehaviour
 
     private ShapeInfoSO CompareShapeDrawing()
     {
+        ShapeInfoSO[] shapes = spellLookupTable.GetShapes();
+
         if (playerPoints == null || playerPoints.Length == 0)
             return null;
 
@@ -97,7 +105,7 @@ public class SpellBook : MonoBehaviour
 
         ScriptableObjectSpells spell;
 
-        LookUpTable.dict.TryGetValue(shapeInfo, out spell);
+        spellLookupTable.TryGetSpell(shapeInfo, out spell);
         return spell;
     }
 }
