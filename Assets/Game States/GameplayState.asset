@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e27b37bf4b462524bab1ee42fd0f1266, type: 3}
+  m_Name: GameplayState
+  m_EditorClassIdentifier: 
+  victoryState: {fileID: 11400000, guid: 0906c7a63be8b67498640284a402df79, type: 2}
+  lakeWorldMusic: {fileID: 8300000, guid: 0b0c14b1ea3b89a41a9039d98c789b21, type: 3}
+  mysticalForestWorldMusic: {fileID: 8300000, guid: 0a351e52cb60b9e44aa1eb0a14e3a171, type: 3}
