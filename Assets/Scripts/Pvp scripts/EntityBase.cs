@@ -44,5 +44,14 @@ public abstract class EntityBase : MonoBehaviour
         entityDmgTaken += amount;
         Debug.Log($"{gameObject} Total Damage Taken: {entityDmgTaken}");
     }
+
+    public virtual void FireSpell(ScriptableObjectSpells spell)
+    {
+        if (spell == null)
+            return;
+
+        prefab = spell.prefab;
+        StartCoroutine(CastAndFireSpell(3));
+    }
     #endregion
 }

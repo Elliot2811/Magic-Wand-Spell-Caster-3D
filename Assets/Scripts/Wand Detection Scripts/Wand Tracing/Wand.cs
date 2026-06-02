@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class WandBase : MonoBehaviour
+public class Wand : MonoBehaviour
 {
     public LineRenderer lineRenderer;
 
     public WandCursorInitialise wandCursor;
 
+    //public InputAction drawingInput;
+    //public InputAction positionInput;
 
     private List<Vector2> points = new List<Vector2>();
     private List<Vector2> catmullPoints = new List<Vector2>();
@@ -30,13 +32,38 @@ public class WandBase : MonoBehaviour
     {
         inputActions = new WandInputActions();
         mainCam = Camera.main;
+
+        //if (drawingInput.Equals(null) ||
+        //    !(
+        //    drawingInput.Equals(inputActions.Wand.DrawingLeft) ||
+        //    drawingInput.Equals(inputActions.Wand.DrawingRight))
+        //    )
+        //{
+        //    Debug.LogError($"{nameof(Wand)}: No valid drawing input assigned on {gameObject.name}.");
+        //    Debug.Log("Setting game object to inactive.");
+        //    gameObject.SetActive(false);
+        //}
+
+
+        //if (positionInput.Equals(null) ||
+        //    !(
+        //    positionInput.Equals(inputActions.Wand.PositionLeft) ||
+        //    positionInput.Equals(inputActions.Wand.PositionRight)
+        //    ))
+        //{
+        //    Debug.LogError($"{nameof(Wand)}: No valid position input assigned on {gameObject.name}.");
+        //    Debug.Log("Setting game object to inactive.");
+        //    gameObject.SetActive(false);
+        //}
     }
 
     private void Start()
     {
         if (lineRenderer == null)
         {
-            Debug.LogError($"{nameof(WandBase)}: No LineRenderer assigned on {gameObject.name}.");
+            Debug.LogError($"{nameof(Wand)}: No LineRenderer assigned on {gameObject.name}.");
+            Debug.Log("Setting game object to inactive.");
+            gameObject.SetActive(false);
             return;
         }
 
@@ -65,6 +92,22 @@ public class WandBase : MonoBehaviour
             renderedPoints.Clear();
         }
     }
+
+
+    #region Subscribe/Unsubscribe To Input System
+    private void OnEnable()
+    {
+        inputActions.Enable();
+        inputActions.Wand.DrawingLeft.started += DrawStarted;
+        inputActions.Wand.DrawingLeft.canceled += DrawCanceled;
+    }
+    private void OnDisable()
+    {
+        inputActions.Wand.DrawingLeft.started -= DrawStarted;
+        inputActions.Wand.DrawingLeft.canceled -= DrawCanceled;
+        inputActions.Disable();
+    }
+    #endregion
 
 
     #region Interpolate the points (Catmull-Rom curve)
@@ -123,22 +166,6 @@ public class WandBase : MonoBehaviour
     #endregion
 
 
-    #region Subscribe/Unsubscribe To Input System
-    private void OnEnable()
-    {
-        inputActions.Enable();
-        inputActions.Wand.Drawing.started += DrawStarted;
-        inputActions.Wand.Drawing.canceled += DrawCanceled;
-    }
-    private void OnDisable()
-    {
-        inputActions.Wand.Drawing.started -= DrawStarted;
-        inputActions.Wand.Drawing.canceled -= DrawCanceled;
-        inputActions.Disable();
-    }
-    #endregion
-
-
     #region Functions to find and record position of cursor
     /// <summary>
     /// Record location of cursor in "points" Queue data struct.
@@ -153,7 +180,7 @@ public class WandBase : MonoBehaviour
         }
         else
         {
-            Vector2 mousePosition = inputActions.Wand.Position.ReadValue<Vector2>();
+            Vector2 mousePosition = inputActions.Wand.DrawingLeft.ReadValue<Vector2>();
             // Debug.Log($"Mouse Posiiton: {mousePosition}"); 
 
             newPos = mainCam.ScreenToWorldPoint(mousePosition);
@@ -180,7 +207,7 @@ public class WandBase : MonoBehaviour
     
 
     #region Events to send drawing data
-    public static event Action<Vector2[]> OnDrawingComplete;
+    public event Action<Vector2[]> OnDrawingComplete;
 
     public void SendData()
     {

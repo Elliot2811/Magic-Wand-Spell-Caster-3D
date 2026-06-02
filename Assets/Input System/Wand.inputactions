@@ -7,7 +7,7 @@
             "id": "5fc70e9d-6d88-4eac-a1dc-769d3d5b0007",
             "actions": [
                 {
-                    "name": "Drawing",
+                    "name": "DrawingLeft",
                     "type": "Button",
                     "id": "d365ed0f-30ef-44eb-9bc1-479284c34210",
                     "expectedControlType": "",
@@ -16,7 +16,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Position",
+                    "name": "PositionLeft",
                     "type": "Value",
                     "id": "5baa3ebd-eb04-4ac5-946c-46566d013652",
                     "expectedControlType": "Vector2",
@@ -33,7 +33,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Mouse",
-                    "action": "Drawing",
+                    "action": "DrawingLeft",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -44,7 +44,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Mouse",
-                    "action": "Position",
+                    "action": "PositionLeft",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

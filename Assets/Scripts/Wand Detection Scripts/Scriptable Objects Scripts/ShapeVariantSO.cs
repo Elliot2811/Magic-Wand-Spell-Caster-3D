@@ -60,11 +60,6 @@ public class ShapeVariantSO : ScriptableObject
     /// </summary>
     private void CaculateNewPoints()
     {
-        if (GameManager.Instance == null)
-        {
-            Debug.LogWarning($"[{name}]: GameManager Instance not found.");
-            return;
-        }
         if (GameConstants.PointCount <= 1)
         {
             Debug.LogWarning($"[{name}]: GameManager Point Count must be greater than 1.");

@@ -1,14 +1,14 @@
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class SpellRecognisionGameManager : MonoBehaviour
 {
-    public static GameManager Instance { get; private set; }
+    public static SpellRecognisionGameManager Instance { get; private set; }
 
     [SerializeField] private ShapesStorageSO shapesCollection;
 
     [SerializeField] private LineRenderer lineRenderer;
 
-    public WandBase AAA;
+    [SerializeField] private Wand wand;
 
     private Camera mainCamera;
 
@@ -64,12 +64,12 @@ public class GameManager : MonoBehaviour
     #region Subscribe to wand and drawing data sent
     private void OnEnable()
     {
-        WandBase.OnDrawingComplete += UpdateDrawing;
+        wand.OnDrawingComplete += UpdateDrawing;
     }
 
     private void OnDisable()
     {
-        WandBase.OnDrawingComplete -= UpdateDrawing;
+        wand.OnDrawingComplete -= UpdateDrawing;
     }
 
     private void UpdateDrawing(Vector2[] receivedPoints) 

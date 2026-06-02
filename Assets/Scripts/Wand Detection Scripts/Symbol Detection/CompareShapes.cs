@@ -1,6 +1,7 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 
+
+// TODO: REMOVE REUSED FINDBESTMATCH CODE AFTER DEPENDENCY ON SHAPESSOTRAGESO REMOVAL
 public static class CompareShapes
 {
     private const float sqrt2 = 1.41421356f;
@@ -57,15 +58,82 @@ public static class CompareShapes
             bestMatch :
             null;
     }
-    
+
+    public static ShapeInfoSO FindBestMatch(Vector2[] playerPoints, ShapeInfoSO[] availableShapes)
+    {
+        //Debug.Log("CompareShapes.FindBestMatch is called");
+
+        if (
+            playerPoints == null ||
+            availableShapes == null ||
+            playerPoints.Length <= 1
+            )
+            return null;
+
+        ShapeInfoSO bestMatch = null;
+        ShapeInfoSO secondBestMatch = null;
+        float bestShapeAccuracy = 0;
+        float secondBestShapeAccuracy = 0;
+        foreach (ShapeInfoSO shape in availableShapes)
+        {
+            //Debug.Log($"Parsing through {shape.ShapeName}");
+
+            foreach (ShapeVariantSO variant in shape)
+            {
+                float averageAcc = CaculateScore(playerPoints, variant, shape.RotSymmetries);
+
+                if (averageAcc > bestShapeAccuracy)
+                {
+                    if (bestMatch != null && bestMatch != shape)
+                    {
+                        secondBestMatch = bestMatch;
+                        secondBestShapeAccuracy = bestShapeAccuracy;
+                    }
+
+                    bestMatch = shape;
+                    bestShapeAccuracy = averageAcc;
+                }
+                else if (shape != bestMatch && averageAcc > secondBestShapeAccuracy)
+                {
+                    secondBestMatch = shape;
+                    secondBestShapeAccuracy = averageAcc;
+                }
+            }
+        }
+
+        if (bestMatch != null)
+            Debug.Log($"Best shape accuracy of {bestShapeAccuracy} from {bestMatch.ShapeName}");
+
+        Debug.Log($"Second best shape accuracy of {secondBestShapeAccuracy} from {secondBestMatch.ShapeName}");
+
+        return
+            (PassedMinAccuracy(bestShapeAccuracy) && UniqueEnough(bestShapeAccuracy, secondBestShapeAccuracy)) ?
+            bestMatch :
+            null;
+    }
+
+
     /// <summary>
     /// Parrses through player drawing, getting total accuracy of points
     /// Acc: Dollar Score + Length Score
     /// </summary>
     private static float CaculateScore(Vector2[] playerPoints, ShapeVariantSO variant, int rotSymmetries)
     {
+        if (variant == null)
+        {
+            Debug.LogError("[CompareShapes]: variant is null");
+            return 0f;
+        }
+
         Vector2[] shapePoints = variant.Points;
-        if (shapePoints == null || playerPoints.Length != shapePoints.Length)
+
+        if (shapePoints == null)
+        {
+            Debug.LogWarning($"[CompareShapes]: {variant.name} has null Points array");
+            return 0f;
+        }
+
+        if (playerPoints.Length != shapePoints.Length)
         {
             Debug.LogError($"[CompareShapes]: point count mismatch on {variant.name} (Player: {playerPoints.Length}, Shape: {shapePoints.Length})");
             return 0f;
