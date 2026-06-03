@@ -286,10 +286,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   victoryState: {fileID: 11400000, guid: 0906c7a63be8b67498640284a402df79, type: 2}
-  player1CharacterDisplay: {fileID: 909677625}
-  player2CharacterDisplay: {fileID: 1789182774}
-  winnerScale: {x: 3, y: 3, z: 3}
-  loserScale: {x: 0.5, y: 0.5, z: 0.5}
+  player1WinPanel: {fileID: 864991896}
+  player2WinPanel: {fileID: 1277070743}
 --- !u!4 &229052576
 Transform:
   m_ObjectHideFlags: 0
