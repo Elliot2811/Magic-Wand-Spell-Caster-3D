@@ -5,7 +5,7 @@ public class GameScenarioSelector : MonoBehaviour
 {
     #region Variables
     [Header("Game Object References")]
-    public GameSceneInitialiser mainGameManager;
+    public GameSceneInitialiser gameSceneInitialiser;
 
     [Header("Game Menu Settings")]
     public int gameStartTimer = 5;
@@ -91,15 +91,15 @@ public class GameScenarioSelector : MonoBehaviour
     {
         if ((leftCoinSlotInsert == true) && (rightCoinSlotInsert == true))
         {
-            mainGameManager.StartGame(3);
+            gameSceneInitialiser.StartGame(3);
         }
         else if ((leftCoinSlotInsert == true) && (rightCoinSlotInsert == false))
         {
-            mainGameManager.StartGame(1);
+            gameSceneInitialiser.StartGame(1);
         }
         else if ((leftCoinSlotInsert == false) && (rightCoinSlotInsert == true))
         {
-            mainGameManager.StartGame(2);
+            gameSceneInitialiser.StartGame(2);
         }
         else
         {

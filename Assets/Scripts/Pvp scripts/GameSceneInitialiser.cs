@@ -8,9 +8,10 @@ public class GameSceneInitialiser : MonoBehaviour
     //Prefabs
     public GameObject entityPrefab1;
     public GameObject entityPrefab2;
-    public GameObject leftPlayer;
-    public GameObject rightPlayer;
     public GameObject projectilePrefab;
+    private GameObject leftPlayer;
+    private GameObject rightPlayer;
+
     //Script References
     public GameScenarioSelector gameScenarioSelector;
 

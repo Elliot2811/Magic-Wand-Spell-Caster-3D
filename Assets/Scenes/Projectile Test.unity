@@ -361,7 +361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58a6ddb50cf5c02448aed7bc68614dee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainGameManager: {fileID: 1533268693}
+  gameSceneInitialiser: {fileID: 1533268697}
   gameStartTimer: 5
 --- !u!4 &610178834
 Transform:
@@ -808,6 +808,51 @@ Transform:
   - {fileID: 1588220675}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1002179515
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1002179517}
+  - component: {fileID: 1002179516}
+  m_Layer: 0
+  m_Name: Main Game Timer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1002179516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1002179515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c07c4d8d69b9f340b3fade397c7dc38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainGameTime: 90
+--- !u!4 &1002179517
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1002179515}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1533268692
 GameObject:
   m_ObjectHideFlags: 0
@@ -817,38 +862,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1533268694}
-  - component: {fileID: 1533268693}
-  - component: {fileID: 1533268695}
-  - component: {fileID: 1533268696}
+  - component: {fileID: 1533268697}
   m_Layer: 0
-  m_Name: TempGameManager2
+  m_Name: Game Scene Initialiser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1533268693
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1533268692}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 630ab0f4ad892f644a27ad32d452f4bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  entityPrefab1: {fileID: 6191189529261095157, guid: 64fa31cfeca21e343b1bab7c0af0832e, type: 3}
-  entityPrefab2: {fileID: 190895154334941364, guid: 3476519da4c027541b9170ace70b3a07, type: 3}
-  leftPlayer: {fileID: 6191189529261095157, guid: 64fa31cfeca21e343b1bab7c0af0832e, type: 3}
-  rightPlayer: {fileID: 190895154334941364, guid: 3476519da4c027541b9170ace70b3a07, type: 3}
-  projectilePrefab: {fileID: 2375220837706918120, guid: a8bc54a7696e3cf4eb42d8e0631e4576, type: 3}
-  gameScenarioSelector: {fileID: 610178833}
-  leftPlayerPosition: {x: -5.5, y: 1, z: 0}
-  leftPlayerRotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
-  rightPlayerPosition: {x: 5.5, y: 1, z: 0}
-  rightPlayerRotation: {x: 0, y: -0.70710677, z: 0, w: 0.70710677}
 --- !u!4 &1533268694
 Transform:
   m_ObjectHideFlags: 0
@@ -864,7 +885,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1533268695
+--- !u!114 &1533268697
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -873,22 +894,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1533268692}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12361b300f7d5f94983d3b6367e642f3, type: 3}
+  m_Script: {fileID: 11500000, guid: 1cba66aa51a53ec4aaeecd55b7d3eb84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1533268696
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1533268692}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c07c4d8d69b9f340b3fade397c7dc38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainGameTime: 90
+  entityPrefab1: {fileID: 6191189529261095157, guid: 64fa31cfeca21e343b1bab7c0af0832e, type: 3}
+  entityPrefab2: {fileID: 190895154334941364, guid: 3476519da4c027541b9170ace70b3a07, type: 3}
+  projectilePrefab: {fileID: 2375220837706918120, guid: a8bc54a7696e3cf4eb42d8e0631e4576, type: 3}
+  gameScenarioSelector: {fileID: 610178833}
+  leftPlayerPosition: {x: -5.5, y: 1, z: 0}
+  leftPlayerRotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+  rightPlayerPosition: {x: 5.5, y: 1, z: 0}
+  rightPlayerRotation: {x: 0, y: -0.70710677, z: 0, w: 0.70710677}
 --- !u!1 &1588220674
 GameObject:
   m_ObjectHideFlags: 0
@@ -1320,3 +1336,4 @@ SceneRoots:
   - {fileID: 610178834}
   - {fileID: 142787702}
   - {fileID: 801079770}
+  - {fileID: 1002179517}
