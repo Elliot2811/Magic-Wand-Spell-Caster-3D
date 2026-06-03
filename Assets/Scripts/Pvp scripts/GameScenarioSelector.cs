@@ -1,31 +1,34 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static TempGameManager;
 
 public class GameScenarioSelector : MonoBehaviour
 {
-    //Game Object References
-    public TempGameManager mainGameManager;
+    #region Variables
+    [Header("Game Object References")]
+    public GameSceneInitialiser mainGameManager;
 
-    //Game Menu logic
     [Header("Game Menu Settings")]
     public int gameStartTimer = 5;
     private bool allowInputCheck = false;
     private bool leftCoinSlotInsert = false;
     private bool rightCoinSlotInsert = false;
     private Coroutine gameCountdownCoroutine;
+    #endregion
 
+    #region Functions
+
+    #region Event Functions
     private void OnEnable()
     {
-        TempGameManager.StartMainMenu += InputCheckSetTrue;
+        GameSceneInitialiser.StartMainMenu += InputCheckSetTrue;
     }
 
     private void OnDisable()
     {
-        TempGameManager.StartMainMenu -= InputCheckSetTrue;
+        GameSceneInitialiser.StartMainMenu -= InputCheckSetTrue;
     }
-
+    #endregion
+    #region Update Function
     private void Update()
     {
         if (allowInputCheck)
@@ -33,17 +36,19 @@ public class GameScenarioSelector : MonoBehaviour
             CoinInsertInput();
         }
     }
-
+    #endregion
+    #region Coin Insert Logic to Initialise Game
+    //These two functions are to control when to check for coin inputs "W" and "I"
     public void InputCheckSetTrue()
     {
         allowInputCheck = true;
     }
-
     public void InputCheckSetFalse()
     {
         allowInputCheck = false;
     }
 
+    //Starts Countdown upon a coin input or press space to directly select game scenario
     private void CoinInsertInput()
     {
         if (Input.GetKeyDown(KeyCode.W))
@@ -66,10 +71,11 @@ public class GameScenarioSelector : MonoBehaviour
         {
             StopCoroutine(gameCountdownCoroutine);
             gameCountdownCoroutine = null;
-            SelectScenario();
+            SelectGameScenario();
         }
     }
 
+    //Countdown before selecting the game scenario
     private IEnumerator GameStartCountdown()
     {
         for (int i = gameStartTimer; i > 0; i--)
@@ -77,10 +83,11 @@ public class GameScenarioSelector : MonoBehaviour
             Debug.Log($"{i}!");
             yield return new WaitForSeconds(1);
         }
-        SelectScenario();
+        SelectGameScenario();
     }
 
-    private void SelectScenario()
+    //Choose the game scenario based on which side the player plays and the number of players
+    private void SelectGameScenario()
     {
         if ((leftCoinSlotInsert == true) && (rightCoinSlotInsert == true))
         {
@@ -99,4 +106,7 @@ public class GameScenarioSelector : MonoBehaviour
             Debug.Log("Error -- Coin Insert if else statement logic is wrong");
         }
     }
+    #endregion
+
+    #endregion
 }

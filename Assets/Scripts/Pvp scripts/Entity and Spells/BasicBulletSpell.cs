@@ -2,8 +2,10 @@ using UnityEngine;
 
 public class BasicBulletSpell : MonoBehaviour
 {
+    #region Variables
     private int projectileSpeed = 5;
     private GameObject spellSpawnPosAndRot;
+    #endregion
 
     #region Start and Update Function
     private void Start()
