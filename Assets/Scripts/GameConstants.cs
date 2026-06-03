@@ -29,12 +29,15 @@ public static class GameConstants
     #endregion
 
     #region Wand 3D model settings
-    public const float DistanceToCamera = 5f;
+    public const float DistanceToCamera = 10f;
     public static Vector3 QuatRotation
     {
         get { return new Vector3(0, 0, 15); }
     }
 
-    public const bool CursorVisible = true;
+    public const bool CursorVisible = false;
+
+    public const float HorizontalFovDeg = 60f;
+    public const float VerticalFovDeg = 40f;
     #endregion
 }

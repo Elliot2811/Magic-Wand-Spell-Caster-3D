@@ -8,10 +8,12 @@ public class Wand : MonoBehaviour
 {
     public LineRenderer lineRenderer;
 
-    public WandCursorInitialise wandCursor;
+    public GameObject wandObject;
 
-    //public InputAction drawingInput;
-    //public InputAction positionInput;
+    public bool usingController = false;
+    private bool UsingController;
+
+    private bool controllerActive = false;
 
     private List<Vector2> points = new List<Vector2>();
     private List<Vector2> catmullPoints = new List<Vector2>();
@@ -30,31 +32,14 @@ public class Wand : MonoBehaviour
 
     private void Awake()
     {
-        inputActions = new WandInputActions();
+        UsingController = usingController;
+
+        if (!UsingController)
+            inputActions = new WandInputActions();
+
         mainCam = Camera.main;
 
-        //if (drawingInput.Equals(null) ||
-        //    !(
-        //    drawingInput.Equals(inputActions.Wand.DrawingLeft) ||
-        //    drawingInput.Equals(inputActions.Wand.DrawingRight))
-        //    )
-        //{
-        //    Debug.LogError($"{nameof(Wand)}: No valid drawing input assigned on {gameObject.name}.");
-        //    Debug.Log("Setting game object to inactive.");
-        //    gameObject.SetActive(false);
-        //}
-
-
-        //if (positionInput.Equals(null) ||
-        //    !(
-        //    positionInput.Equals(inputActions.Wand.PositionLeft) ||
-        //    positionInput.Equals(inputActions.Wand.PositionRight)
-        //    ))
-        //{
-        //    Debug.LogError($"{nameof(Wand)}: No valid position input assigned on {gameObject.name}.");
-        //    Debug.Log("Setting game object to inactive.");
-        //    gameObject.SetActive(false);
-        //}
+        Cursor.visible = GameConstants.CursorVisible;
     }
 
     private void Start()
@@ -70,14 +55,35 @@ public class Wand : MonoBehaviour
         lineRenderer.startWidth = GameConstants.LineWidth;
         lineRenderer.endWidth = GameConstants.LineWidth;
 
-        if (wandCursor == null)
+        if (UsingController && JoyConTracker.Instance == null)
         {
-            wandCursor = GetComponent<WandCursorInitialise>();
+            Debug.LogError($"{nameof(Wand)}: No JoyConTracker instance found for controller input on {gameObject.name}.");
+            Debug.Log("Setting game object to inactive.");
+            gameObject.SetActive(false);
+            return;
+        }
+
+        if (UsingController)
+        {
+            JoyConTracker.Instance.drawingButtonPressed += DrawStarted;
+            JoyConTracker.Instance.drawingButtonReleased += DrawCancelled;
+        }
+        else
+        {
+            inputActions.Enable();
+            inputActions.Wand.DrawingLeft.started += DrawStarted;
+            inputActions.Wand.DrawingLeft.canceled += DrawCancelled;
         }
     }
 
     private void Update()
     {
+        if (usingController && !controllerActive)
+        {
+            controllerActive = JoyConTracker.Instance.Connected;
+            return;
+        }
+
         while (lastProcessedIndex < points.Count - 1)
         {
             lastProcessedIndex++;
@@ -86,26 +92,34 @@ public class Wand : MonoBehaviour
 
         if (renderedPoints.Count > 0)
         {
-            //LineRendererInterface.RemovePoint(lineRenderer);
             LineRendererInterface.AddPoints(lineRenderer, renderedPoints);
-            //LineRendererInterface.AddPoint(lineRenderer, points[^1]);
             renderedPoints.Clear();
+        }
+
+        if (wandObject != null)
+        {
+            wandObject.transform.position = GetCurrentPos();
+            //wandObject.transform.rotation = Quaternion.Euler(GameConstants.QuatRotation) * mainCam.transform.rotation;
         }
     }
 
 
     #region Subscribe/Unsubscribe To Input System
-    private void OnEnable()
-    {
-        inputActions.Enable();
-        inputActions.Wand.DrawingLeft.started += DrawStarted;
-        inputActions.Wand.DrawingLeft.canceled += DrawCanceled;
-    }
     private void OnDisable()
     {
-        inputActions.Wand.DrawingLeft.started -= DrawStarted;
-        inputActions.Wand.DrawingLeft.canceled -= DrawCanceled;
-        inputActions.Disable();
+        if (UsingController)
+        {
+            JoyConTracker.Instance.drawingButtonPressed -= DrawStarted;
+            JoyConTracker.Instance.drawingButtonReleased -= DrawCancelled;
+        }
+        else
+        {
+            inputActions.Wand.DrawingLeft.started -= DrawStarted;
+            inputActions.Wand.DrawingLeft.canceled -= DrawCancelled;
+            inputActions.Disable();
+        }
+
+        StopAllCoroutines();
     }
     #endregion
 
@@ -167,25 +181,33 @@ public class Wand : MonoBehaviour
 
 
     #region Functions to find and record position of cursor
-    /// <summary>
-    /// Record location of cursor in "points" Queue data struct.
-    /// </summary>
-    private void RecordCurrentPos()
+    private Vector3 GetCurrentPos()
     {
-        Vector2 newPos;
+        Vector2 screenPos;
 
-        if (wandCursor != null)
+        if (UsingController)
         {
-            newPos = wandCursor.pos2;
+            screenPos = JoyConTracker.Instance.ScreenPos;
+            //Debug.Log("Controller viewport pos: " + screenPos);
         }
         else
         {
-            Vector2 mousePosition = inputActions.Wand.DrawingLeft.ReadValue<Vector2>();
-            // Debug.Log($"Mouse Posiiton: {mousePosition}"); 
-
-            newPos = mainCam.ScreenToWorldPoint(mousePosition);
+            screenPos = inputActions.Wand.PositionLeft.ReadValue<Vector2>();
+            //Debug.Log("Mouse screen pos: " + screenPos);
         }
 
+        return mainCam.ScreenToWorldPoint(new Vector3(
+            screenPos.x,
+            screenPos.y,
+            Camera.main.nearClipPlane + GameConstants.DistanceToCamera
+            ));
+    }
+
+    /// <summary>
+    /// Record location of cursor in "points" Queue data struct.
+    /// </summary>
+    private void TryRecordCurrentPos(Vector2 newPos)
+    {
         if (points.Count == 0 || newPos != points[^1])
             points.Add(newPos);
     }
@@ -198,7 +220,7 @@ public class Wand : MonoBehaviour
     {
         while (drawActive)
         {
-            RecordCurrentPos();
+            TryRecordCurrentPos(GetCurrentPos());
 
             yield return new WaitForSeconds(GameConstants.sampleSpeedSec);
         }
@@ -218,7 +240,7 @@ public class Wand : MonoBehaviour
 
 
     #region Input System Helper Functions
-    private void DrawStarted(InputAction.CallbackContext callback)
+    private void DrawStarted()
     {
         drawActive = true;
 
@@ -233,7 +255,12 @@ public class Wand : MonoBehaviour
             StopCoroutine(loggingCoroutine);
         loggingCoroutine = StartCoroutine(LogMousePos());
     }
-    private void DrawCanceled(InputAction.CallbackContext callback)
+    private void DrawStarted(InputAction.CallbackContext callback)
+    {
+        DrawStarted();
+    }
+
+    private void DrawCancelled()
     {
         if (loggingCoroutine != null)
             StopCoroutine(loggingCoroutine);    
@@ -242,6 +269,11 @@ public class Wand : MonoBehaviour
 
         FlushCatmullTail();
         SendData();
+    }
+
+    private void DrawCancelled(InputAction.CallbackContext callback)
+    {
+        DrawCancelled();
     }
     #endregion
 }

@@ -223,6 +223,11 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &425771040 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3590691501918631393, guid: e5b9182236c39634b9e8cd75a85c938a, type: 3}
+  m_PrefabInstance: {fileID: 649676110174789578}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -456,7 +461,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6290188424019819844, guid: e5b9182236c39634b9e8cd75a85c938a, type: 3}
   m_PrefabInstance: {fileID: 649676110174789578}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 425771040}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a2de738713ffcf0458cfe9f0d294eb24, type: 3}
@@ -889,10 +894,19 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6290188424019819844, guid: e5b9182236c39634b9e8cd75a85c938a, type: 3}
+      propertyPath: wandObject
+      value: 
+      objectReference: {fileID: 425771040}
+    - target: {fileID: 6290188424019819844, guid: e5b9182236c39634b9e8cd75a85c938a, type: 3}
       propertyPath: lineRenderer
       value: 
       objectReference: {fileID: 878079791}
-    m_RemovedComponents: []
+    - target: {fileID: 6290188424019819844, guid: e5b9182236c39634b9e8cd75a85c938a, type: 3}
+      propertyPath: usingController
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 3442006809655983213, guid: e5b9182236c39634b9e8cd75a85c938a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
