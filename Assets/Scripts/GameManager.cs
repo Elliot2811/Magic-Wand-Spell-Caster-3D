@@ -1,32 +1,14 @@
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class SpellRecognisionGameManager : MonoBehaviour
 {
-    public static GameManager Instance { get; private set; }
+    public static SpellRecognisionGameManager Instance { get; private set; }
 
-    [Header("Shapes to compare")]
     [SerializeField] private ShapesStorageSO shapesCollection;
 
-    [Space]
-    [Header("Display matched shape")]
-    [SerializeField] private bool displayBestShape = false;
     [SerializeField] private LineRenderer lineRenderer;
-    [SerializeField] private float lineWidth = 0.1f;
-    [SerializeField] private float displayPercentage = 0.5f;
-    [SerializeField] private Vector2 offset = new Vector2(0f, 0f); 
 
-    [Space]
-    [Header("Points matching options")]
-    [SerializeField][Min(2)] private int pointCount = 64;
-
-    [Space]
-    [Header("Shapes comparision options")]
-    [SerializeField][Range(0f, 1f)] private float minAccuracy = 0.8f;
-    [SerializeField][Min(1)] private int deviationPower = 4;
-
-    public static int PointCount { get; private set; }
-    public static float MinAccuracy { get; private set; }
-    public static int DeviationPower { get; private set; }
+    [SerializeField] private Wand wand;
 
     private Camera mainCamera;
 
@@ -48,22 +30,18 @@ public class GameManager : MonoBehaviour
         if (shapesCollection == null)
             Debug.LogError("[GameManager]: shapesCollection not found.");
 
-        if (displayBestShape)
+        if (GameConstants.DisplayBestShape)
         {
             if (lineRenderer == null)
                 Debug.LogError("[GameManager]: lineRenderer not found.");
             else
             {
-                lineRenderer.startWidth = lineWidth;
-                lineRenderer.endWidth = lineWidth;
+                lineRenderer.startWidth = GameConstants.LineWidth;
+                lineRenderer.endWidth = GameConstants.LineWidth;
 
                 mainCamera = Camera.main;
             }
         }
-
-        PointCount = pointCount;
-        MinAccuracy = minAccuracy;
-        DeviationPower = deviationPower;
     }
 
     private void Update()
@@ -73,25 +51,25 @@ public class GameManager : MonoBehaviour
 
         newDrawingData = false;
 
-        points = PointsManipulation.ResampleAndNormalize(points, PointCount);
+        points = PointsManipulation.ResampleAndNormalize(points, GameConstants.PointCount);
 
         ShapeInfoSO shapeInfo = CompareShapes.FindBestMatch(points, shapesCollection);
 
         PrintBestShape(shapeInfo);
 
-        if (displayBestShape)
+        if (GameConstants.DisplayBestShape)
             DisplayBestShape(shapeInfo);
     }
 
     #region Subscribe to wand and drawing data sent
     private void OnEnable()
     {
-        WandBase.OnDrawingComplete += UpdateDrawing;
+        wand.OnDrawingComplete += UpdateDrawing;
     }
 
     private void OnDisable()
     {
-        WandBase.OnDrawingComplete -= UpdateDrawing;
+        wand.OnDrawingComplete -= UpdateDrawing;
     }
 
     private void UpdateDrawing(Vector2[] receivedPoints) 
@@ -119,14 +97,10 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        Vector2[] rescaledData = PointsManipulation.ScaleToScreen(shapeData, mainCamera, displayPercentage, offset);
+        Vector2[] catmulledData = PointsManipulation.CatmullRomLine(shapeData);
+        Vector2[] rescaledData = PointsManipulation.ScaleToScreen(catmulledData, mainCamera, GameConstants.DisplayShapePercentage, GameConstants.DisplayShapeOffset);
 
-        lineRenderer.positionCount = rescaledData.Length;
-        
-        for (int i = 0; i < rescaledData.Length; i++)
-        {
-            lineRenderer.SetPosition(i, rescaledData[i]);
-        }
+        LineRendererInterface.Points(lineRenderer, rescaledData);
     }
 
     private void PrintBestShape(ShapeInfoSO shapeInfo)
@@ -137,4 +111,4 @@ public class GameManager : MonoBehaviour
             Debug.Log($"Shape is: {shapeInfo.ShapeName}");
     }
     #endregion
-}
+}   
