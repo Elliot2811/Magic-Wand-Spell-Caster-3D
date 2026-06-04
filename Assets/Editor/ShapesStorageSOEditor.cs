@@ -1,6 +1,6 @@
 using UnityEditor;
 
-[CustomEditor(typeof(ShapesStorageSO))]
+[CustomEditor(typeof(ShapesCollectionSO))]
 public class ShapesStorageSOEditor : Editor
 {
     public override void OnInspectorGUI()

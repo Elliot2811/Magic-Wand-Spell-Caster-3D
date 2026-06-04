@@ -11,6 +11,10 @@ public class Wand : MonoBehaviour
     public GameObject wandObject;
 
     public bool usingController = false;
+
+    [Tooltip("Individual joycon connection id")]
+    [Range(0, 1)]
+    public int deviceId = 0;
     private bool UsingController;
 
     private bool controllerActive = false;
@@ -35,11 +39,13 @@ public class Wand : MonoBehaviour
         UsingController = usingController;
 
         if (!UsingController)
+        {
             inputActions = new WandInputActions();
+            Cursor.visible = GameConstants.CursorVisible;
+        }
 
         mainCam = Camera.main;
 
-        Cursor.visible = GameConstants.CursorVisible;
     }
 
     private void Start()
@@ -187,7 +193,7 @@ public class Wand : MonoBehaviour
 
         if (UsingController)
         {
-            screenPos = JoyConTracker.Instance.ScreenPos;
+            screenPos = ConvertToViewportPos.Caculate(0);
             //Debug.Log("Controller viewport pos: " + screenPos);
         }
         else

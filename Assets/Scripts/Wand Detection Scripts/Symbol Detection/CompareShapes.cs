@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -11,10 +12,13 @@ public static class CompareShapes
     /// applies checks on player drawing to shape,
     /// and returns best shape.
     /// </summary>
+    /// <param name="availableShapes">
+    /// Accepts any enumarable collection of ShapeInfoSO, such as ShapesStorageSO or ShapeInfoSO array
+    /// </param>
     /// <returns>
     /// ShapeInfoSO object that has shape name information
     /// </returns>
-    public static ShapeInfoSO FindBestMatch(Vector2[] playerPoints, ShapesStorageSO availableShapes)
+    public static ShapeInfoSO FindBestMatch(Vector2[] playerPoints, IEnumerable<ShapeInfoSO> availableShapes)
     {
         //Debug.Log("CompareShapes.FindBestMatch is called");
 
@@ -58,60 +62,6 @@ public static class CompareShapes
             bestMatch :
             null;
     }
-
-    public static ShapeInfoSO FindBestMatch(Vector2[] playerPoints, ShapeInfoSO[] availableShapes)
-    {
-        //Debug.Log("CompareShapes.FindBestMatch is called");
-
-        if (
-            playerPoints == null ||
-            availableShapes == null ||
-            playerPoints.Length <= 1
-            )
-            return null;
-
-        ShapeInfoSO bestMatch = null;
-        ShapeInfoSO secondBestMatch = null;
-        float bestShapeAccuracy = 0;
-        float secondBestShapeAccuracy = 0;
-        foreach (ShapeInfoSO shape in availableShapes)
-        {
-            //Debug.Log($"Parsing through {shape.ShapeName}");
-
-            foreach (ShapeVariantSO variant in shape)
-            {
-                float averageAcc = CaculateScore(playerPoints, variant, shape.RotSymmetries);
-
-                if (averageAcc > bestShapeAccuracy)
-                {
-                    if (bestMatch != null && bestMatch != shape)
-                    {
-                        secondBestMatch = bestMatch;
-                        secondBestShapeAccuracy = bestShapeAccuracy;
-                    }
-
-                    bestMatch = shape;
-                    bestShapeAccuracy = averageAcc;
-                }
-                else if (shape != bestMatch && averageAcc > secondBestShapeAccuracy)
-                {
-                    secondBestMatch = shape;
-                    secondBestShapeAccuracy = averageAcc;
-                }
-            }
-        }
-
-        if (bestMatch != null)
-            Debug.Log($"Best shape accuracy of {bestShapeAccuracy} from {bestMatch.ShapeName}");
-
-        Debug.Log($"Second best shape accuracy of {secondBestShapeAccuracy} from {secondBestMatch.ShapeName}");
-
-        return
-            (PassedMinAccuracy(bestShapeAccuracy) && UniqueEnough(bestShapeAccuracy, secondBestShapeAccuracy)) ?
-            bestMatch :
-            null;
-    }
-
 
     /// <summary>
     /// Parrses through player drawing, getting total accuracy of points

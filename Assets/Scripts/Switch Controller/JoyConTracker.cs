@@ -12,15 +12,12 @@ public class JoyConTracker : MonoBehaviour
     private int count = 0;
     private int[] handles = new int[16];
 
+    private bool readyToConnect = false;
+
     private Quaternion currentRotation = Quaternion.identity;
     public Quaternion CurrentRotation => currentRotation;
 
-    public Vector2 ScreenPos
-    {
-        get { return CaculateRotationToCameraPos(currentRotation); }
-    }
-
-    public bool Connected => count > 0;
+    public bool Connected => readyToConnect;
 
     private struct ImuData
     {
@@ -220,35 +217,8 @@ public class JoyConTracker : MonoBehaviour
 
         callbackDelegate = OnJSLCallback;
         JSL.JslSetCallback(callbackDelegate);
-    }
-    #endregion
 
-    #region Convert rotation to screen position
-    private Vector2 CaculateRotationToCameraPos(Quaternion rotation)
-    {
-        Vector3 forward = rotation * Vector3.forward;
-
-        float yawDegrees = Mathf.Atan2(forward.x, forward.z) * Mathf.Rad2Deg;
-
-        float pitchDegrees = Mathf.Asin(Mathf.Clamp(forward.y, -1f, 1f)) * Mathf.Rad2Deg;
-
-        Vector2 posInCamera = new Vector2(
-            yawDegrees / GameConstants.HorizontalFovDeg,
-            pitchDegrees / GameConstants.VerticalFovDeg
-            );
-
-        posInCamera.x = Mathf.Clamp(posInCamera.x, -0.4f, 0.4f);
-        posInCamera.y = Mathf.Clamp(posInCamera.y, -0.4f, 0.4f);
-
-        Vector2 viewport = posInCamera + new Vector2(0.5f, 0.5f);
-
-        viewport.x = Mathf.Clamp01(viewport.x);
-        viewport.y = Mathf.Clamp01(viewport.y);
-
-        return new Vector2(
-            viewport.x * Screen.width,
-            viewport.y * Screen.height
-            );
+        readyToConnect = true;
     }
     #endregion
 

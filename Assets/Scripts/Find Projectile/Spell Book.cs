@@ -3,7 +3,7 @@ using UnityEngine;
 public class SpellBook : MonoBehaviour
 {
     [SerializeField]
-    private ShapesStorageSO shapesCollection;
+    private ShapesCollectionSO shapesCollection;
 
     [SerializeField]
     private SpellProjectileLookUpTable spellLookupTable;
@@ -89,7 +89,7 @@ public class SpellBook : MonoBehaviour
         
         if (shapesCollection == null)
         {
-            Debug.LogError($"[{nameof(SpellBook)}]: No reference to {nameof(ShapesStorageSO)} found on {gameObject.name}.");
+            Debug.LogError($"[{nameof(SpellBook)}]: No reference to {nameof(ShapesCollectionSO)} found on {gameObject.name}.");
             return null;
         }   
 

@@ -4,7 +4,7 @@ public class SpellRecognisionTest : MonoBehaviour
 {
     public static SpellRecognisionTest Instance { get; private set; }
 
-    [SerializeField] private ShapesStorageSO shapesCollection;
+    [SerializeField] private ShapesCollectionSO shapesCollection;
 
     [SerializeField] private LineRenderer lineRenderer;
 
