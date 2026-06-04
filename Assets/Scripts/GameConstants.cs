@@ -11,11 +11,14 @@ public static class GameConstants
     public const float AspectWeightage = 0.15f; // initial: 0.15
     public const float LineWeightage = 0.10f; // initial: 0.10
 
-    public const float MinAccuracy = 0.7f;
+    public const float MinAccuracy = 0.85f;
     public const float MinAccDiff = 0.10f;
     #endregion
 
     #region Display settings
+    [Range(0f, 0.5f)]
+    public const float DrawingAreaPercentage = 0.90f;
+
     public const bool DisplayBestShape = true;
     public const float LineWidth = 0.1f;
     public const float DisplayShapePercentage = 0.75f;
@@ -29,12 +32,15 @@ public static class GameConstants
     #endregion
 
     #region Wand 3D model settings
-    public const float DistanceToCamera = 5f;
+    public const float DistanceToCamera = 10f;
     public static Vector3 QuatRotation
     {
         get { return new Vector3(0, 0, 15); }
     }
 
-    public const bool CursorVisible = true;
+    public const bool CursorVisible = false;
+
+    public const float HorizontalFovDeg = 45f;
+    public const float VerticalFovDeg = 30f;
     #endregion
 }

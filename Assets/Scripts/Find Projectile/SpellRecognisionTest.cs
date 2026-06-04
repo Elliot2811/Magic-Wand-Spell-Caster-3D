@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class SpellRecognisionGameManager : MonoBehaviour
+public class SpellRecognisionTest : MonoBehaviour
 {
-    public static SpellRecognisionGameManager Instance { get; private set; }
+    public static SpellRecognisionTest Instance { get; private set; }
 
-    [SerializeField] private ShapesStorageSO shapesCollection;
+    [SerializeField] private ShapesCollectionSO shapesCollection;
 
     [SerializeField] private LineRenderer lineRenderer;
 
