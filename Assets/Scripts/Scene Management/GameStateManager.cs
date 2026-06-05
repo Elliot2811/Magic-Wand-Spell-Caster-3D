@@ -10,6 +10,8 @@ public class GameStateManager : MonoBehaviour
     [SerializeField] private GameState initialState;
     private GameState currentState;
 
+    [HideInInspector] public int gameScenarioChosen = 0;
+
     private void Awake()
     {
         //Singleton Pattern
@@ -52,6 +54,7 @@ public class GameStateManager : MonoBehaviour
             currentState.ExitState(this);
         }
         currentState = newState;
+        Debug.Log("Changing to " + currentState);
         currentState.EnterState(this);
     }
 }
