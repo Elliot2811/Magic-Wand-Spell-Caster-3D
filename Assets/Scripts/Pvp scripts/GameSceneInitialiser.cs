@@ -15,11 +15,11 @@ public class GameSceneInitialiser : MonoBehaviour
     //Script References
     public GameScenarioSelector gameScenarioSelector;
 
-    [Header("Starting Game Position and Rotation")]
-    public Vector3 leftPlayerPosition = new Vector3(-5.5F, 1, 0);
-    public Quaternion leftPlayerRotation = Quaternion.Euler(0, 90, 0);
-    public Vector3 rightPlayerPosition = new Vector3(5.5F, 1, 0);
-    public Quaternion rightPlayerRotation = Quaternion.Euler(0,-90,0);
+    //[Header("Starting Game Position and Rotation")]
+    //public Vector3 leftPlayerPosition = new Vector3(-5.5F, 1, 0);
+    //public Quaternion leftPlayerRotation = Quaternion.Euler(0, 90, 0);
+    //public Vector3 rightPlayerPosition = new Vector3(5.5F, 1, 0);
+    //public Quaternion rightPlayerRotation = Quaternion.Euler(0,-90,0);
 
     //Overall Game flow variables
     public static event Action<GameRunStatus> StartMainGame;
@@ -50,14 +50,17 @@ public class GameSceneInitialiser : MonoBehaviour
 
         leftPlayer = Instantiate(
             entityPrefab1,
-            leftPlayerPosition,
-            leftPlayerRotation
+            GameConstants.LakeWorldLeftPos,
+            Quaternion.Euler(GameConstants.LakeWorldLeftRot)
         );
+        leftPlayer.transform.localScale = GameConstants.LakeWorldLeftScale;
+
         rightPlayer = Instantiate(
             entityPrefab2,
-            rightPlayerPosition,
-            rightPlayerRotation
+            GameConstants.LakeWorldRightPos,
+            Quaternion.Euler(GameConstants.LakeWorldRightRot)
         );
+        rightPlayer.transform.localScale = GameConstants.LakeWorldRightScale;
 
         switch (gameScenario)
         {

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public static class GameConstants
@@ -22,10 +23,7 @@ public static class GameConstants
     public const bool DisplayBestShape = true;
     public const float LineWidth = 0.1f;
     public const float DisplayShapePercentage = 0.75f;
-    public static Vector2 DisplayShapeOffset
-    {
-        get { return Vector2.zero; }
-    }
+    public static readonly Vector2 DisplayShapeOffset;
 
     public const int CatmullResolution = 10;
     public const float sharpAngleThreshold = 45f;
@@ -42,5 +40,17 @@ public static class GameConstants
 
     public const float HorizontalFovDeg = 45f;
     public const float VerticalFovDeg = 30f;
+    #endregion
+
+    #region Scene Transforms
+    #region Lake World
+    public static readonly Vector3 LakeWorldLeftPos = new Vector3(-16F, 5, 8);
+    public static readonly Vector3 LakeWorldLeftRot = new Vector3(0, 90, 0);
+    public static readonly Vector3 LakeWorldLeftScale = new Vector3(5f, 5f, 5f);
+    public static readonly Vector3 LakeWorldRightPos = new Vector3(16F, 5, 8);
+    public static readonly Vector3 LakeWorldRightRot = new Vector3(0, -90, 0);
+    public static readonly Vector3 LakeWorldRightScale = new Vector3(5f, 5f, 5f);
+    #endregion
+
     #endregion
 }
