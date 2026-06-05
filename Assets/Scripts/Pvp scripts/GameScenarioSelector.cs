@@ -4,31 +4,24 @@ using UnityEngine;
 public class GameScenarioSelector : MonoBehaviour
 {
     #region Variables
-    [Header("Game Object References")]
-    public GameSceneInitialiser gameSceneInitialiser;
-
     [Header("Game Menu Settings")]
     public int gameStartTimer = 5;
-    private bool allowInputCheck = false;
+    private bool allowInputCheck = true;
     private bool leftCoinSlotInsert = false;
     private bool rightCoinSlotInsert = false;
     private Coroutine gameCountdownCoroutine;
+    [SerializeField] private GameState MapSelectionState;
     #endregion
 
     #region Functions
-
-    #region Event Functions
-    private void OnEnable()
+    #region Start and Update Function
+    private void Start()
     {
-        GameSceneInitialiser.StartMainMenu += InputCheckSetTrue;
+        if (GameStateManager.Instance == null)
+        {
+            Debug.LogError("ERROR - GameStateManager doesn't exist in current scene.");
+        }
     }
-
-    private void OnDisable()
-    {
-        GameSceneInitialiser.StartMainMenu -= InputCheckSetTrue;
-    }
-    #endregion
-    #region Update Function
     private void Update()
     {
         if (allowInputCheck)
@@ -51,16 +44,18 @@ public class GameScenarioSelector : MonoBehaviour
     //Starts Countdown upon a coin input or press space to directly select game scenario
     private void CoinInsertInput()
     {
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.W) && leftCoinSlotInsert == false)
         {
+            Debug.Log("Left Coin has been inserted");
             leftCoinSlotInsert = true;
             if (gameCountdownCoroutine == null)
             {
                 gameCountdownCoroutine = StartCoroutine(GameStartCountdown());
             }
         }
-        if (Input.GetKeyDown(KeyCode.I))
+        if (Input.GetKeyDown(KeyCode.I) && rightCoinSlotInsert == false)
         {
+            Debug.Log("Right Coin has been inserted");
             rightCoinSlotInsert = true;
             if (gameCountdownCoroutine == null)
             {
@@ -91,15 +86,21 @@ public class GameScenarioSelector : MonoBehaviour
     {
         if ((leftCoinSlotInsert == true) && (rightCoinSlotInsert == true))
         {
-            gameSceneInitialiser.StartGame(3);
+            //gameSceneInitialiser.StartGame(3);
+            GameStateManager.Instance.gameScenarioChosen = 3;
+            GameStateManager.Instance.TransitionToState(MapSelectionState);
         }
         else if ((leftCoinSlotInsert == true) && (rightCoinSlotInsert == false))
         {
-            gameSceneInitialiser.StartGame(1);
+            //gameSceneInitialiser.StartGame(1);
+            GameStateManager.Instance.gameScenarioChosen = 1;
+            GameStateManager.Instance.TransitionToState(MapSelectionState);
         }
         else if ((leftCoinSlotInsert == false) && (rightCoinSlotInsert == true))
         {
-            gameSceneInitialiser.StartGame(2);
+            //gameSceneInitialiser.StartGame(2);
+            GameStateManager.Instance.gameScenarioChosen = 2;
+            GameStateManager.Instance.TransitionToState(MapSelectionState);
         }
         else
         {
