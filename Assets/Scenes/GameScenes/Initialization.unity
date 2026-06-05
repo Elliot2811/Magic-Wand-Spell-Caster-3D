@@ -245,7 +245,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae21f7077c4846e4b8c0264e97a6541d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialState: {fileID: 11400000, guid: a1f3f8bfe5f75fd45ab0bc4ff50e0daf, type: 2}
+  initialState: {fileID: 11400000, guid: 44c13c6fe41cbd142a3abb916493a9fc, type: 2}
+  gameScenarioChosen: 0
 --- !u!4 &1249132590
 Transform:
   m_ObjectHideFlags: 0

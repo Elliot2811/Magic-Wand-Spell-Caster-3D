@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef2189e810c5e0c43a84cfe331f1f022, type: 3}
+  m_Name: MysticalForestWorldData
+  m_EditorClassIdentifier: 
+  mapName: MysticalForestWorld
+  mapPrefab: {fileID: 0}
+  mapMusic: {fileID: 8300000, guid: 0b0c14b1ea3b89a41a9039d98c789b21, type: 3}
+  sceneToLoad: 
+  sceneAsset: {fileID: 102900000, guid: 316e8c4da6fc2c14a81404ed277d8a0f, type: 3}
+  leftPos: {x: -16, y: 5, z: 8}
+  leftRot: {x: 0, y: 90, z: 0}
+  leftScale: {x: 5, y: 5, z: 5}
+  rightPos: {x: 16, y: 5, z: 8}
+  rightRot: {x: 0, y: -90, z: 0}
+  rightScale: {x: 5, y: 5, z: 5}

@@ -152,7 +152,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73939fffc8eafb44a84efa97eeeec299, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MapSelectionState: {fileID: 11400000, guid: 77e4d3f0d0334cd4681d649178785e29, type: 2}
   mainMenuMusic: {fileID: 8300000, guid: 1836a097fecb8ac4782c6d3c9932ada5, type: 3}
 --- !u!4 &85628099
 Transform:
@@ -182,7 +181,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameStartTimer: 5
-  MapSelectionState: {fileID: 11400000, guid: 77e4d3f0d0334cd4681d649178785e29, type: 2}
+  MapSelectionState: {fileID: 11400000, guid: a1f3f8bfe5f75fd45ab0bc4ff50e0daf, type: 2}
 --- !u!1 &907792118
 GameObject:
   m_ObjectHideFlags: 0
