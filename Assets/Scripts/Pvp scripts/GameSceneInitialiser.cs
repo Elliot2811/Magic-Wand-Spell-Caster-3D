@@ -13,7 +13,7 @@ public class GameSceneInitialiser : MonoBehaviour
     private GameObject rightPlayer;
 
     //Script References
-    public GameScenarioSelector gameScenarioSelector;
+    //public GameScenarioSelector gameScenarioSelector;
 
     //[Header("Starting Game Position and Rotation")]
     //public Vector3 leftPlayerPosition = new Vector3(-5.5F, 1, 0);
@@ -24,7 +24,7 @@ public class GameSceneInitialiser : MonoBehaviour
     //Overall Game flow variables
     public static event Action<GameRunStatus> StartMainGame;
     public static event Action StartMainMenu;
-    private int gameScenario = 0; //1 means player at left side, 2 means player at right side, 3 means 2 players
+    //private int gameScenario = 0; //1 means player at left side, 2 means player at right side, 3 means 2 players
     public enum GameRunStatus
     {
         MainMenu,
@@ -38,14 +38,19 @@ public class GameSceneInitialiser : MonoBehaviour
     #region Start Function
     private void Start()
     {
-        StartMainMenu?.Invoke();
+        if (GameStateManager.Instance == null)
+        {
+            Debug.LogError("ERROR - GameStateManager doesn't exist in current scene");
+        }
+        //StartMainMenu?.Invoke();
+        StartGame(GameStateManager.Instance.gameScenarioChosen);
     }
     #endregion
     #region Scene Initialise Function
     public void StartGame(int gameScenarioSelected)
     {
-        gameScenario = gameScenarioSelected;
-        gameScenarioSelector.InputCheckSetFalse();
+        //gameScenarioSelector.InputCheckSetFalse();
+        Debug.Log("Starting game...");
         StartMainGame?.Invoke(GameRunStatus.GameStarted);
 
         leftPlayer = Instantiate(
@@ -62,7 +67,7 @@ public class GameSceneInitialiser : MonoBehaviour
         );
         rightPlayer.transform.localScale = GameConstants.LakeWorldRightScale;
 
-        switch (gameScenario)
+        switch (gameScenarioSelected)
         {
             case 0:
                 Debug.Log("Error -- Game Scenario variable has not been given a scenario");
