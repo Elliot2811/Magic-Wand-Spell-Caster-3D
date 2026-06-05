@@ -12,6 +12,9 @@ public class GameSceneInitialiser : MonoBehaviour
     private GameObject leftPlayer;
     private GameObject rightPlayer;
 
+    public MapData currentMapData;
+    private bool hasGameStarted = false;
+
     //Script References
     //public GameScenarioSelector gameScenarioSelector;
 
@@ -49,23 +52,40 @@ public class GameSceneInitialiser : MonoBehaviour
     #region Scene Initialise Function
     public void StartGame(int gameScenarioSelected)
     {
+        if (hasGameStarted) return;
+        hasGameStarted = true;
         //gameScenarioSelector.InputCheckSetFalse();
         Debug.Log("Starting game...");
         StartMainGame?.Invoke(GameRunStatus.GameStarted);
 
+        if (currentMapData == null)
+        {
+            Debug.LogError("Current Map Data asset is missing from GameSceneInitialiser");
+            return;
+        }
+
+        if (currentMapData.mapPrefab != null)
+        {
+            Instantiate(currentMapData.mapPrefab, currentMapData.mapPrefab.transform.position, currentMapData.mapPrefab.transform.rotation);
+        }
+        else
+        {
+            Debug.LogWarning($"No mapPrefab has been assigned inside the {currentMapData.mapName} data asset!");
+        }
+
         leftPlayer = Instantiate(
             entityPrefab1,
-            GameConstants.LakeWorldLeftPos,
-            Quaternion.Euler(GameConstants.LakeWorldLeftRot)
+            currentMapData.leftPos,
+            Quaternion.Euler(currentMapData.leftRot)
         );
-        leftPlayer.transform.localScale = GameConstants.LakeWorldLeftScale;
+        leftPlayer.transform.localScale = currentMapData.leftScale;
 
         rightPlayer = Instantiate(
             entityPrefab2,
-            GameConstants.LakeWorldRightPos,
-            Quaternion.Euler(GameConstants.LakeWorldRightRot)
+            currentMapData.rightPos,
+            Quaternion.Euler(currentMapData.rightRot)
         );
-        rightPlayer.transform.localScale = GameConstants.LakeWorldRightScale;
+        rightPlayer.transform.localScale = currentMapData.rightScale;
 
         switch (gameScenarioSelected)
         {

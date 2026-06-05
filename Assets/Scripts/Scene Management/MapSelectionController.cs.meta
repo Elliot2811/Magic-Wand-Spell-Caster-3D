@@ -3,7 +3,10 @@ guid: cdfbce18da824304d8c9334afb21d9f5
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - gameplayState: {fileID: 11400000, guid: cf5256d72205d1445b60d136a4a052bc, type: 2}
+  - LakeWorldMapData: {fileID: 11400000, guid: f25c9fd3308e0ca4e825daac643f61ab, type: 2}
+  - MysticalForestWorldData: {fileID: 11400000, guid: c9608eaafe3ca58449929be445b29d2a, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

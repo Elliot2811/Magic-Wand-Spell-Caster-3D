@@ -6,22 +6,31 @@ public class MapSelectionController : MonoBehaviour
 {
     [SerializeField] private GameplayState gameplayState;
 
+    [Header("Map Assets")]
+    [SerializeField] private MapData LakeWorldMapData;
+    [SerializeField] private MapData MysticalForestWorldData;
+
     void Update()
     {
-        //PLACEHOLDERS for actual controller input
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            SelectMap("LakeWorld");
+            SelectMap(LakeWorldMapData);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            SelectMap("MysticalForestWorld");
+            SelectMap(MysticalForestWorldData);
         }
     }
 
-    public void SelectMap(string mapName)
+    public void SelectMap(MapData mapData)
     {
-        gameplayState.SetMap(mapName);
+        if (mapData == null)
+        {
+            Debug.LogError("The selected Map Data asset is missing from the Inspector!");
+            return;
+        }
+
+        gameplayState.SetMap(mapData);
         GameStateManager.Instance.TransitionToState(gameplayState);
     }
 }
