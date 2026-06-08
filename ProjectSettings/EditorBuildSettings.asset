@@ -18,7 +18,7 @@ EditorBuildSettings:
     path: Assets/Scenes/GameScenes/Gameplay.unity
     guid: 316e8c4da6fc2c14a81404ed277d8a0f
   - enabled: 0
-    path: Assets/Scenes/GameScenes/MapSelection.unity
+    path: Assets/Scenes/MapSelection.unity
     guid: 0aefadf3365c5c847bf79c418ab5b50f
   - enabled: 0
     path: Assets/Scenes/GameScenes/LakeWorld.unity
