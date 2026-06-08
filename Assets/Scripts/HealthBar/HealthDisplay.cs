@@ -12,8 +12,8 @@ public class HealthDisplay : MonoBehaviour
     public VictoryState victoryState;
 
     [Header("Settings")]
-    public float maxDamageAdvantage = 50f; //maximum amount of damage that player needs to have to immediately win the other player
-    //e.g. if maxDamageAdvantage = 50f, then the player needs to deal 50 dmg more than the other player to win
+    public float maxDamageAdvantage = 100f; //maximum amount of damage that player needs to have to immediately win the other player
+    //e.g. if maxDamageAdvantage = 100f, then the player needs to deal 100 dmg more than the other player to win
 
     private EntityBase leftPlayer;
     private EntityBase rightPlayer;
