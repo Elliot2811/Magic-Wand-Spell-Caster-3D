@@ -5,7 +5,6 @@ using UnityEngine;
 public class GameStateManager : MonoBehaviour
 {
     public static GameStateManager Instance { get; private set; }
-    public AudioSource MusicSource { get; private set; }
 
     [SerializeField] private GameState initialState;
     private GameState currentState;
@@ -20,14 +19,6 @@ public class GameStateManager : MonoBehaviour
             //Keep this GameStateManager running
             Instance = this;
             DontDestroyOnLoad(gameObject);
-
-            MusicSource = gameObject.GetComponent<AudioSource>();
-            if (MusicSource == null)
-            {
-                MusicSource = gameObject.AddComponent<AudioSource>();
-            }
-            MusicSource.loop = true;
-            MusicSource.playOnAwake = false;
         }
         else
         {

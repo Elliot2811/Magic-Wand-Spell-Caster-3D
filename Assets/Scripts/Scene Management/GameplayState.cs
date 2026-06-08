@@ -31,10 +31,9 @@ public class GameplayState : GameState
         SceneManager.LoadScene(activeMapData.sceneToLoad);
 
         // Play Music
-        if (activeMapData.mapMusic != null && gameManager.MusicSource != null)
+        if (AudioManager.Instance != null)
         {
-            gameManager.MusicSource.clip = activeMapData.mapMusic;
-            gameManager.MusicSource.Play();
+            AudioManager.Instance.PlayMusic(activeMapData.mapMusic);
         }
     }
     private void OnGameplaySceneLoaded(Scene scene, LoadSceneMode mode)
@@ -63,9 +62,9 @@ public class GameplayState : GameState
     public override void ExitState(GameStateManager gameManager)
     {
         //Stop battleMusic if exit Gameplay
-        if (gameManager.MusicSource != null)
+        if (AudioManager.Instance != null)
         {
-            gameManager.MusicSource.Stop();
+            AudioManager.Instance.StopMusic();
         }
     }
     public void EndMatch(int winningPlayerNumber, GameStateManager gameManager)
