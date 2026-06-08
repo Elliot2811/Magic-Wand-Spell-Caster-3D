@@ -870,7 +870,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HealthBar: {fileID: 1564893809}
   victoryState: {fileID: 11400000, guid: 0906c7a63be8b67498640284a402df79, type: 2}
-  maxDamageAdvantage: 50
+  maxDamageAdvantage: 100
 --- !u!4 &1427030757
 Transform:
   m_ObjectHideFlags: 0
