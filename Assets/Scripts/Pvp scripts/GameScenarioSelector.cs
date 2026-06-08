@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class GameScenarioSelector : MonoBehaviour
@@ -11,6 +12,11 @@ public class GameScenarioSelector : MonoBehaviour
     private bool rightCoinSlotInsert = false;
     private Coroutine gameCountdownCoroutine;
     [SerializeField] private GameState MapSelectionState;
+
+    [Header("UI Elements")]
+    [SerializeField] private TextMeshProUGUI countdownText;
+    [SerializeField] private TextMeshProUGUI leftSlotStatusText;
+    [SerializeField] private TextMeshProUGUI rightSlotStatusText;
     #endregion
 
     #region Functions
@@ -21,6 +27,10 @@ public class GameScenarioSelector : MonoBehaviour
         {
             Debug.LogError("ERROR - GameStateManager doesn't exist in current scene.");
         }
+
+        //Initialize the UI text
+        UpdateStatusUI();
+        if (countdownText != null) countdownText.gameObject.SetActive(false);
     }
     private void Update()
     {
@@ -48,6 +58,8 @@ public class GameScenarioSelector : MonoBehaviour
         {
             Debug.Log("Left Coin has been inserted");
             leftCoinSlotInsert = true;
+            UpdateStatusUI(); //Update UI text
+
             if (gameCountdownCoroutine == null)
             {
                 gameCountdownCoroutine = StartCoroutine(GameStartCountdown());
@@ -57,6 +69,8 @@ public class GameScenarioSelector : MonoBehaviour
         {
             Debug.Log("Right Coin has been inserted");
             rightCoinSlotInsert = true;
+            UpdateStatusUI(); //Update UI text
+
             if (gameCountdownCoroutine == null)
             {
                 gameCountdownCoroutine = StartCoroutine(GameStartCountdown());
@@ -66,6 +80,7 @@ public class GameScenarioSelector : MonoBehaviour
         {
             StopCoroutine(gameCountdownCoroutine);
             gameCountdownCoroutine = null;
+            if (countdownText != null) countdownText.gameObject.SetActive(false); //Hide UI
             SelectGameScenario();
         }
     }
@@ -73,12 +88,37 @@ public class GameScenarioSelector : MonoBehaviour
     //Countdown before selecting the game scenario
     private IEnumerator GameStartCountdown()
     {
+        //Show countdown UI if it exists
+        if (countdownText != null) countdownText.gameObject.SetActive(true);
+
         for (int i = gameStartTimer; i > 0; i--)
         {
             Debug.Log($"{i}!");
+
+            if (countdownText != null)
+            {
+                countdownText.text = i.ToString();
+            }
+
             yield return new WaitForSeconds(1);
         }
+
+        if (countdownText != null) countdownText.gameObject.SetActive(false);
         SelectGameScenario();
+    }
+    private void UpdateStatusUI()
+    {
+        if (leftSlotStatusText != null)
+        {
+            leftSlotStatusText.text = leftCoinSlotInsert ? "P1 READY" : "INSERT COIN";
+            leftSlotStatusText.color = leftCoinSlotInsert ? Color.green : Color.white;
+        }
+
+        if (rightSlotStatusText != null)
+        {
+            rightSlotStatusText.text = rightCoinSlotInsert ? "P2 READY" : "INSERT COIN";
+            rightSlotStatusText.color = rightCoinSlotInsert ? Color.green : Color.white;
+        }
     }
 
     //Choose the game scenario based on which side the player plays and the number of players
