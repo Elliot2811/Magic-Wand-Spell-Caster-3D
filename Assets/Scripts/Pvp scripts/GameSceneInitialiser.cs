@@ -12,6 +12,9 @@ public class GameSceneInitialiser : MonoBehaviour
     private GameObject leftPlayer;
     private GameObject rightPlayer;
 
+    [Header("UI References")]
+    public HealthDisplay healthDisplayUI;
+
     public MapData currentMapData;
     private bool hasGameStarted = false;
 
@@ -47,6 +50,20 @@ public class GameSceneInitialiser : MonoBehaviour
         }
         //StartMainMenu?.Invoke();
         StartGame(GameStateManager.Instance.gameScenarioChosen);
+
+        //assigning which entity is which player is which for Healthbar UI to track health
+        EntityBase leftEntity = leftPlayer.GetComponent<EntityBase>();
+        EntityBase rightEntity = rightPlayer.GetComponent<EntityBase>();
+
+        if (healthDisplayUI != null && leftEntity != null && rightEntity != null)
+        {
+            //pass entities over to the UI!
+            healthDisplayUI.InitializePlayers(leftEntity, rightEntity);
+        }
+        else
+        {
+            Debug.LogError("Failed to link players to HealthDisplay UI!");
+        }
     }
     #endregion
     #region Scene Initialise Function
