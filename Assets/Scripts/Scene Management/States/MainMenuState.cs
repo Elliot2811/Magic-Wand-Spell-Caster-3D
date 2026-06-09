@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-[CreateAssetMenu(menuName = "States/MainMenuState")]
 public class MainMenuState : GameState
 {
     public override void EnterState(GameStateManager gameManager)
@@ -13,11 +10,11 @@ public class MainMenuState : GameState
             SceneManager.LoadScene("MainMenu");
         }
     }
-    public override void UpdateState(GameStateManager gameManager)
+    public override void UpdateState()
     {
-        //WAIT FOR PLAYER TO SELECT MAP (LakeWorld/MysticalForestWorld)
+
     }
-    public override void ExitState(GameStateManager gameManager)
+    public override void ExitState()
     {
 
     }

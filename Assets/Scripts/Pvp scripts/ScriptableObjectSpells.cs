@@ -6,7 +6,8 @@ public class ScriptableObjectSpells : ScriptableObject
     [Header("Spell settings")]
     public string spellName = "Input Spell Name";
     public string spellType = "Basic";
-    public float spellDamage = 10.0F;
+    public float spellDamage = 10.0f;
+    public float spellSpeed = 5f;
 
     public GameObject prefab;
 }

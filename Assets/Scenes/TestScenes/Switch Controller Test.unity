@@ -414,7 +414,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 280d127323e11d5479384a1122a3c14a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gyroRepresentation: {fileID: 28310311}
+  gyroRepresentation: {fileID: 0}
 --- !u!1 &688016960
 GameObject:
   m_ObjectHideFlags: 0
@@ -1087,7 +1087,7 @@ PrefabInstance:
       objectReference: {fileID: 1961506786}
     - target: {fileID: 6290188424019819844, guid: e5b9182236c39634b9e8cd75a85c938a, type: 3}
       propertyPath: usingController
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3442006809655983213, guid: e5b9182236c39634b9e8cd75a85c938a, type: 3}

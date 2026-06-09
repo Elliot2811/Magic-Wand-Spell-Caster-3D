@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public static class GameConstants
@@ -23,7 +22,7 @@ public static class GameConstants
     public const bool DisplayBestShape = true;
     public const float LineWidth = 0.1f;
     public const float DisplayShapePercentage = 0.75f;
-    public static readonly Vector2 DisplayShapeOffset;
+    public static readonly Vector2 DisplayShapeOffset = Vector2.zero;
 
     public const int CatmullResolution = 10;
     public const float sharpAngleThreshold = 45f;
@@ -42,7 +41,17 @@ public static class GameConstants
     public const float VerticalFovDeg = 30f;
     #endregion
 
-    #region Scene Transforms
+    #region Game Play settings
+
+    public static float coinInsertionCountdownTime = 10f;
+
+    public static class ProjectileSpawn
+    {    
+        public static readonly Vector3 relativePos = new Vector3(0, 0.25f, 0.85f);
+        public static readonly Quaternion relativeRotation = Quaternion.identity;
+        public static readonly Vector3 scale = Vector3.one;
+    }
+
     #region Lake World
     public static readonly Vector3 LakeWorldLeftPos = new Vector3(-16F, 5, 8);
     public static readonly Vector3 LakeWorldLeftRot = new Vector3(0, 90, 0);

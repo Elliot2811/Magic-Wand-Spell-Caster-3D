@@ -12,7 +12,7 @@ public class SpellBook : MonoBehaviour
     private Wand wand;
 
     [SerializeField]
-    private EntityBase playerEntity;
+    private CharacterEntity playerEntity;
 
     public ShapeInfoSO shape1;
     public ShapeInfoSO shape2;
@@ -48,11 +48,11 @@ public class SpellBook : MonoBehaviour
         newData = false;
         ShapeInfoSO shapeInfo = CompareShapeDrawing();
 
-        ScriptableObjectSpells spell = findProjectile(shapeInfo);
+        ScriptableObjectSpells spell = FindProjectile(shapeInfo);
 
         if (spell != null)
         {
-            playerEntity.FireSpell(spell);
+            playerEntity.FireSpell(spell, 3f);
         }
     }
 
@@ -98,7 +98,7 @@ public class SpellBook : MonoBehaviour
         return shapeInfo;
     }
 
-    private ScriptableObjectSpells findProjectile(ShapeInfoSO shapeInfo)
+    private ScriptableObjectSpells FindProjectile(ShapeInfoSO shapeInfo)
     {
         if (shapeInfo == null)
             return null;

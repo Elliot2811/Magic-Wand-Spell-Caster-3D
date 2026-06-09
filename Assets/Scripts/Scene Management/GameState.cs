@@ -1,10 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class GameState : ScriptableObject
+public abstract class GameState
 {
-    public abstract void EnterState(GameStateManager gameManager);
-    public abstract void UpdateState(GameStateManager gameManager);
-    public abstract void ExitState(GameStateManager gameManager);
+    protected GameStateManager stateManager;
+
+    public virtual void EnterState(GameStateManager gameManager)
+    {
+        stateManager = gameManager;
+    }
+
+    public virtual void UpdateState() { }
+    public virtual void ExitState() { }
 }
