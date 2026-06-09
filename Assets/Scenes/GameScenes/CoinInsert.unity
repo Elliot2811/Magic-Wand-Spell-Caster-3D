@@ -181,7 +181,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameStartTimer: 5
-  MapSelectionState: {fileID: 11400000, guid: a1f3f8bfe5f75fd45ab0bc4ff50e0daf, type: 2}
+  MapSelectionState: {fileID: 11400000, guid: 77e4d3f0d0334cd4681d649178785e29, type: 2}
   countdownText: {fileID: 397757920}
   leftSlotStatusText: {fileID: 778136733}
   rightSlotStatusText: {fileID: 1194701553}
