@@ -20,10 +20,10 @@ public class VictoryState : GameState
     {
         SceneManager.LoadScene("Victory");
 
-        if (victoryMusic != null && gameManager.MusicSource != null)
+        //Play Music
+        if (AudioManager.Instance != null)
         {
-            gameManager.MusicSource.clip = victoryMusic;
-            gameManager.MusicSource.Play();
+            AudioManager.Instance.PlayMusic(victoryMusic);
         }
     }
     public override void UpdateState(GameStateManager gameManager)
@@ -37,9 +37,9 @@ public class VictoryState : GameState
     public override void ExitState(GameStateManager gameManager)
     {
         //Stop victoryMusic when exit Victory
-        if (gameManager.MusicSource != null)
+        if (AudioManager.Instance != null)
         {
-            gameManager.MusicSource.Stop();
+            AudioManager.Instance.StopMusic();
         }
     }
     private void ReturnToMainMenu()

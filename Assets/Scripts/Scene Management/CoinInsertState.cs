@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-[CreateAssetMenu(menuName = "States/MapSelectionState")]
-public class MapSelectionState : GameState
+[CreateAssetMenu(menuName ="States/CoinInsertState")]
+public class CoinInsertState : GameState
 {
     public override void EnterState(GameStateManager gameManager)
     {
-        if (SceneManager.GetActiveScene().name != "MapSelection")
+        //Load Main Menu Screen
+        if (SceneManager.GetActiveScene().name != "CoinInsert")
         {
-            SceneManager.LoadScene("MapSelection");
+            SceneManager.LoadScene("CoinInsert");
         }
     }
     public override void UpdateState(GameStateManager gameManager)
     {
-        //WAIT FOR PLAYER TO SELECT MAP (LakeWorld/MysticalForestWorld)
+        //WAIT FOR PLAYER TO START GAME
     }
     public override void ExitState(GameStateManager gameManager)
     {

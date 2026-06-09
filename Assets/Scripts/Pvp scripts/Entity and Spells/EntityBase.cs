@@ -12,7 +12,7 @@ public abstract class EntityBase : MonoBehaviour
     #region Protected Variables
     protected GameObject spellSpawnPosAndRot;
     protected bool entityAlive = true;
-    protected float entityDmgTaken = 0F;
+    public float entityDmgTaken { get; private set; } = 0F;
     protected float entityDMG = 1F;
     protected float entityHaste = 1F;
     #endregion

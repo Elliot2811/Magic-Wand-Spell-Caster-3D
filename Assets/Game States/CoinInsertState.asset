@@ -9,6 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e23d707000e15e345bf9631343c33f12, type: 3}
-  m_Name: MapSelectionState
+  m_Script: {fileID: 11500000, guid: f8725fdfa0b2ed945b475213e325faa1, type: 3}
+  m_Name: CoinInsertState
   m_EditorClassIdentifier: 

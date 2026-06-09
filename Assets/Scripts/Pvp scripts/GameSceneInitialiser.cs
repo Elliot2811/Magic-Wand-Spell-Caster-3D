@@ -12,19 +12,25 @@ public class GameSceneInitialiser : MonoBehaviour
     private GameObject leftPlayer;
     private GameObject rightPlayer;
 
-    //Script References
-    public GameScenarioSelector gameScenarioSelector;
+    [Header("UI References")]
+    public HealthDisplay healthDisplayUI;
 
-    [Header("Starting Game Position and Rotation")]
-    public Vector3 leftPlayerPosition = new Vector3(-5.5F, 1, 0);
-    public Quaternion leftPlayerRotation = Quaternion.Euler(0, 90, 0);
-    public Vector3 rightPlayerPosition = new Vector3(5.5F, 1, 0);
-    public Quaternion rightPlayerRotation = Quaternion.Euler(0,-90,0);
+    public MapData currentMapData;
+    private bool hasGameStarted = false;
+
+    //Script References
+    //public GameScenarioSelector gameScenarioSelector;
+
+    //[Header("Starting Game Position and Rotation")]
+    //public Vector3 leftPlayerPosition = new Vector3(-5.5F, 1, 0);
+    //public Quaternion leftPlayerRotation = Quaternion.Euler(0, 90, 0);
+    //public Vector3 rightPlayerPosition = new Vector3(5.5F, 1, 0);
+    //public Quaternion rightPlayerRotation = Quaternion.Euler(0,-90,0);
 
     //Overall Game flow variables
     public static event Action<GameRunStatus> StartMainGame;
     public static event Action StartMainMenu;
-    private int gameScenario = 0; //1 means player at left side, 2 means player at right side, 3 means 2 players
+    //private int gameScenario = 0; //1 means player at left side, 2 means player at right side, 3 means 2 players
     public enum GameRunStatus
     {
         MainMenu,
@@ -38,28 +44,67 @@ public class GameSceneInitialiser : MonoBehaviour
     #region Start Function
     private void Start()
     {
-        StartMainMenu?.Invoke();
+        if (GameStateManager.Instance == null)
+        {
+            Debug.LogError("ERROR - GameStateManager doesn't exist in current scene");
+        }
+        //StartMainMenu?.Invoke();
+        StartGame(GameStateManager.Instance.gameScenarioChosen);
+
+        //assigning which entity is which player is which for Healthbar UI to track health
+        EntityBase leftEntity = leftPlayer.GetComponent<EntityBase>();
+        EntityBase rightEntity = rightPlayer.GetComponent<EntityBase>();
+
+        if (healthDisplayUI != null && leftEntity != null && rightEntity != null)
+        {
+            //pass entities over to the UI!
+            healthDisplayUI.InitializePlayers(leftEntity, rightEntity);
+        }
+        else
+        {
+            Debug.LogError("Failed to link players to HealthDisplay UI!");
+        }
     }
     #endregion
     #region Scene Initialise Function
     public void StartGame(int gameScenarioSelected)
     {
-        gameScenario = gameScenarioSelected;
-        gameScenarioSelector.InputCheckSetFalse();
+        if (hasGameStarted) return;
+        hasGameStarted = true;
+        //gameScenarioSelector.InputCheckSetFalse();
+        Debug.Log("Starting game...");
         StartMainGame?.Invoke(GameRunStatus.GameStarted);
+
+        if (currentMapData == null)
+        {
+            Debug.LogError("Current Map Data asset is missing from GameSceneInitialiser");
+            return;
+        }
+
+        if (currentMapData.mapPrefab != null)
+        {
+            Instantiate(currentMapData.mapPrefab, currentMapData.mapPrefab.transform.position, currentMapData.mapPrefab.transform.rotation);
+        }
+        else
+        {
+            Debug.LogWarning($"No mapPrefab has been assigned inside the {currentMapData.mapName} data asset!");
+        }
 
         leftPlayer = Instantiate(
             entityPrefab1,
-            leftPlayerPosition,
-            leftPlayerRotation
+            currentMapData.leftPos,
+            Quaternion.Euler(currentMapData.leftRot)
         );
+        leftPlayer.transform.localScale = currentMapData.leftScale;
+
         rightPlayer = Instantiate(
             entityPrefab2,
-            rightPlayerPosition,
-            rightPlayerRotation
+            currentMapData.rightPos,
+            Quaternion.Euler(currentMapData.rightRot)
         );
+        rightPlayer.transform.localScale = currentMapData.rightScale;
 
-        switch (gameScenario)
+        switch (gameScenarioSelected)
         {
             case 0:
                 Debug.Log("Error -- Game Scenario variable has not been given a scenario");

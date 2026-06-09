@@ -14,7 +14,8 @@ public class PlayerPVP : EntityBase
     {
         if (Input.GetKeyDown(inputKey) && (entityAlive) && (eventActivated == false))
         {
-            StartCoroutine(CastAndFireSpell(3));
+            //StartCoroutine(CastAndFireSpell(3));
+            FireSummonedSpell();
         }
     }
 }

@@ -5,37 +5,47 @@ using UnityEngine.SceneManagement;
 public class GameplayState : GameState
 {
     [SerializeField] private VictoryState victoryState;
-    private string mapToLoad;
+    private MapData activeMapData;
 
-    [Header("Music Settings")]
-    [SerializeField] private AudioClip lakeWorldMusic;
-    [SerializeField] private AudioClip mysticalForestWorldMusic;
-
-    public void SetMap(string mapName)
+    public void SetMap(MapData chosenMap)
     {
-        mapToLoad = mapName;
+        activeMapData = chosenMap;
     }
 
     public override void EnterState(GameStateManager gameManager)
     {
-        SceneManager.LoadScene(mapToLoad);
-
-        AudioClip trackToPlay = null;
-
-        if (mapToLoad == "LakeWorld")
+        if (activeMapData == null)
         {
-            trackToPlay = lakeWorldMusic;
-        }
-        if (mapToLoad == "MysticalForestWorld")
-        {
-            trackToPlay = mysticalForestWorldMusic;
+            Debug.LogError("No Map Data set before entering GameplayState!");
+            return;
         }
 
-        if (trackToPlay != null && gameManager.MusicSource != null)
+        // Double-check to catch typos early
+        if (string.IsNullOrEmpty(activeMapData.sceneToLoad))
         {
-            gameManager.MusicSource.clip = trackToPlay;
-            gameManager.MusicSource.Play();
+            Debug.LogError($"[MapData Error] 'sceneToLoad' field is completely empty inside asset: {activeMapData.name}!");
+            return;
         }
+
+        SceneManager.sceneLoaded += OnGameplaySceneLoaded;
+        SceneManager.LoadScene(activeMapData.sceneToLoad);
+
+        // Play Music
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayMusic(activeMapData.mapMusic);
+        }
+    }
+    private void OnGameplaySceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        GameSceneInitialiser initialiser = FindFirstObjectByType<GameSceneInitialiser>();
+
+        if (initialiser != null)
+        {
+            initialiser.currentMapData = activeMapData; // Pass data
+            initialiser.StartGame(GameStateManager.Instance.gameScenarioChosen); // Start game!
+        }
+        SceneManager.sceneLoaded -= OnGameplaySceneLoaded;
     }
     public override void UpdateState(GameStateManager gameManager)
     {
@@ -52,9 +62,9 @@ public class GameplayState : GameState
     public override void ExitState(GameStateManager gameManager)
     {
         //Stop battleMusic if exit Gameplay
-        if (gameManager.MusicSource != null)
+        if (AudioManager.Instance != null)
         {
-            gameManager.MusicSource.Stop();
+            AudioManager.Instance.StopMusic();
         }
     }
     public void EndMatch(int winningPlayerNumber, GameStateManager gameManager)
