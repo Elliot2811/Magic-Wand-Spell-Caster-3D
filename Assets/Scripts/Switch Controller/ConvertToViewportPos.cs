@@ -2,12 +2,12 @@ using UnityEngine;
 
 public static class ConvertToViewportPos
 {
-    public static Vector2 Caculate(int deviceId)
+    public static Vector2 Caculate(int deviceIndex)
     {
-        if (JoyConTracker.Instance == null || JoyConTracker.Instance.Connected == false)
+        if (JoyConTracker.Instance == null || JoyConTracker.Instance.readyToConnect == false)
             return Vector2.zero;
 
-        Vector3 forward = JoyConTracker.Instance.CurrentRotation * Vector3.forward;
+        Vector3 forward = JoyConTracker.Instance.CurrentRotation(deviceIndex) * Vector3.forward;
 
         float yawDegrees = Mathf.Atan2(forward.x, forward.z) * Mathf.Rad2Deg;
         float pitchDegrees = Mathf.Asin(forward.y) * Mathf.Rad2Deg;
