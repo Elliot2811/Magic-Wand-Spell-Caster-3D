@@ -5,9 +5,22 @@ using UnityEngine;
 
 public class JoyConTracker : MonoBehaviour
 {
+    public static JoyConTracker Instance { get; private set; }
+
+    public GameObject gyroRepresentation;
+
+    private int count = 0;
+    private int[] handles = new int[16];
+
+    private bool readyToConnect = false;
+
+    private Quaternion currentRotation = Quaternion.identity;
+    public Quaternion CurrentRotation => currentRotation;
+
+    public bool Connected => readyToConnect;
+
     private struct ImuData
     {
-        public int index;
         public JSL.IMU_STATE currImu;
         public JSL.IMU_STATE prevImu;
         public JSL.JOY_SHOCK_STATE currState;
@@ -15,37 +28,18 @@ public class JoyConTracker : MonoBehaviour
         public float deltaTime;
     }
 
-    public static JoyConTracker Instance { get; private set; }
-
-    public GameObject gyroRepresentationLeft;
-    public GameObject gyroRepresentationRight;
-
-    private int count = 0;
-    private int[] handles = new int[16];
-
-
-    private Quaternion[] currentRotation = new Quaternion[16];
-    public Quaternion CurrentRotation(int deviceIndex) => currentRotation[deviceIndex];
-
-    public bool readyToConnect { get; private set; } = false;
-
-    private bool cleaned = false;
-
     private readonly ConcurrentQueue<ImuData> messageQueue = new ConcurrentQueue<ImuData>();
+
     private JSL.CallBackDelegate callbackDelegate;
 
     private void Awake()
     {
-        if (Instance == null)
+        if (Instance != null && Instance != this)
         {
-            Instance = this;
-            DontDestroyOnLoad(Instance);
-        }
-        else
-        {
-            Destroy(gameObject);
+            Destroy(this);
             return;
         }
+        Instance = this;
     }
 
     private void Start()
@@ -63,10 +57,8 @@ public class JoyConTracker : MonoBehaviour
         while (messageQueue.TryDequeue(out ImuData data))
             ProcessData(data);
 
-        if (gyroRepresentationLeft != null)
-            gyroRepresentationLeft.transform.rotation = currentRotation[0];
-        if (gyroRepresentationRight != null)
-            gyroRepresentationRight.transform.rotation = currentRotation[1];
+        if (gyroRepresentation != null)
+            gyroRepresentation.transform.rotation = currentRotation;
     }
 
     private void ProcessData(ImuData data)
@@ -75,21 +67,21 @@ public class JoyConTracker : MonoBehaviour
         bool lWasPressed = (data.prevState.buttons & JSL.JSMASK_L) != 0;
 
         if (lPressed && !lWasPressed)
-            ResetAllRotation(data.index);
+            ResetAll();
 
-        currentRotation[data.index] = GyroRotation(data.index, data.currImu, data.deltaTime);
-        currentRotation[data.index] = ApplyAccelCorrection(currentRotation[data.index], data.currImu, data.deltaTime);
+        currentRotation = GyroRotation(data.currImu, data.deltaTime);
+        currentRotation = ApplyAccelCorrection(currentRotation, data.currImu, data.deltaTime);
 
         bool zlPressed = (data.currState.buttons & JSL.JSMASK_ZL) != 0;
         bool zlWasPressed = (data.prevState.buttons & JSL.JSMASK_ZL) != 0;
 
         if (zlPressed && !zlWasPressed)
         {
-            drawingButtonPressed?.Invoke(data.index);
+            drawingButtonPressed?.Invoke();
         }
         else if (!zlPressed && zlWasPressed)
         {
-            drawingButtonReleased?.Invoke(data.index);
+            drawingButtonReleased?.Invoke();
         }
     }
 
@@ -98,7 +90,7 @@ public class JoyConTracker : MonoBehaviour
 
     #region Controller rotation functions
 
-    private Quaternion GyroRotation(int index, JSL.IMU_STATE imu, float deltaTime)
+    private Quaternion GyroRotation(JSL.IMU_STATE imu, float deltaTime)
     {
         Vector3 omega = new Vector3(
             -imu.gyroX * Mathf.Deg2Rad,
@@ -110,7 +102,7 @@ public class JoyConTracker : MonoBehaviour
         float halfAngle = magnitude * 0.5f * deltaTime;
 
         if (halfAngle < 1e-6f)
-            return currentRotation[index];
+            return currentRotation;
 
         float sinHalf = Mathf.Sin(halfAngle);
         Quaternion delta = new Quaternion(
@@ -120,35 +112,35 @@ public class JoyConTracker : MonoBehaviour
             Mathf.Cos(halfAngle)
         );
 
-        return Quaternion.Normalize(currentRotation[index] * delta);
+        return Normalize(currentRotation * delta);
     }
 
     private Quaternion ApplyAccelCorrection(Quaternion rotation, JSL.IMU_STATE imu, float deltaTime)
     {
         Vector3 accel = new Vector3(imu.accelX, imu.accelY, imu.accelZ);
         float accelMag = accel.magnitude;
-
         bool isStable = accelMag > 0.85f && accelMag < 1.15f;
+
         if (!isStable)
             return rotation;
 
         Vector3 gyroUp = rotation * Vector3.up;
         Vector3 accelUp = accel.normalized;
-
         float tiltError = Vector3.Angle(gyroUp, accelUp);
+
         if (tiltError <= 0.5f)
             return rotation;
 
-        //Vector3 error = Vector3.Cross(gyroUp, accelUp);
-        //Quaternion tiltCorr = Quaternion.Euler(error * 5f);
+        Vector3 euler = rotation.eulerAngles;
         Quaternion tiltCorr = Quaternion.FromToRotation(gyroUp, accelUp);
-
         float correctionRate = Mathf.Lerp(1f, 5f, Mathf.InverseLerp(0.5f, 10f, tiltError));
-        float correctionStep = correctionRate * deltaTime;
+        float correctionStep = correctionRate * deltaTime * Mathf.Deg2Rad;
 
         Quaternion corrected = Quaternion.Slerp(rotation, tiltCorr * rotation, correctionStep);
 
-        return Normalize(corrected);
+        // Reapply original yaw — accel has no yaw information
+        Vector3 correctedEuler = corrected.eulerAngles;
+        return Quaternion.Euler(correctedEuler.x, euler.y, correctedEuler.z);
     }
 
     private Quaternion Normalize(Quaternion q)
@@ -160,9 +152,9 @@ public class JoyConTracker : MonoBehaviour
         return new Quaternion(q.x / mag, q.y / mag, q.z / mag, q.w / mag);
     }
 
-    private void ResetAllRotation(int index)
+    private void ResetAll()
     {
-        currentRotation[index] = Quaternion.identity;
+        currentRotation = Quaternion.identity;
         Debug.Log("Rotation reset");
     }
     #endregion
@@ -170,19 +162,13 @@ public class JoyConTracker : MonoBehaviour
     #region Switch Connection and Cleanup
     private void Cleanup()
     {
-        if (cleaned || count <= 0)
+        if (count <= 0)
             return;
 
-        for (int i = 0; i < count; i++)
-        {
-            JSL.JslPauseContinuousCalibration(handles[i]);
-        }
-
+        JSL.JslPauseContinuousCalibration(handles[0]);
         JSL.JslSetCallback(null);
         JSL.JslDisconnectAndDisposeAll();
         count = 0;
-
-        cleaned = true;
     }
 
     private void OnJSLCallback(
@@ -193,14 +179,11 @@ public class JoyConTracker : MonoBehaviour
         JSL.IMU_STATE prevImu,
         float deltaTime)
     {
-        int index = Array.FindIndex(handles, item => item == handle);
-
-        if (index == -1)
+        if (handle != handles[0])
             return;
 
         messageQueue.Enqueue(new ImuData
         {
-            index = index,
             currImu = currImu,
             prevImu = prevImu,
             currState = currState,
@@ -222,21 +205,14 @@ public class JoyConTracker : MonoBehaviour
         if (count <= 0)
             yield break;
 
-        for (int i = 0; i < count; i++)
-        {
-            JSL.JslSetGyroSpace(handles[i], i);
+        JSL.JslSetGyroSpace(handles[0], 0);
 
-            JSL.JslResetContinuousCalibration(handles[i]);
-            JSL.JslStartContinuousCalibration(handles[i]);
-        }
+        JSL.JslResetContinuousCalibration(handles[0]);
+        JSL.JslStartContinuousCalibration(handles[0]);
 
         yield return new WaitForSeconds(2f);
 
-        for (int i = 0; i < count; i++)
-        {
-            JSL.JslPauseContinuousCalibration(handles[i]);
-        }
-
+        JSL.JslPauseContinuousCalibration(handles[0]);
         Debug.Log("Continuous calibration complete");
 
         callbackDelegate = OnJSLCallback;
@@ -247,7 +223,7 @@ public class JoyConTracker : MonoBehaviour
     #endregion
 
     #region Events to send drawing request
-    public event Action<int> drawingButtonPressed;
-    public event Action<int> drawingButtonReleased;
+    public event Action drawingButtonPressed;
+    public event Action drawingButtonReleased;
     #endregion
 }

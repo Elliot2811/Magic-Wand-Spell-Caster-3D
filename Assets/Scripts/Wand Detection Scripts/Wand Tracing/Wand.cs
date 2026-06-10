@@ -7,18 +7,17 @@ using UnityEngine.InputSystem;
 public class Wand : MonoBehaviour
 {
     public LineRenderer lineRenderer;
+
     public GameObject wandObject;
 
-    [Space(10)]
-    [Header("Controller settings if using controller")]
     public bool usingController = false;
-    [Tooltip("Index 0: left, Index 1: right")]
+
+    [Tooltip("Individual joycon connection id")]
     [Range(0, 1)]
-    public int deviceIndex = 0;
-
+    public int deviceId = 0;
     private bool UsingController;
-    private bool controllerActive = false;
 
+    private bool controllerActive = false;
 
     private List<Vector2> points = new List<Vector2>();
     private List<Vector2> catmullPoints = new List<Vector2>();
@@ -26,12 +25,14 @@ public class Wand : MonoBehaviour
 
     private int lastProcessedIndex = -1;
 
+
     private Coroutine loggingCoroutine;
 
     private WandInputActions inputActions;
     private bool drawActive = false;
 
     private Camera mainCam;
+
 
     private void Awake()
     {
@@ -85,7 +86,7 @@ public class Wand : MonoBehaviour
     {
         if (usingController && !controllerActive)
         {
-            controllerActive = JoyConTracker.Instance.readyToConnect;
+            controllerActive = JoyConTracker.Instance.Connected;
             return;
         }
 
@@ -192,7 +193,7 @@ public class Wand : MonoBehaviour
 
         if (UsingController)
         {
-            screenPos = ConvertToViewportPos.Caculate(deviceIndex);
+            screenPos = ConvertToViewportPos.Caculate(0);
             //Debug.Log("Controller viewport pos: " + screenPos);
         }
         else
@@ -245,11 +246,8 @@ public class Wand : MonoBehaviour
 
 
     #region Input System Helper Functions
-    private void DrawStarted(int handle = -1)
+    private void DrawStarted()
     {
-        if (handle != -1 && handle != deviceIndex)
-            return;
-
         drawActive = true;
 
         points.Clear();
@@ -268,11 +266,8 @@ public class Wand : MonoBehaviour
         DrawStarted();
     }
 
-    private void DrawCancelled(int handle = -1)
+    private void DrawCancelled()
     {
-        if (handle != 1 && handle != deviceIndex)
-            return;
-
         if (loggingCoroutine != null)
             StopCoroutine(loggingCoroutine);    
 
