@@ -3,8 +3,10 @@ using System.Runtime.InteropServices;
 public static class JSL
 {
     #region Button Masks
-    public const int JSMASK_ZL = 0x000400;
     public const int JSMASK_L = 0x000100;
+    public const int JSMASK_R = 0x000200;
+    public const int JSMASK_ZL = 0x000400;
+    public const int JSMASK_ZR = 0x000800;
 
     #endregion
 

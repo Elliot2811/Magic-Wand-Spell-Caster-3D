@@ -270,7 +270,7 @@ public class Wand : MonoBehaviour
 
     private void DrawCancelled(int handle = -1)
     {
-        if (handle != 1 && handle != deviceIndex)
+        if (handle != -1 && handle != deviceIndex)
             return;
 
         if (loggingCoroutine != null)

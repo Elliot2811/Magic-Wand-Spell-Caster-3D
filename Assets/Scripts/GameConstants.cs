@@ -11,7 +11,7 @@ public static class GameConstants
     public const float AspectWeightage = 0.15f; // initial: 0.15
     public const float LineWeightage = 0.10f; // initial: 0.10
 
-    public const float MinAccuracy = 0.85f;
+    public const float MinAccuracy = 0.75f;
     public const float MinAccDiff = 0.10f;
     #endregion
 
@@ -51,6 +51,8 @@ public static class GameConstants
         public static readonly Quaternion relativeRotation = Quaternion.identity;
         public static readonly Vector3 scale = Vector3.one;
     }
+    public static readonly Rect DisplayRectLeft = new Rect(0.05f, 0.05f, 0.425f, 0.9f);
+    public static readonly Rect DisplayRectRight = new Rect(0.55f, 0.05f, 0.425f, 0.9f);
 
     #region Lake World
     public static readonly Vector3 LakeWorldLeftPos = new Vector3(-16F, 5, 8);

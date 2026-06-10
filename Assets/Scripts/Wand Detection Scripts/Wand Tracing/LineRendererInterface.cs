@@ -27,6 +27,16 @@ public static class LineRendererInterface
         }
     }
 
+    public static void Points(LineRenderer lineRenderer, Vector3[] points)
+    {
+        lineRenderer.positionCount = points.Length;
+
+        for (int i = 0; i < points.Length; i++)
+        {
+            lineRenderer.SetPosition(i, points[i]);
+        }
+    }
+
     public static void AddPoints(LineRenderer lineRenderer, List<Vector2[]> points)
     {
         int total = 0;
