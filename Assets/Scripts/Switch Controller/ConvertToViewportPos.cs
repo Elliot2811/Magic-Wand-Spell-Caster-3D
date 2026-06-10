@@ -12,18 +12,18 @@ public static class ConvertToViewportPos
         float yawDegrees = Mathf.Atan2(forward.x, forward.z) * Mathf.Rad2Deg;
         float pitchDegrees = Mathf.Asin(forward.y) * Mathf.Rad2Deg;
 
-        Vector2 posInCamera = new Vector2(
-            yawDegrees / GameConstants.HorizontalFovDeg,
-            pitchDegrees / GameConstants.VerticalFovDeg
+        Vector2 viewport = new Vector2(
+            yawDegrees / GameConstants.HorizontalFovDeg + 0.5f,
+            pitchDegrees / GameConstants.VerticalFovDeg + 0.5f
             );
 
-        Vector2 viewport = posInCamera + new Vector2(0.5f, 0.5f);
-        
-        float left = 0.5f - GameConstants.DrawingAreaPercentage / 2;
-        float right = 0.5f + GameConstants.DrawingAreaPercentage / 2;
 
-        viewport.x = Mathf.Clamp(viewport.x, left, right);
-        viewport.y = Mathf.Clamp(viewport.y, left, right);
+        Rect bounds = deviceIndex == 0 ? GameConstants.DisplayRectLeft : GameConstants.DisplayRectRight;
+
+        Vector2 rectCentre = bounds.center;
+
+        viewport.x = Mathf.Clamp(viewport.x - 0.5f + rectCentre.x, bounds.xMin, bounds.xMax);
+        viewport.y = Mathf.Clamp(viewport.y - 0.5f + rectCentre.y, bounds.yMin, bounds.yMax);
 
         return new Vector2(
             viewport.x * Screen.width,

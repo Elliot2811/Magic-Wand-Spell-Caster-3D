@@ -71,23 +71,23 @@ public class JoyConTracker : MonoBehaviour
 
     private void ProcessData(ImuData data)
     {
-        bool lPressed = (data.currState.buttons & JSL.JSMASK_L) != 0;
-        bool lWasPressed = (data.prevState.buttons & JSL.JSMASK_L) != 0;
+        bool ResetButPressed = (data.currState.buttons & (JSL.JSMASK_L | JSL.JSMASK_R)) != 0;
+        bool ResetButWasPressed = (data.prevState.buttons & (JSL.JSMASK_L | JSL.JSMASK_R)) != 0;
 
-        if (lPressed && !lWasPressed)
+        if (ResetButPressed && !ResetButWasPressed)
             ResetAllRotation(data.index);
 
         currentRotation[data.index] = GyroRotation(data.index, data.currImu, data.deltaTime);
         currentRotation[data.index] = ApplyAccelCorrection(currentRotation[data.index], data.currImu, data.deltaTime);
 
-        bool zlPressed = (data.currState.buttons & JSL.JSMASK_ZL) != 0;
-        bool zlWasPressed = (data.prevState.buttons & JSL.JSMASK_ZL) != 0;
+        bool DrawButPressed = (data.currState.buttons & (JSL.JSMASK_ZL | JSL.JSMASK_ZR)) != 0;
+        bool DrawButWasPressed = (data.prevState.buttons & (JSL.JSMASK_ZL | JSL.JSMASK_ZR)) != 0;
 
-        if (zlPressed && !zlWasPressed)
+        if (DrawButPressed && !DrawButWasPressed)
         {
             drawingButtonPressed?.Invoke(data.index);
         }
-        else if (!zlPressed && zlWasPressed)
+        else if (!DrawButPressed && DrawButWasPressed)
         {
             drawingButtonReleased?.Invoke(data.index);
         }
@@ -120,12 +120,12 @@ public class JoyConTracker : MonoBehaviour
             Mathf.Cos(halfAngle)
         );
 
-        return Quaternion.Normalize(currentRotation[index] * delta);
+        return Quaternion.Normalize(delta * currentRotation[index]);
     }
 
     private Quaternion ApplyAccelCorrection(Quaternion rotation, JSL.IMU_STATE imu, float deltaTime)
     {
-        Vector3 accel = new Vector3(imu.accelX, imu.accelY, imu.accelZ);
+        Vector3 accel = new Vector3(-imu.accelX, imu.accelY, imu.accelZ);
         float accelMag = accel.magnitude;
 
         bool isStable = accelMag > 0.85f && accelMag < 1.15f;
