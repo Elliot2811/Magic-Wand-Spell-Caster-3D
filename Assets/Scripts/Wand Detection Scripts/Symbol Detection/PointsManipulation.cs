@@ -283,7 +283,7 @@ public static class PointsManipulation
     /// <summary>
     /// Evaluates A Catmull-Rom segment
     /// </summary>
-    public static Vector2[] EvaluateCatmullSegment(Vector2 p0, Vector2 p1, Vector2 p2, Vector3 p3, int resolution)
+    public static Vector2[] EvaluateCatmullSegment(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3, int resolution)
     {
         if (p1 == p2)
             return new Vector2[]{p1};
@@ -377,6 +377,23 @@ public static class PointsManipulation
 
         return new PointBounds(minX, maxX, minY, maxY);
     }
+    public static PointBounds GetBounds(Vector3[] points)
+    {
+        Vector3 first = points[0];
+
+        float maxX = first.x, minX = first.x;
+        float maxY = first.y, minY = first.y;
+
+        foreach (Vector2 point in points)
+        {
+            if (point.x > maxX) maxX = point.x;
+            if (point.x < minX) minX = point.x;
+            if (point.y > maxY) maxY = point.y;
+            if (point.y < minY) minY = point.y;
+        }
+
+        return new PointBounds(minX, maxX, minY, maxY);
+    }
 
     /// <summary>
     /// Total distance between Vector2 points
@@ -394,6 +411,26 @@ public static class PointsManipulation
         Vector2 previousPoint = points[0];
 
         for (int i = 1; i <  points.Length; i++)
+        {
+            totalDistance += Vector2.Distance(previousPoint, points[i]);
+            previousPoint = points[i];
+        }
+
+        return totalDistance;
+    }
+    public static float TotalDistance(Vector3[] points)
+    {
+        if (points.Length <= 1)
+        {
+            Debug.LogWarning("[PointsManipulation.TotalDistance]: points.Length should be more than 1.");
+            return 0;
+        }
+
+        float totalDistance = 0f;
+
+        Vector2 previousPoint = points[0];
+
+        for (int i = 1; i < points.Length; i++)
         {
             totalDistance += Vector2.Distance(previousPoint, points[i]);
             previousPoint = points[i];

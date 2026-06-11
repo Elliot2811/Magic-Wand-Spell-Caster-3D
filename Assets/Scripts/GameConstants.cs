@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public static class GameConstants
+public class GameConstants : MonoBehaviour
 {
     #region Shape Matching settings
     public const float sampleSpeedSec = 0.01f;
@@ -64,4 +64,26 @@ public static class GameConstants
     #endregion
 
     #endregion
+
+    public const float controllerCallibrationTime = 2f;
+
+    //-------------------------------------------------------------------------------------------------------------
+    public static GameConstants Instance;
+
+    public MapData[] mapPresets;
+    public CharacterEntity characterPrefab;
+
+    private void Start()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+    }
 }

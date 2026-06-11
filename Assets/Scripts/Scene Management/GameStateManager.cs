@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,10 +19,26 @@ public class GameStateManager : MonoBehaviour
 
     public JoyConTracker joyConTracker;
 
-    private Dictionary<StateEnum, GameState> dict = new Dictionary<StateEnum, GameState>();
+    public Wand wandPrefab;
+    [HideInInspector]
+    public Wand wandLeft;
+    [HideInInspector]
+    public Wand wandRight;
+
+    public WandListener wandListenerPrefab;
+    [HideInInspector]
+    public WandListener wandListenerLeft;
+    [HideInInspector]
+    public WandListener wandListenerRight;
+
+    public ShapesCollectionSO allShapesCollectionSO;
+
+    private Dictionary<StateEnum, Func<GameState>> dict = new Dictionary<StateEnum, Func<GameState>>();
 
     [HideInInspector]
     public int gameScenario = 0;
+    [HideInInspector]
+    public int mapIndex = 0;
 
     private void Awake()
     {
@@ -32,7 +49,7 @@ public class GameStateManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
-            dict.Add(StateEnum.Init, new InitializationState());
+            dict.Add(StateEnum.Init, () => new InitializationState());
         }
         else
         {
@@ -62,14 +79,18 @@ public class GameStateManager : MonoBehaviour
             CurrentState.ExitState();
         }
 
-        dict.TryGetValue(newState, out GameState gameState);
+        if (!dict.ContainsKey(newState))
+        {
+            Debug.LogError($"[GameStateManager]: Contatins no enum game state of {newState.ToString()}");
+        }
 
-        CurrentState = gameState;
+        CurrentState = dict[newState]();
+
         Debug.Log("Changing to " +  CurrentState);
         CurrentState.EnterState(this);
     }
 
-    public void AddState(StateEnum state, GameState gameState)
+    public void AddState(StateEnum state, Func<GameState> gameState)
     {
         if (dict.ContainsKey(state))
             Debug.LogError("[GameStateManager]: Contains a duplicate of the same enum game state");
@@ -81,4 +102,56 @@ public class GameStateManager : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+
+    public GameObject Instatiate(GameObject gameObject, Transform parent = null)
+    {
+        if (parent == null)
+            return Instantiate(gameObject);
+
+        return Instantiate(gameObject, parent);
+    }
+
+    public static T InstatiateGetScript<T>(T scriptPrefab, Transform parent = null)
+        where T : MonoBehaviour
+    {
+        if (parent == null)
+            return Instantiate(scriptPrefab);
+
+        return Instantiate(scriptPrefab, parent);
+    }
+
+    //public void ResetWands()
+    //{
+    //    gameScenario = 0;
+
+    //    if (wandLeft != null)
+    //    {
+    //        if (wandLeft.lineRenderer != null)
+    //        {
+    //            wandLeft.setNotReady();
+    //            GameObject lr = wandLeft.lineRenderer.gameObject;
+    //            wandLeft.lineRenderer = null;
+    //            GameObject.DestroyImmediate(lr);
+    //        }
+
+    //        GameObject wandObj = wandLeft.gameObject;
+    //        wandLeft = null;
+    //        GameObject.DestroyImmediate(wandObj);
+    //    }
+
+    //    if (wandRight != null)
+    //    {
+    //        if (wandRight.lineRenderer != null)
+    //        {
+    //            wandRight.setNotReady();
+    //            GameObject lr = wandRight.lineRenderer.gameObject;
+    //            wandRight.lineRenderer = null;
+    //            GameObject.DestroyImmediate(lr);
+    //        }
+
+    //        GameObject wandObj = wandRight.gameObject;
+    //        wandRight = null;
+    //        GameObject.DestroyImmediate(wandObj);
+    //    }
+    //}
 }

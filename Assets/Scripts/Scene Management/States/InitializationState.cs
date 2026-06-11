@@ -12,12 +12,13 @@ public class InitializationState : GameState
             stateManager.Disable();
         }
 
-        stateManager.AddState(GameStateManager.StateEnum.PlayersSelect, new CoinInsertState());
+        stateManager.AddState(GameStateManager.StateEnum.PlayersSelect, () => new CoinInsertState());
+        stateManager.AddState(GameStateManager.StateEnum.Fight, () => new GamePlayState());
     }
 
     public override void UpdateState()
     {
-        if (stateManager.joyConTracker.Connected)
+        if (stateManager.joyConTracker.readyToConnect)
         {
             stateManager.TransitionToState(GameStateManager.StateEnum.PlayersSelect);
         }

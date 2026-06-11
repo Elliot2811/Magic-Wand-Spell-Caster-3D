@@ -10,5 +10,22 @@ public abstract class GameState
     }
 
     public virtual void UpdateState() { }
-    public virtual void ExitState() { }
+    public virtual void ExitState()
+    {
+        if (stateManager.wandLeft != null)
+            if (stateManager.wandLeft.lineRenderer != null)
+                stateManager.wandLeft.lineRenderer.positionCount = 0;
+
+        if (stateManager.wandRight != null)
+            if (stateManager.wandRight.lineRenderer != null)
+                stateManager.wandRight.lineRenderer.positionCount = 0;
+
+        if (stateManager.wandListenerLeft != null)
+            if (stateManager.wandListenerLeft.lineRenderer != null)
+                stateManager.wandListenerLeft.lineRenderer.positionCount = 0;
+
+        if (stateManager.wandListenerRight != null)
+            if (stateManager.wandListenerRight.lineRenderer != null)
+                stateManager.wandListenerRight.lineRenderer.positionCount = 0;
+    }
 }

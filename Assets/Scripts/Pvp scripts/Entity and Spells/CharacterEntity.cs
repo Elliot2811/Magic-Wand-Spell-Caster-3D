@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public abstract class CharacterEntity : MonoBehaviour
+public class CharacterEntity : MonoBehaviour
 {
     //#region Public Variables
     //public GameObject prefab;

@@ -6,9 +6,7 @@ public class MainMenuState : GameState
     public override void EnterState(GameStateManager gameManager)
     {
         if (SceneManager.GetActiveScene().name != "MainMenu")
-        {
             SceneManager.LoadScene("MainMenu");
-        }
     }
     public override void UpdateState()
     {

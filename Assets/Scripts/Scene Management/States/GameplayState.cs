@@ -73,3 +73,60 @@
 //        gameManager.TransitionToState(victoryState);
 //    }
 //}
+
+using System.Collections;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class GamePlayState : GameState
+{
+    private MapData mapData;
+    private CharacterEntity characterPrefab;
+
+    private CharacterEntity leftCharacter;
+    private CharacterEntity rightCharacter;
+
+    public override void EnterState(GameStateManager gameManager)
+    {
+        base.EnterState(gameManager);
+
+        if (SceneManager.GetActiveScene().name != "Gameplay")
+            SceneManager.LoadScene("Gameplay");
+
+        mapData = GameConstants.Instance.mapPresets[stateManager.mapIndex];
+        characterPrefab = GameConstants.Instance.characterPrefab;
+
+
+        stateManager.StartCoroutine(LoadGameplayObjects());
+    }
+
+    public override void UpdateState()
+    {
+        base.UpdateState();
+    }
+
+    public override void ExitState()
+    {
+        base.ExitState();
+    }
+
+
+    private IEnumerator LoadGameplayObjects()
+    {
+        yield return SceneManager.LoadSceneAsync("Gameplay");
+
+        Debug.Log("Spawning Objects");
+
+        MonoBehaviour.Instantiate(mapData.mapPrefab);
+
+        leftCharacter = MonoBehaviour.Instantiate(characterPrefab);
+        leftCharacter.transform.position = mapData.leftPos;
+        leftCharacter.transform.rotation = Quaternion.Euler(mapData.leftRot);
+        leftCharacter.transform.localScale = mapData.leftScale;
+
+        rightCharacter = MonoBehaviour.Instantiate(characterPrefab);
+        rightCharacter.transform.position = mapData.rightPos;
+        rightCharacter.transform.rotation = Quaternion.Euler(mapData.rightRot);
+        rightCharacter.transform.localScale = mapData.rightScale;
+    }
+}

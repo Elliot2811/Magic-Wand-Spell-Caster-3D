@@ -222,6 +222,8 @@ public class JoyConTracker : MonoBehaviour
         if (count <= 0)
             yield break;
 
+        Debug.Log("Calibrating");
+
         for (int i = 0; i < count; i++)
         {
             JSL.JslSetGyroSpace(handles[i], i);
@@ -230,7 +232,7 @@ public class JoyConTracker : MonoBehaviour
             JSL.JslStartContinuousCalibration(handles[i]);
         }
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(GameConstants.controllerCallibrationTime);
 
         for (int i = 0; i < count; i++)
         {
