@@ -12,6 +12,11 @@ public abstract class GameState
     public virtual void UpdateState() { }
     public virtual void ExitState()
     {
+        clearWand();
+    }
+
+    public void clearWand()
+    {
         if (stateManager.wandLeft != null)
             if (stateManager.wandLeft.lineRenderer != null)
                 stateManager.wandLeft.lineRenderer.positionCount = 0;

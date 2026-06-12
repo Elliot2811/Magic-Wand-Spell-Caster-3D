@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewSpellProjectileLookUpTable", menuName = "Shapes/Spell Projectile Look Up Table")]
 public class SpellProjectileLookUpTable : ScriptableObject, IEnumerable<SpellProjectileLookUpTable.SpellProjectilePair>
 {
+    [System.Serializable]
     public struct SpellProjectilePair
     {
         public ShapeInfoSO shape;

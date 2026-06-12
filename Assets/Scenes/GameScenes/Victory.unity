@@ -265,7 +265,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 229052576}
-  - component: {fileID: 229052575}
+  - component: {fileID: 229052577}
   m_Layer: 0
   m_Name: Victory Controller
   m_TagString: Untagged
@@ -273,21 +273,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &229052575
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 229052574}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f53d29605e218184ebc1f266e6d32b3d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  victoryState: {fileID: 11400000, guid: 0906c7a63be8b67498640284a402df79, type: 2}
-  player1WinPanel: {fileID: 864991896}
-  player2WinPanel: {fileID: 1277070743}
 --- !u!4 &229052576
 Transform:
   m_ObjectHideFlags: 0
@@ -303,6 +288,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &229052577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 229052574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40b4b43f6c67f6a45aa4c4439dc16dc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player1WinPanel: {fileID: 864991896}
+  player2WinPanel: {fileID: 1277070743}
 --- !u!1 &284677168
 GameObject:
   m_ObjectHideFlags: 0

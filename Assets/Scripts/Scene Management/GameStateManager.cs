@@ -31,6 +31,11 @@ public class GameStateManager : MonoBehaviour
     [HideInInspector]
     public WandListener wandListenerRight;
 
+    [HideInInspector]
+    public bool leftWon = false;
+    [HideInInspector]
+    public bool rightWon = false;
+
     public ShapesCollectionSO allShapesCollectionSO;
 
     private Dictionary<StateEnum, Func<GameState>> dict = new Dictionary<StateEnum, Func<GameState>>();
@@ -101,23 +106,6 @@ public class GameStateManager : MonoBehaviour
     public void Disable()
     {
         gameObject.SetActive(false);
-    }
-
-    public GameObject Instatiate(GameObject gameObject, Transform parent = null)
-    {
-        if (parent == null)
-            return Instantiate(gameObject);
-
-        return Instantiate(gameObject, parent);
-    }
-
-    public static T InstatiateGetScript<T>(T scriptPrefab, Transform parent = null)
-        where T : MonoBehaviour
-    {
-        if (parent == null)
-            return Instantiate(scriptPrefab);
-
-        return Instantiate(scriptPrefab, parent);
     }
 
     //public void ResetWands()

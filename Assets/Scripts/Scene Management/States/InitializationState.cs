@@ -14,6 +14,7 @@ public class InitializationState : GameState
 
         stateManager.AddState(GameStateManager.StateEnum.PlayersSelect, () => new CoinInsertState());
         stateManager.AddState(GameStateManager.StateEnum.Fight, () => new GamePlayState());
+        stateManager.AddState(GameStateManager.StateEnum.Winner, () => new VictoryState());
     }
 
     public override void UpdateState()

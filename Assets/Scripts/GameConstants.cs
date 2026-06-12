@@ -73,6 +73,8 @@ public class GameConstants : MonoBehaviour
     public MapData[] mapPresets;
     public CharacterEntity characterPrefab;
 
+    public SpellProjectileLookUpTable lookUpTable;
+
     private void Start()
     {
         if (Instance == null)

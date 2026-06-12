@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spellName: Fireball
   spellType: Basic
-  spellDamage: 10
+  spellDamage: 0.1
+  spellSpeed: 5
   prefab: {fileID: 2375220837706918120, guid: a8bc54a7696e3cf4eb42d8e0631e4576, type: 3}

@@ -440,6 +440,7 @@ MonoBehaviour:
   mapPresets:
   - {fileID: 11400000, guid: f25c9fd3308e0ca4e825daac643f61ab, type: 2}
   characterPrefab: {fileID: -7457795878227265963, guid: 64fa31cfeca21e343b1bab7c0af0832e, type: 3}
+  lookUpTable: {fileID: 11400000, guid: 18614491eace6f84fa71a40ac975cbc2, type: 2}
 --- !u!4 &1881772484
 Transform:
   m_ObjectHideFlags: 0

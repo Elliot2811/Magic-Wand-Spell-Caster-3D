@@ -67,17 +67,19 @@ public class CharacterEntity : MonoBehaviour
         if (spell == null || spell.prefab == null)
             return;
 
-        GameObject proj = Instantiate(
-            spell.prefab,
-            GameConstants.ProjectileSpawn.relativePos,
-            GameConstants.ProjectileSpawn.relativeRotation,
-            transform
-            );
+        GameObject proj = Instantiate(spell.prefab);
 
-        SpellProjHandler projHandler = proj.AddComponent<SpellProjHandler>();
+        proj.transform.localScale = GameConstants.ProjectileSpawn.scale;
+        proj.transform.SetParent(transform);
+        proj.transform.localPosition = GameConstants.ProjectileSpawn.relativePos;
+        proj.transform.localRotation = GameConstants.ProjectileSpawn.relativeRotation;
+
+        SpellProjHandler projHandler = proj.GetComponent<SpellProjHandler>();
+        if (projHandler == null)
+            projHandler = proj.AddComponent<SpellProjHandler>();
         projHandler.Init(spell);
 
-        Debug.Log($"Player launched spell");
+        //Debug.Log($"Player launched spell");
     }
 
     private IEnumerator WaitFireSpell(ScriptableObjectSpells spell, float delay)
@@ -90,7 +92,9 @@ public class CharacterEntity : MonoBehaviour
     {
         EntityDmgTaken += damage;
 
-        damageTakenMessage.Invoke(damage);
+        damageTakenMessage?.Invoke(damage);
+
+        //Debug.Log($"Sending message of damage taken: {damage}");
     }
 
     public event Action<float> damageTakenMessage;

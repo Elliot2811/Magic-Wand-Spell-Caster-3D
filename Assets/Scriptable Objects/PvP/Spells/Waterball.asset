@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spellName: Waterball
   spellType: Basic
-  spellDamage: 10
+  spellDamage: 0.125
+  spellSpeed: 5
   prefab: {fileID: 2375220837706918120, guid: 71624ffce48903645a3847d811ad1316, type: 3}

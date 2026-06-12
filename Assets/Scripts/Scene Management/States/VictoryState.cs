@@ -47,3 +47,27 @@
 //        GameStateManager.Instance.TransitionToState(MainMenuState);
 //    }
 //}
+
+using UnityEngine.SceneManagement;
+
+// TODO: reset game. 
+public class VictoryState : GameState
+{
+    public override void EnterState(GameStateManager gameManager)
+    {
+        base.EnterState(gameManager);
+
+        if (SceneManager.GetActiveScene().name != "Victory")
+            SceneManager.LoadScene("victory");
+    }
+
+    public override void UpdateState()
+    {
+        base.UpdateState();
+    }
+
+    public override void ExitState()
+    {
+        base.ExitState();
+    }
+}

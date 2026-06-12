@@ -74,6 +74,7 @@
 //    }
 //}
 
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -83,8 +84,15 @@ public class GamePlayState : GameState
     private MapData mapData;
     private CharacterEntity characterPrefab;
 
-    private CharacterEntity leftCharacter;
-    private CharacterEntity rightCharacter;
+    public CharacterEntity leftCharacter { get; private set; }
+    public CharacterEntity rightCharacter { get; private set; }
+
+    public bool timerRunning = false;
+    public float timer = 100;
+    public float displayPercentage = 0.5f;
+
+    private SpellBook leftSpellBook;
+    private SpellBook rightSpellBook;
 
     public override void EnterState(GameStateManager gameManager)
     {
@@ -103,13 +111,65 @@ public class GamePlayState : GameState
     public override void UpdateState()
     {
         base.UpdateState();
+
+        if (timerRunning)
+        {
+            timer -= Time.deltaTime;
+        }
+
+        if (timer <= 0 || displayPercentage <= 0 || displayPercentage >= 1)
+        {
+            Debug.Log($"Timer: {timer}\nDisplay Percentage: {displayPercentage}");
+
+            onWin(displayPercentage);
+        }
     }
 
     public override void ExitState()
     {
         base.ExitState();
+
+        if (leftCharacter != null)
+            leftCharacter.damageTakenMessage -= LeftTakeDamage;
+
+        if (rightCharacter != null)
+            rightCharacter.damageTakenMessage -= RightTakeDamage;
     }
 
+    public void onWin(float sliderPercent)
+    {
+        Debug.Log($"On win called, sliderPercent: {sliderPercent}");
+
+        if (sliderPercent < 0.5)
+        {
+            stateManager.leftWon = false;
+            stateManager.rightWon = true;
+        }
+        else if (sliderPercent > 0.5f)
+        {
+            stateManager.leftWon = true;
+            stateManager.rightWon = false;
+        }
+        else
+        {
+            stateManager.leftWon = false;
+            stateManager.rightWon = false;
+        }
+
+        stateManager.TransitionToState(GameStateManager.StateEnum.Winner);
+    }
+
+    private void LeftTakeDamage(float damage)
+    {
+        displayPercentage -= damage;
+        displayPercentage = Mathf.Clamp01(displayPercentage);
+    }
+
+    private void RightTakeDamage(float damage)
+    {
+        displayPercentage += damage;
+        displayPercentage = Mathf.Clamp01(displayPercentage);
+    }
 
     private IEnumerator LoadGameplayObjects()
     {
@@ -124,9 +184,22 @@ public class GamePlayState : GameState
         leftCharacter.transform.rotation = Quaternion.Euler(mapData.leftRot);
         leftCharacter.transform.localScale = mapData.leftScale;
 
+        leftCharacter.damageTakenMessage += LeftTakeDamage;
+
+        leftSpellBook = new GameObject("Left Spell Book").AddComponent<SpellBook>();
+        leftSpellBook.Init(stateManager.wandListenerLeft, leftCharacter, GameConstants.Instance.lookUpTable);
+
         rightCharacter = MonoBehaviour.Instantiate(characterPrefab);
         rightCharacter.transform.position = mapData.rightPos;
         rightCharacter.transform.rotation = Quaternion.Euler(mapData.rightRot);
         rightCharacter.transform.localScale = mapData.rightScale;
+
+        rightCharacter.damageTakenMessage += RightTakeDamage;
+
+        rightSpellBook = new GameObject("Right Spell Book").AddComponent<SpellBook>();
+        rightSpellBook.Init(stateManager.wandListenerRight, rightCharacter, GameConstants.Instance.lookUpTable);
+
+        timerRunning = true;
+        timer = 100;
     }
 }
