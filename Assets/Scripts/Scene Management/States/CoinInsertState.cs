@@ -6,6 +6,8 @@ public class CoinInsertState : GameState
 {
     public float Countdown { get; private set; }
 
+    private bool coroutineStarted = false;
+
     public bool LeftCoin { get; private set; } = false;
     public bool RightCoin { get; private set; } = false;
     public bool leftSideConfirmation = false;
@@ -72,12 +74,20 @@ public class CoinInsertState : GameState
 
         if ((LeftCoin && RightCoin))
             if (leftSideConfirmation && RightSideConfirmation)
-                stateManager.TransitionToState(GameStateManager.StateEnum.Fight);
+                if (!coroutineStarted)
+                {
+                    coroutineStarted = true;
+                    stateManager.TransitionToState(GameStateManager.StateEnum.Fight, 2f);
+                }
 
         if (LeftCoin ^ RightCoin)
         {
             if ((LeftCoin && leftSideConfirmation) || (RightCoin && RightSideConfirmation))
-                stateManager.TransitionToState(GameStateManager.StateEnum.Fight);
+                if (!coroutineStarted)
+                {
+                    coroutineStarted = true;
+                    stateManager.TransitionToState(GameStateManager.StateEnum.Fight, 2f);
+                }
 
             Countdown -= Time.deltaTime;
         }

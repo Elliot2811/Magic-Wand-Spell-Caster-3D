@@ -140,7 +140,10 @@ public class HealthDisplay : MonoBehaviour
     {
         if (countdownText != null)
         {
-            countdownText.text = timer.ToString();
+            int minutes = Mathf.FloorToInt(timer / 60f);
+            int seconds = Mathf.FloorToInt(timer % 60f);
+
+            countdownText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
         }
     }
 }

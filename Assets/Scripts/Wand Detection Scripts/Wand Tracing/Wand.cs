@@ -33,6 +33,7 @@ public class Wand : MonoBehaviour
     private int lastProcessedIndex = -1;
 
     private Coroutine loggingCoroutine;
+    private Coroutine deleteDrawing;
 
     private WandInputActions inputActions;
 
@@ -289,6 +290,9 @@ public class Wand : MonoBehaviour
         renderedPoints.Clear();
         lastProcessedIndex = -1;
 
+        if (deleteDrawing != null)
+            StopCoroutine(deleteDrawing);
+
         LineRendererInterface.ResetLineRenderer(lineRenderer);
 
         if (loggingCoroutine != null)
@@ -306,7 +310,9 @@ public class Wand : MonoBehaviour
             return;
 
         if (loggingCoroutine != null)
-            StopCoroutine(loggingCoroutine);    
+            StopCoroutine(loggingCoroutine);
+
+        deleteDrawing = StartCoroutine(EraseBackground());
 
         drawActive = false;
 
@@ -317,6 +323,13 @@ public class Wand : MonoBehaviour
     private void DrawCancelled(InputAction.CallbackContext callback)
     {
         DrawCancelled();
+    }
+
+    private IEnumerator EraseBackground()
+    {
+        yield return new WaitForSeconds(3f);
+
+        lineRenderer.positionCount = 0;
     }
     #endregion
 }

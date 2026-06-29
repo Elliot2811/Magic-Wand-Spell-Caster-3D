@@ -20,7 +20,7 @@ public class GameConstants : MonoBehaviour
     public const float DrawingAreaPercentage = 0.90f;
 
     public const bool DisplayBestShape = true;
-    public const float LineWidth = 0.1f;
+    public const float LineWidth = 0.05f;
     public const float DisplayShapePercentage = 0.75f;
     public static readonly Vector2 DisplayShapeOffset = Vector2.zero;
 
@@ -51,8 +51,10 @@ public class GameConstants : MonoBehaviour
         public static readonly Quaternion relativeRotation = Quaternion.identity;
         public static readonly Vector3 scale = Vector3.one;
     }
-    public static readonly Rect DisplayRectLeft = new Rect(0.05f, 0.05f, 0.425f, 0.9f);
-    public static readonly Rect DisplayRectRight = new Rect(0.55f, 0.05f, 0.425f, 0.9f);
+    public static readonly Rect DrawingRectLeft = new Rect(0.05f, 0.05f, 0.425f, 0.9f);
+    public static readonly Rect DrawingRectRight = new Rect(0.55f, 0.05f, 0.425f, 0.9f);
+    public static readonly Rect DisplayRectLeft = new Rect(0.025f, 0.05f, 0.1f, 0.1f);
+    public static readonly Rect DisplayRectRight = new Rect(0.875f, 0.05f, 0.1f, 0.1f);
 
     #region Lake World
     public static readonly Vector3 LakeWorldLeftPos = new Vector3(-16F, 5, 8);

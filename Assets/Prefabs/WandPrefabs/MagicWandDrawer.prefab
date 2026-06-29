@@ -84,9 +84,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2de738713ffcf0458cfe9f0d294eb24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  notInstatiated: 1
+  instatiated: 1
   lineRenderer: {fileID: 0}
-  lineMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   usingController: 1
   deviceIndex: 0
 --- !u!120 &370561893962454323

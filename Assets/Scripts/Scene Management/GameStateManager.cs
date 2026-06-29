@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -75,6 +76,18 @@ public class GameStateManager : MonoBehaviour
         {
             CurrentState.UpdateState();
         }
+    }
+
+    public void TransitionToState(StateEnum newState, float time)
+    {
+        StartCoroutine(TimeTransitionToState(newState, time));
+    }
+
+    public IEnumerator TimeTransitionToState(StateEnum newState, float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        TransitionToState(newState);
     }
 
     public void TransitionToState(StateEnum newState)

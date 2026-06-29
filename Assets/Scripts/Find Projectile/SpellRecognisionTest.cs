@@ -134,7 +134,7 @@ public class SpellRecognisionTest : MonoBehaviour
             catmulledData,
             mainCamera,
             10,
-            left ? GameConstants.DisplayRectLeft : GameConstants.DisplayRectRight,
+            left ? GameConstants.DrawingRectLeft : GameConstants.DrawingRectRight,
             GameConstants.DisplayShapePercentage
             );
 

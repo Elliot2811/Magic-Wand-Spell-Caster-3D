@@ -18,7 +18,7 @@ public static class ConvertToViewportPos
             );
 
 
-        Rect bounds = deviceIndex == 0 ? GameConstants.DisplayRectLeft : GameConstants.DisplayRectRight;
+        Rect bounds = deviceIndex == 0 ? GameConstants.DrawingRectLeft : GameConstants.DrawingRectRight;
 
         Vector2 rectCentre = bounds.center;
 
