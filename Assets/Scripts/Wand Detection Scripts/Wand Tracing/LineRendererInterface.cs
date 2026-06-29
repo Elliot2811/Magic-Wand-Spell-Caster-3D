@@ -17,13 +17,24 @@ public static class LineRendererInterface
         }
     }
 
-    public static void Points(LineRenderer lineRenderer, Vector3[] points)
+    public static void Points(LineRenderer lineRenderer, Vector2[] points, float zPos = 0)
     {
         lineRenderer.positionCount = points.Length;
 
         for (int i = 0; i < points.Length; i++)
         {
-            lineRenderer.SetPosition(i, points[i]);
+            lineRenderer.SetPosition(i, new Vector3(points[i].x, points[i].y, zPos));
+        }
+    }
+    public static void Points(LineRenderer lineRenderer, Vector3[] points, float offset = 0)
+    {
+        lineRenderer.positionCount = points.Length;
+
+        for (int i = 0; i < points.Length; i++)
+        {
+            Vector3 point = points[i];
+            point.z += offset;
+            lineRenderer.SetPosition(i, point);
         }
     }
 
