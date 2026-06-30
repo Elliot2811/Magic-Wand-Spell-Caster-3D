@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class GameStateManager : MonoBehaviour
 {
+    public AudioLibrarySO audioLibrary;
+
     public enum StateEnum
     {
         Init,
@@ -68,6 +70,7 @@ public class GameStateManager : MonoBehaviour
     private void Start()
     {
         TransitionToState(StateEnum.Init);
+
     }
 
     private void Update()

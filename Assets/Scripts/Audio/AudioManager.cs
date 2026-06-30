@@ -8,7 +8,7 @@ public class AudioManager : MonoBehaviour
 
     private AudioSource musicSource;
 
-    void Start()
+    void Awake()
     {
         if (Instance == null)
         {
