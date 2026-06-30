@@ -2,7 +2,7 @@ using UnityEngine;
 
 public static class ConvertToViewportPos
 {
-    public static Vector2 Caculate(int deviceIndex)
+    public static Vector2 GyroToViewPort(int deviceIndex)
     {
         if (JoyConTracker.Instance == null || JoyConTracker.Instance.readyToConnect == false)
             return Vector2.zero;
@@ -30,4 +30,19 @@ public static class ConvertToViewportPos
             viewport.y * Screen.height
             );
     }
+
+    
+    public static Vector2 MousePosToViewPort(Vector2 mousePos, bool left)
+    {
+        Rect bounds = left ? GameConstants.DrawingRectLeft : GameConstants.DrawingRectRight;
+
+        int width = Screen.width;
+        int height = Screen.height;
+
+        mousePos.x = Mathf.Clamp(mousePos.x, bounds.xMin * width, bounds.xMax * width);
+        mousePos.y = Mathf.Clamp(mousePos.y, bounds.yMin * height, bounds.yMax * height);
+
+        return mousePos;
+    }
+    
 }

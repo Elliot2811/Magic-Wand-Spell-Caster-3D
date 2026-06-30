@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class CoinInsertState : GameState
@@ -136,17 +137,39 @@ public class CoinInsertHelper
     private bool leftCoin;
     private bool rightCoin;
 
+    private JoyConTracker controllerInstance;
+    private WandInputActions wandInputActions;
+
     public CoinInsertHelper()
     {
         leftCoin = false;
         rightCoin = false;
 
-        JoyConTracker.Instance.drawingButtonPressed += HandleJoyConButtonPress;
+        controllerInstance = JoyConTracker.Instance;
+
+        if (controllerInstance != null)
+            JoyConTracker.Instance.drawingButtonPressed += HandleJoyConButtonPress;
+        else
+        {
+            wandInputActions = new WandInputActions();
+            wandInputActions.Enable();
+            wandInputActions.Wand.DrawingLeft.started += HandleLeftButtonPress;
+            wandInputActions.Wand.DrawingRight.started += HandleRightButtonPress;
+
+        }
+
     }
 
     ~CoinInsertHelper()
     {
-        JoyConTracker.Instance.drawingButtonPressed -= HandleJoyConButtonPress;
+        if (controllerInstance != null)
+            JoyConTracker.Instance.drawingButtonPressed -= HandleJoyConButtonPress;
+        else if (wandInputActions != null)
+        {
+            wandInputActions.Wand.DrawingLeft.started -= HandleLeftButtonPress;
+            wandInputActions.Wand.DrawingRight.started -= HandleRightButtonPress;
+            wandInputActions.Disable();
+        }
     }
 
     private void HandleJoyConButtonPress(int handle)
@@ -156,6 +179,16 @@ public class CoinInsertHelper
 
         if (handle == 1)
             rightCoin = true;
+    }
+
+    private void HandleLeftButtonPress(InputAction.CallbackContext context) 
+    {
+        leftCoin = true;
+    }
+
+    private void HandleRightButtonPress(InputAction.CallbackContext context)
+    {
+        rightCoin = true;
     }
 
     public bool LeftCoinInsertion()

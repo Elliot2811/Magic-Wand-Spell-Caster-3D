@@ -102,7 +102,16 @@ public partial class @WandInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""PositionLeft"",
+                    ""name"": ""DrawingRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""e8608091-fbf1-43c3-8b57-5f9df0d7098b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Position"",
                     ""type"": ""Value"",
                     ""id"": ""5baa3ebd-eb04-4ac5-946c-46566d013652"",
                     ""expectedControlType"": ""Vector2"",
@@ -120,6 +129,17 @@ public partial class @WandInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Mouse"",
                     ""action"": ""DrawingLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""603886f5-7f0a-4951-83e8-5bd9581eaba7"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Mouse"",
+                    ""action"": ""DrawingRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -152,17 +172,6 @@ public partial class @WandInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Mouse"",
-                    ""action"": ""PositionLeft"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""fa8da9dd-6c96-40b1-b3f3-fd4f10383061"",
-                    ""path"": ""<Gamepad>/rightStick"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Switch"",
                     ""action"": ""Position"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -181,24 +190,14 @@ public partial class @WandInputActions: IInputActionCollection2, IDisposable
                     ""isOR"": false
                 }
             ]
-        },
-        {
-            ""name"": ""Switch"",
-            ""bindingGroup"": ""Switch"",
-            ""devices"": [
-                {
-                    ""devicePath"": ""<SwitchProControllerHID>"",
-                    ""isOptional"": false,
-                    ""isOR"": false
-                }
-            ]
         }
     ]
 }");
         // Wand
         m_Wand = asset.FindActionMap("Wand", throwIfNotFound: true);
         m_Wand_DrawingLeft = m_Wand.FindAction("DrawingLeft", throwIfNotFound: true);
-        m_Wand_PositionLeft = m_Wand.FindAction("PositionLeft", throwIfNotFound: true);
+        m_Wand_DrawingRight = m_Wand.FindAction("DrawingRight", throwIfNotFound: true);
+        m_Wand_Position = m_Wand.FindAction("Position", throwIfNotFound: true);
     }
 
     ~@WandInputActions()
@@ -280,7 +279,8 @@ public partial class @WandInputActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Wand;
     private List<IWandActions> m_WandActionsCallbackInterfaces = new List<IWandActions>();
     private readonly InputAction m_Wand_DrawingLeft;
-    private readonly InputAction m_Wand_PositionLeft;
+    private readonly InputAction m_Wand_DrawingRight;
+    private readonly InputAction m_Wand_Position;
     /// <summary>
     /// Provides access to input actions defined in input action map "Wand".
     /// </summary>
@@ -297,9 +297,13 @@ public partial class @WandInputActions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @DrawingLeft => m_Wrapper.m_Wand_DrawingLeft;
         /// <summary>
-        /// Provides access to the underlying input action "Wand/PositionLeft".
+        /// Provides access to the underlying input action "Wand/DrawingRight".
         /// </summary>
-        public InputAction @PositionLeft => m_Wrapper.m_Wand_PositionLeft;
+        public InputAction @DrawingRight => m_Wrapper.m_Wand_DrawingRight;
+        /// <summary>
+        /// Provides access to the underlying input action "Wand/Position".
+        /// </summary>
+        public InputAction @Position => m_Wrapper.m_Wand_Position;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -329,9 +333,12 @@ public partial class @WandInputActions: IInputActionCollection2, IDisposable
             @DrawingLeft.started += instance.OnDrawingLeft;
             @DrawingLeft.performed += instance.OnDrawingLeft;
             @DrawingLeft.canceled += instance.OnDrawingLeft;
-            @PositionLeft.started += instance.OnPositionLeft;
-            @PositionLeft.performed += instance.OnPositionLeft;
-            @PositionLeft.canceled += instance.OnPositionLeft;
+            @DrawingRight.started += instance.OnDrawingRight;
+            @DrawingRight.performed += instance.OnDrawingRight;
+            @DrawingRight.canceled += instance.OnDrawingRight;
+            @Position.started += instance.OnPosition;
+            @Position.performed += instance.OnPosition;
+            @Position.canceled += instance.OnPosition;
         }
 
         /// <summary>
@@ -346,9 +353,12 @@ public partial class @WandInputActions: IInputActionCollection2, IDisposable
             @DrawingLeft.started -= instance.OnDrawingLeft;
             @DrawingLeft.performed -= instance.OnDrawingLeft;
             @DrawingLeft.canceled -= instance.OnDrawingLeft;
-            @PositionLeft.started -= instance.OnPositionLeft;
-            @PositionLeft.performed -= instance.OnPositionLeft;
-            @PositionLeft.canceled -= instance.OnPositionLeft;
+            @DrawingRight.started -= instance.OnDrawingRight;
+            @DrawingRight.performed -= instance.OnDrawingRight;
+            @DrawingRight.canceled -= instance.OnDrawingRight;
+            @Position.started -= instance.OnPosition;
+            @Position.performed -= instance.OnPosition;
+            @Position.canceled -= instance.OnPosition;
         }
 
         /// <summary>
@@ -395,19 +405,6 @@ public partial class @WandInputActions: IInputActionCollection2, IDisposable
             return asset.controlSchemes[m_MouseSchemeIndex];
         }
     }
-    private int m_SwitchSchemeIndex = -1;
-    /// <summary>
-    /// Provides access to the input control scheme.
-    /// </summary>
-    /// <seealso cref="UnityEngine.InputSystem.InputControlScheme" />
-    public InputControlScheme SwitchScheme
-    {
-        get
-        {
-            if (m_SwitchSchemeIndex == -1) m_SwitchSchemeIndex = asset.FindControlSchemeIndex("Switch");
-            return asset.controlSchemes[m_SwitchSchemeIndex];
-        }
-    }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Wand" which allows adding and removing callbacks.
     /// </summary>
@@ -423,11 +420,18 @@ public partial class @WandInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDrawingLeft(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "PositionLeft" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "DrawingRight" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnPositionLeft(InputAction.CallbackContext context);
+        void OnDrawingRight(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Position" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPosition(InputAction.CallbackContext context);
     }
 }

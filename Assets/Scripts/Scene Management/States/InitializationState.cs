@@ -6,15 +6,16 @@ public class InitializationState : GameState
     {
         base.EnterState(gameManager);
 
-        if (stateManager.joyConTracker == null)
-        {
-            Debug.LogError("[InitializationState]: No joyConTracker");
-            stateManager.Disable();
-        }
-
         stateManager.AddState(GameStateManager.StateEnum.PlayersSelect, () => new CoinInsertState());
         stateManager.AddState(GameStateManager.StateEnum.Fight, () => new GamePlayState());
         stateManager.AddState(GameStateManager.StateEnum.Winner, () => new VictoryState());
+
+        if (stateManager.joyConTracker == null)
+        {
+            Debug.LogWarning("[InitializationState]: No joyConTracker");
+            //stateManager.Disable();
+            stateManager.TransitionToState(GameStateManager.StateEnum.PlayersSelect);
+        }
     }
 
     public override void UpdateState()

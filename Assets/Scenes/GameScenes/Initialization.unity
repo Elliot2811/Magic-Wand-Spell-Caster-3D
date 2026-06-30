@@ -334,7 +334,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &429939950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -461,7 +461,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae21f7077c4846e4b8c0264e97a6541d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  joyConTracker: {fileID: 429939950}
+  joyConTracker: {fileID: 0}
   wandPrefab: {fileID: 6290188424019819844, guid: e5b9182236c39634b9e8cd75a85c938a, type: 3}
   wandLeft: {fileID: 0}
   wandRight: {fileID: 0}
