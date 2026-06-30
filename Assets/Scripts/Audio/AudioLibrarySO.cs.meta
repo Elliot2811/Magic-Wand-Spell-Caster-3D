@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2b7111afa2265c542b8225a4dd81c11e
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - coinInsertMusic: {fileID: 8300000, guid: 1836a097fecb8ac4782c6d3c9932ada5, type: 3}
+  - MapSelectionMusic: {fileID: 8300000, guid: 1836a097fecb8ac4782c6d3c9932ada5, type: 3}
+  - gameplayMusic: {instanceID: 0}
+  - victoryMusic: {fileID: 8300000, guid: 4772620070556e745b6f8595df7ae6e4, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

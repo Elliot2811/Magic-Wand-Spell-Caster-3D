@@ -48,11 +48,13 @@
 //    }
 //}
 
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 // TODO: reset game. 
 public class VictoryState : GameState
 {
+    protected override AudioClip Music => stateManager?.audioLibrary?.victoryMusic;
     public override void EnterState(GameStateManager gameManager)
     {
         base.EnterState(gameManager);
