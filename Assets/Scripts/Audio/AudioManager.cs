@@ -7,6 +7,7 @@ public class AudioManager : MonoBehaviour
     public static AudioManager Instance { get; private set; }
 
     private AudioSource musicSource;
+    private AudioSource sfxSource;
 
     void Awake()
     {
@@ -15,13 +16,13 @@ public class AudioManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
-            musicSource = gameObject.GetComponent<AudioSource>();
-            if (musicSource == null)
-            {
-                musicSource = gameObject.AddComponent<AudioSource>();
-            }
+            musicSource = gameObject.AddComponent<AudioSource>();
             musicSource.loop = true;
             musicSource.playOnAwake = false;
+
+            sfxSource = gameObject.AddComponent<AudioSource>();
+            sfxSource.loop = false;
+            sfxSource.playOnAwake = false;
         }
         else
         {
@@ -38,9 +39,13 @@ public class AudioManager : MonoBehaviour
             musicSource.Play();
         }
     }
-
     public void StopMusic()
     {
         musicSource.Stop();
+    }
+    public void PlaySFX(AudioClip clip, float volume = 1f, float pitch = 1f)
+    {
+        if (clip == null) return;
+        sfxSource.PlayOneShot(clip);
     }
 }
