@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// TODO: Remove mouse input only joycons input
 public class Wand : MonoBehaviour
 {
     [SerializeField]
@@ -97,25 +96,33 @@ public class Wand : MonoBehaviour
             lineRenderer.endWidth = GameConstants.LineWidth;
         }
 
-        if (UsingController && JoyConTracker.Instance == null)
-        {
-            Debug.LogError($"{nameof(Wand)}: No JoyConTracker instance found for controller input in scene.");
-            gameObject.SetActive(false);
-            return;
-        }
-
-        if (UsingController)
+        if (UsingController && JoyConTracker.Instance != null)
         {
             JoyConTracker.Instance.drawingButtonPressed += DrawStarted;
             JoyConTracker.Instance.drawingButtonReleased += DrawCancelled;
         }
         else
         {
+            if (UsingController)
+            {
+                Debug.LogWarning($"{nameof(Wand)}: No JoyConTracker instance found for controller input in scene.");
+                UsingController = false;
+            }
+
             inputActions = new WandInputActions();
 
             inputActions.Enable();
-            inputActions.Wand.DrawingLeft.started += DrawStarted;
-            inputActions.Wand.DrawingLeft.canceled += DrawCancelled;
+
+            if (deviceIndex == 0)
+            {
+                inputActions.Wand.DrawingLeft.started += DrawStarted;
+                inputActions.Wand.DrawingLeft.canceled += DrawCancelled;
+            }
+            else
+            {
+                inputActions.Wand.DrawingRight.started += DrawStarted;
+                inputActions.Wand.DrawingRight.canceled += DrawCancelled;
+            }
         }
 
         initialized = true;
@@ -148,8 +155,17 @@ public class Wand : MonoBehaviour
         }
         else
         {
-            inputActions.Wand.DrawingLeft.started -= DrawStarted;
-            inputActions.Wand.DrawingLeft.canceled -= DrawCancelled;
+            if (deviceIndex == 0)
+            {
+                inputActions.Wand.DrawingLeft.started -= DrawStarted;
+                inputActions.Wand.DrawingLeft.canceled -= DrawCancelled;
+            }
+            else
+            {
+                inputActions.Wand.DrawingRight.started -= DrawStarted;
+                inputActions.Wand.DrawingRight.canceled -= DrawCancelled;
+            }
+
             inputActions.Disable();
         }
 
@@ -223,12 +239,12 @@ public class Wand : MonoBehaviour
 
         if (UsingController)
         {
-            screenPos = ConvertToViewportPos.Caculate(deviceIndex);
+            screenPos = ConvertToViewportPos.GyroToViewPort(deviceIndex);
             //Debug.Log("Controller viewport pos: " + screenPos);
         }
         else
         {
-            screenPos = inputActions.Wand.PositionLeft.ReadValue<Vector2>();
+            screenPos = ConvertToViewportPos.MousePosToViewPort(inputActions.Wand.Position.ReadValue<Vector2>(), deviceIndex == 0);
             //Debug.Log("Mouse screen pos: " + screenPos);
         }
 

@@ -16,7 +16,16 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "PositionLeft",
+                    "name": "DrawingRight",
+                    "type": "Button",
+                    "id": "e8608091-fbf1-43c3-8b57-5f9df0d7098b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Position",
                     "type": "Value",
                     "id": "5baa3ebd-eb04-4ac5-946c-46566d013652",
                     "expectedControlType": "Vector2",
@@ -34,6 +43,17 @@
                     "processors": "",
                     "groups": ";Mouse",
                     "action": "DrawingLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "603886f5-7f0a-4951-83e8-5bd9581eaba7",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Mouse",
+                    "action": "DrawingRight",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -66,17 +86,6 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Mouse",
-                    "action": "PositionLeft",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "fa8da9dd-6c96-40b1-b3f3-fd4f10383061",
-                    "path": "<Gamepad>/rightStick",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Switch",
                     "action": "Position",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -91,17 +100,6 @@
             "devices": [
                 {
                     "devicePath": "<Mouse>",
-                    "isOptional": false,
-                    "isOR": false
-                }
-            ]
-        },
-        {
-            "name": "Switch",
-            "bindingGroup": "Switch",
-            "devices": [
-                {
-                    "devicePath": "<SwitchProControllerHID>",
                     "isOptional": false,
                     "isOR": false
                 }
