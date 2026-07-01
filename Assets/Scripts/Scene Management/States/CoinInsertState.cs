@@ -149,8 +149,8 @@ public class CoinInsertHelper
 
         controllerInstance = JoyConTracker.Instance;
 
-        if (controllerInstance != null)
-            JoyConTracker.Instance.drawingButtonPressed += HandleJoyConButtonPress;
+        if (controllerInstance != null && controllerInstance.gameObject.activeInHierarchy)
+            controllerInstance.drawingButtonPressed += HandleJoyConButtonPress;
         else
         {
             wandInputActions = new WandInputActions();
@@ -164,8 +164,8 @@ public class CoinInsertHelper
 
     ~CoinInsertHelper()
     {
-        if (controllerInstance != null)
-            JoyConTracker.Instance.drawingButtonPressed -= HandleJoyConButtonPress;
+        if (controllerInstance != null && controllerInstance.gameObject.activeInHierarchy)
+            controllerInstance.drawingButtonPressed -= HandleJoyConButtonPress;
         else if (wandInputActions != null)
         {
             wandInputActions.Wand.DrawingLeft.started -= HandleLeftButtonPress;

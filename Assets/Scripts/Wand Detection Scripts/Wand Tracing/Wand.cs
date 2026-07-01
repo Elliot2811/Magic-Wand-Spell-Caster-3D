@@ -11,6 +11,7 @@ public class Wand : MonoBehaviour
     private bool initialized = false;
 
     public LineRenderer lineRenderer;
+    private JoyConTracker joyConTracker;
 
     [Space(10)]
     [Header("Controller settings if using controller")]
@@ -51,9 +52,11 @@ public class Wand : MonoBehaviour
         if (!initialized)
             return;
 
-        if (UsingController && !controllerActive)
+        joyConTracker = JoyConTracker.Instance;
+
+        if (UsingController && joyConTracker != null && joyConTracker.gameObject.activeInHierarchy)
         {
-            controllerActive = JoyConTracker.Instance.readyToConnect;
+            controllerActive = joyConTracker.readyToConnect;
             return;
         }
 
@@ -96,10 +99,10 @@ public class Wand : MonoBehaviour
             lineRenderer.endWidth = GameConstants.LineWidth;
         }
 
-        if (UsingController && JoyConTracker.Instance != null)
+        if (UsingController && joyConTracker != null)
         {
-            JoyConTracker.Instance.drawingButtonPressed += DrawStarted;
-            JoyConTracker.Instance.drawingButtonReleased += DrawCancelled;
+            joyConTracker.drawingButtonPressed += DrawStarted;
+            joyConTracker.drawingButtonReleased += DrawCancelled;
         }
         else
         {
@@ -147,10 +150,10 @@ public class Wand : MonoBehaviour
     {
         if (UsingController)
         {
-            if (JoyConTracker.Instance != null)
+            if (joyConTracker != null && joyConTracker.gameObject.activeInHierarchy)
             {
-                JoyConTracker.Instance.drawingButtonPressed -= DrawStarted;
-                JoyConTracker.Instance.drawingButtonReleased -= DrawCancelled;
+                joyConTracker.drawingButtonPressed -= DrawStarted;
+                joyConTracker.drawingButtonReleased -= DrawCancelled;
             }
         }
         else

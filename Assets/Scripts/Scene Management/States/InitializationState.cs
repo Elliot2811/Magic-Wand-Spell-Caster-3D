@@ -16,10 +16,18 @@ public class InitializationState : GameState
             //stateManager.Disable();
             stateManager.TransitionToState(GameStateManager.StateEnum.PlayersSelect);
         }
+
+        stateManager.joyConTracker.gameObject.SetActive(true);
     }
 
     public override void UpdateState()
     {
+        if (stateManager.joyConTracker.count == 0)
+        {
+            stateManager.joyConTracker.gameObject.SetActive(false);
+            stateManager.TransitionToState(GameStateManager.StateEnum.PlayersSelect);
+        }
+
         if (stateManager.joyConTracker.readyToConnect)
         {
             stateManager.TransitionToState(GameStateManager.StateEnum.PlayersSelect);

@@ -20,7 +20,7 @@ public class JoyConTracker : MonoBehaviour
     public GameObject gyroRepresentationLeft;
     public GameObject gyroRepresentationRight;
 
-    private int count = 0;
+    public int count { get; private set; } = -1;
     private int[] handles = new int[16];
 
 
