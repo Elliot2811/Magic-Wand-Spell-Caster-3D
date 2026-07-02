@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -6,8 +5,11 @@ using UnityEngine.SceneManagement;
 public class CoinInsertState : GameState
 {
     public float Countdown { get; private set; }
+    public bool DisplayCountdown { get; private set; } = false;
 
-    private bool coroutineStarted = false;
+    private float transitionTime = 6f;
+    public float transitionTimer { get; private set; } = 0f;
+    public bool DisplayTransitionTimer { get; private set; } = false;
 
     public bool LeftCoin { get; private set; } = false;
     public bool RightCoin { get; private set; } = false;
@@ -24,7 +26,7 @@ public class CoinInsertState : GameState
     private WandListener wandListenerRight;
     #endregion
 
-    CoinInsertHelper helperFunc = null;
+    CoinInsertListener coinInsertListener = null;
 
     public override void EnterState(GameStateManager gameManager)
     {
@@ -34,17 +36,21 @@ public class CoinInsertState : GameState
             SceneManager.LoadScene("CoinInsert");
 
         Countdown = GameConstants.coinInsertionCountdownTime;
-        helperFunc = new CoinInsertHelper();
+        coinInsertListener = new CoinInsertListener();
     }
 
     public override void UpdateState()
     {
         base.UpdateState();
 
-        if (!LeftCoin && helperFunc.LeftCoinInsertion())
+        if (!LeftCoin && coinInsertListener.LeftCoinInsertion())
         {
             LeftCoin = true;
             stateManager.gameScenario += 0b_1;
+
+            DisplayCountdown = true;
+            transitionTimer = transitionTime;
+            DisplayTransitionTimer = false;
 
             wandLeft = MonoBehaviour.Instantiate(stateManager.wandPrefab);
             MonoBehaviour.DontDestroyOnLoad(wandLeft);
@@ -58,10 +64,14 @@ public class CoinInsertState : GameState
             stateManager.wandListenerLeft = wandListenerLeft;
         }
 
-        if (!RightCoin && helperFunc.rightCoinInsertion())
+        if (!RightCoin && coinInsertListener.rightCoinInsertion())
         {
             RightCoin = true;
             stateManager.gameScenario += 0b_10;
+            
+            DisplayCountdown = true;
+            transitionTime = transitionTimer;
+            DisplayTransitionTimer = false;
 
             wandRight = MonoBehaviour.Instantiate(stateManager.wandPrefab);
             MonoBehaviour.DontDestroyOnLoad(wandRight);
@@ -76,23 +86,27 @@ public class CoinInsertState : GameState
         }
 
         if ((LeftCoin && RightCoin))
+        {
             if (leftSideConfirmation && RightSideConfirmation)
-                if (!coroutineStarted)
-                {
-                    coroutineStarted = true;
-                    stateManager.TransitionToState(GameStateManager.StateEnum.Fight, 2f);
-                }
+            {
+                TransitionToFightState();
+                DisplayCountdown = false;
+            }
+            else
+                Countdown -= Time.deltaTime;
+
+        }
 
         if (LeftCoin ^ RightCoin)
         {
-            if ((LeftCoin && leftSideConfirmation) || (RightCoin && RightSideConfirmation))
-                if (!coroutineStarted)
-                {
-                    coroutineStarted = true;
-                    stateManager.TransitionToState(GameStateManager.StateEnum.Fight, 2f);
-                }
-
-            Countdown -= Time.deltaTime;
+            if ((LeftCoin && leftSideConfirmation && !RightCoin) || (RightCoin && RightSideConfirmation && !LeftCoin))
+            {
+                TransitionToFightState();
+                DisplayCountdown = false;
+                return;
+            }
+            else
+                Countdown -= Time.deltaTime;
         }
 
         // Implement resetng and dispensing coins back to player.
@@ -132,9 +146,20 @@ public class CoinInsertState : GameState
         if (shapeInfo != null)
             RightSideConfirmation = true;
     }
+
+    private void TransitionToFightState()
+    {
+        transitionTimer -= Time.deltaTime;
+        DisplayTransitionTimer = true;
+
+        if (transitionTimer <= 0)
+        {
+            stateManager.TransitionToState(GameStateManager.StateEnum.Fight);
+        }
+    }
 }
 
-public class CoinInsertHelper
+public class CoinInsertListener
 {
     private bool leftCoin;
     private bool rightCoin;
@@ -142,7 +167,7 @@ public class CoinInsertHelper
     private JoyConTracker controllerInstance;
     private WandInputActions wandInputActions;
 
-    public CoinInsertHelper()
+    public CoinInsertListener()
     {
         leftCoin = false;
         rightCoin = false;
@@ -162,7 +187,7 @@ public class CoinInsertHelper
 
     }
 
-    ~CoinInsertHelper()
+    ~CoinInsertListener()
     {
         if (controllerInstance != null && controllerInstance.gameObject.activeInHierarchy)
             controllerInstance.drawingButtonPressed -= HandleJoyConButtonPress;
