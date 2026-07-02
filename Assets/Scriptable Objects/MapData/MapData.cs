@@ -8,9 +8,6 @@ public class MapData : ScriptableObject
     public GameObject mapPrefab;
     public AudioClip mapMusic;
 
-    [Range(0f, 1f)]
-    public float musicVolume = 1f;
-
     [Header("Left Player Transform")]
     public Vector3 leftPos = new Vector3(-16f, 5f, 8f);
     public Vector3 leftRot = new Vector3(0f, 90f, 0f);

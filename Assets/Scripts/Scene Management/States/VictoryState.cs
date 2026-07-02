@@ -54,7 +54,7 @@ using UnityEngine.SceneManagement;
 // TODO: reset game. 
 public class VictoryState : GameState
 {
-    protected override AudioPair Music => stateManager?.audioLibrary?.victoryMusic;
+    protected override AudioClip Music => stateManager?.audioLibrary?.victoryMusic;
     private bool coroutineStarted = false;
 
     public override void EnterState(GameStateManager gameManager)

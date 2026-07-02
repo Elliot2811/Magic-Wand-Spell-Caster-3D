@@ -45,9 +45,6 @@ public class GameConstants : MonoBehaviour
 
     public static float coinInsertionCountdownTime = 10f;
 
-    public static float musicVolume = 0.02f;
-    public static float sfxVolume = 0.02f;
-
     public static class ProjectileSpawn
     {    
         public static readonly Vector3 relativePos = new Vector3(0, 0.25f, 0.85f);

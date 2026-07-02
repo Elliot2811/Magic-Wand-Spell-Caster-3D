@@ -3,7 +3,7 @@ using UnityEngine;
 public abstract class GameState
 {
     protected GameStateManager stateManager;
-    protected virtual AudioPair Music => null;
+    protected virtual AudioClip Music => null;
 
     public virtual void EnterState(GameStateManager gameManager)
     {
@@ -12,7 +12,7 @@ public abstract class GameState
         if (Music != null)
         {
             Debug.Log($"AudioManager.Instance = {AudioManager.Instance}");
-            AudioManager.Instance.PlayMusic(Music.clip, Music.volume);
+            AudioManager.Instance.PlayMusic(Music);
         }
     }
 

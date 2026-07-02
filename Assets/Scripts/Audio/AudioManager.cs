@@ -29,14 +29,13 @@ public class AudioManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public void PlayMusic(AudioClip clip, float baseVolume = 1f)
+    public void PlayMusic(AudioClip clip)
     {
         if (clip == null) return;
 
         if (musicSource.clip != clip)
         {
             musicSource.clip = clip;
-            musicSource.volume = baseVolume * GameConstants.musicVolume;
             musicSource.Play();
         }
     }
@@ -44,9 +43,9 @@ public class AudioManager : MonoBehaviour
     {
         musicSource.Stop();
     }
-    public void PlaySFX(AudioClip clip, float baseVolume = 1f, float pitch = 1f)
+    public void PlaySFX(AudioClip clip, float volume = 1f, float pitch = 1f)
     {
         if (clip == null) return;
-        sfxSource.PlayOneShot(clip, baseVolume * GameConstants.sfxVolume);
+        sfxSource.PlayOneShot(clip);
     }
 }
