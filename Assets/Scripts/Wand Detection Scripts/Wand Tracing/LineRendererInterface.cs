@@ -5,7 +5,7 @@ public static class LineRendererInterface
 {
     public static void ResetLineRenderer(LineRenderer lineRenderer) => lineRenderer.positionCount = 0;
 
-    public static void Points(LineRenderer lineRenderer, List<Vector2> points)
+    public static void Points(LineRenderer lineRenderer, List<Vector2> points, float zClipPlane = 0f)
     {
         lineRenderer.positionCount = points.Count;
 
@@ -13,7 +13,7 @@ public static class LineRendererInterface
 
         foreach (Vector2 point in points)
         {
-            lineRenderer.SetPosition(i++, point);
+            lineRenderer.SetPosition(i++, new Vector3(point.x, point.y, zClipPlane));
         }
     }
 
@@ -38,7 +38,7 @@ public static class LineRendererInterface
         }
     }
 
-    public static void AddPoints(LineRenderer lineRenderer, List<Vector2[]> points)
+    public static void AddPoints(LineRenderer lineRenderer, List<Vector2[]> points, float zClipPlane = 0f)
     {
         int total = 0;
         foreach (Vector2[] seg in points)
@@ -52,7 +52,7 @@ public static class LineRendererInterface
         {
             foreach (Vector2 point in seg)
             {
-                lineRenderer.SetPosition(i++, point);
+                lineRenderer.SetPosition(i++, new Vector3(point.x, point.y, zClipPlane));
             }
         }
     }

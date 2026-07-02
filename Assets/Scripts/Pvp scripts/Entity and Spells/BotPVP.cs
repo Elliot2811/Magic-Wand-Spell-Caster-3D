@@ -1,7 +1,7 @@
-using System.Collections;
-using UnityEngine;
+/* using UnityEngine;
 
-public class BotPVP : EntityBase
+// BROKEN
+public class BotPVP : CharacterEntity
 {
     #region Variables
     [Header("Bot Settings")]
@@ -18,7 +18,6 @@ public class BotPVP : EntityBase
     {
         //Gets a reference to the child of the current player to get its position and rotation for spawning future spells
         Debug.Log("This is a bot script!!!");
-        spellSpawnPosAndRot = transform.GetChild(0).gameObject;
         selectRandNum();
     }
     void Update()
@@ -29,7 +28,7 @@ public class BotPVP : EntityBase
         {
             timer = 0f;
 
-            StartCoroutine(CastAndFireSpell(3));
+            FireSpell()
             selectRandNum();
         }
     }
@@ -44,3 +43,4 @@ public class BotPVP : EntityBase
 
     #endregion
 }
+*/

@@ -6,87 +6,57 @@ using UnityEngine.InputSystem;
 
 public class Wand : MonoBehaviour
 {
+    [SerializeField]
+    private bool instatiated = true;
+    private bool initialized = false;
+
     public LineRenderer lineRenderer;
+    private JoyConTracker joyConTracker;
 
-    public GameObject wandObject;
-
-    public bool usingController = false;
-
-    [Tooltip("Individual joycon connection id")]
+    [Space(10)]
+    [Header("Controller settings if using controller")]
+    public bool usingController = true;
+    [Tooltip("Index 0: left, Index 1: right")]
     [Range(0, 1)]
-    public int deviceId = 0;
-    private bool UsingController;
+    public int deviceIndex = 0;
 
+    private bool UsingController;
     private bool controllerActive = false;
+
 
     private List<Vector2> points = new List<Vector2>();
     private List<Vector2> catmullPoints = new List<Vector2>();
     private List<Vector2[]> renderedPoints = new List<Vector2[]>();
 
+    private float zClipPlane = 0;
+
     private int lastProcessedIndex = -1;
 
-
     private Coroutine loggingCoroutine;
+    private Coroutine deleteDrawing;
 
     private WandInputActions inputActions;
+
     private bool drawActive = false;
-
-    private Camera mainCam;
-
-
-    private void Awake()
-    {
-        UsingController = usingController;
-
-        if (!UsingController)
-        {
-            inputActions = new WandInputActions();
-            Cursor.visible = GameConstants.CursorVisible;
-        }
-
-        mainCam = Camera.main;
-
-    }
 
     private void Start()
     {
-        if (lineRenderer == null)
+        if (!instatiated)
         {
-            Debug.LogError($"{nameof(Wand)}: No LineRenderer assigned on {gameObject.name}.");
-            Debug.Log("Setting game object to inactive.");
-            gameObject.SetActive(false);
-            return;
-        }
-
-        lineRenderer.startWidth = GameConstants.LineWidth;
-        lineRenderer.endWidth = GameConstants.LineWidth;
-
-        if (UsingController && JoyConTracker.Instance == null)
-        {
-            Debug.LogError($"{nameof(Wand)}: No JoyConTracker instance found for controller input on {gameObject.name}.");
-            Debug.Log("Setting game object to inactive.");
-            gameObject.SetActive(false);
-            return;
-        }
-
-        if (UsingController)
-        {
-            JoyConTracker.Instance.drawingButtonPressed += DrawStarted;
-            JoyConTracker.Instance.drawingButtonReleased += DrawCancelled;
-        }
-        else
-        {
-            inputActions.Enable();
-            inputActions.Wand.DrawingLeft.started += DrawStarted;
-            inputActions.Wand.DrawingLeft.canceled += DrawCancelled;
+            Init();
         }
     }
 
     private void Update()
     {
-        if (usingController && !controllerActive)
+        if (!initialized)
+            return;
+
+        joyConTracker = JoyConTracker.Instance;
+
+        if (UsingController && joyConTracker != null && joyConTracker.gameObject.activeInHierarchy)
         {
-            controllerActive = JoyConTracker.Instance.Connected;
+            controllerActive = joyConTracker.readyToConnect;
             return;
         }
 
@@ -96,32 +66,109 @@ public class Wand : MonoBehaviour
             HandleCatmullPoints(lastProcessedIndex);
         }
 
-        if (renderedPoints.Count > 0)
+        if (lineRenderer != null && renderedPoints.Count > 0)
         {
-            LineRendererInterface.AddPoints(lineRenderer, renderedPoints);
+            LineRendererInterface.AddPoints(lineRenderer, renderedPoints, zClipPlane);
             renderedPoints.Clear();
         }
 
-        if (wandObject != null)
-        {
-            wandObject.transform.position = GetCurrentPos();
-            //wandObject.transform.rotation = Quaternion.Euler(GameConstants.QuatRotation) * mainCam.transform.rotation;
-        }
+        transform.position = GetCurrentPos();
     }
 
+    private void Init()
+    {
+        Init(usingController, deviceIndex);
+    }
+
+    public void Init(bool usingController, int deviceIndex)
+    {
+        UsingController = usingController;
+        this.deviceIndex = deviceIndex;
+
+        lineRenderer = GetComponent<LineRenderer>();
+
+        if (lineRenderer == null)
+        {
+            Debug.LogWarning($"{nameof(Wand)}: No LineRenderer assigned on {gameObject.name}.");
+        }
+        else
+        {
+            lineRenderer.startColor = Color.red;
+            lineRenderer.endColor = Color.red;
+            lineRenderer.startWidth = GameConstants.LineWidth;
+            lineRenderer.endWidth = GameConstants.LineWidth;
+        }
+
+        if (UsingController && joyConTracker != null)
+        {
+            joyConTracker.drawingButtonPressed += DrawStarted;
+            joyConTracker.drawingButtonReleased += DrawCancelled;
+        }
+        else
+        {
+            if (UsingController)
+            {
+                Debug.LogWarning($"{nameof(Wand)}: No JoyConTracker instance found for controller input in scene.");
+                UsingController = false;
+            }
+
+            inputActions = new WandInputActions();
+
+            inputActions.Enable();
+
+            if (deviceIndex == 0)
+            {
+                inputActions.Wand.DrawingLeft.started += DrawStarted;
+                inputActions.Wand.DrawingLeft.canceled += DrawCancelled;
+            }
+            else
+            {
+                inputActions.Wand.DrawingRight.started += DrawStarted;
+                inputActions.Wand.DrawingRight.canceled += DrawCancelled;
+            }
+        }
+
+        initialized = true;
+    }
+
+    public Vector2[] listToArray(List<Vector3> list)
+    {
+        Vector2[] result = new Vector2[list.Count];
+
+        int i = 0;
+        foreach (Vector3 item in list)
+        {
+            result[i] = new Vector2(item.x, item.y);
+            i++;
+        }
+
+        return result;
+    }
 
     #region Subscribe/Unsubscribe To Input System
     private void OnDisable()
     {
         if (UsingController)
         {
-            JoyConTracker.Instance.drawingButtonPressed -= DrawStarted;
-            JoyConTracker.Instance.drawingButtonReleased -= DrawCancelled;
+            if (joyConTracker != null && joyConTracker.gameObject.activeInHierarchy)
+            {
+                joyConTracker.drawingButtonPressed -= DrawStarted;
+                joyConTracker.drawingButtonReleased -= DrawCancelled;
+            }
         }
         else
         {
-            inputActions.Wand.DrawingLeft.started -= DrawStarted;
-            inputActions.Wand.DrawingLeft.canceled -= DrawCancelled;
+            if (deviceIndex == 0)
+            {
+                inputActions.Wand.DrawingLeft.started -= DrawStarted;
+                inputActions.Wand.DrawingLeft.canceled -= DrawCancelled;
+            }
+            else
+            {
+                inputActions.Wand.DrawingRight.started -= DrawStarted;
+                inputActions.Wand.DrawingRight.canceled -= DrawCancelled;
+            }
+
             inputActions.Disable();
         }
 
@@ -179,7 +226,7 @@ public class Wand : MonoBehaviour
 
         renderedPoints.Add(segment);
         //LineRendererInterface.RemovePoint(lineRenderer);  
-        LineRendererInterface.AddPoints(lineRenderer, renderedPoints);
+        LineRendererInterface.AddPoints(lineRenderer, renderedPoints, zClipPlane);
 
         renderedPoints.Clear();
     }
@@ -191,21 +238,23 @@ public class Wand : MonoBehaviour
     {
         Vector2 screenPos;
 
+        Camera mainCam = Camera.main;
+
         if (UsingController)
         {
-            screenPos = ConvertToViewportPos.Caculate(0);
+            screenPos = ConvertToViewportPos.GyroToViewPort(deviceIndex);
             //Debug.Log("Controller viewport pos: " + screenPos);
         }
         else
         {
-            screenPos = inputActions.Wand.PositionLeft.ReadValue<Vector2>();
+            screenPos = ConvertToViewportPos.MousePosToViewPort(inputActions.Wand.Position.ReadValue<Vector2>(), deviceIndex == 0);
             //Debug.Log("Mouse screen pos: " + screenPos);
         }
 
         return mainCam.ScreenToWorldPoint(new Vector3(
             screenPos.x,
             screenPos.y,
-            Camera.main.nearClipPlane + GameConstants.DistanceToCamera
+            mainCam.nearClipPlane + GameConstants.DistanceToCamera
             ));
     }
 
@@ -224,6 +273,7 @@ public class Wand : MonoBehaviour
     /// </summary>
     private IEnumerator LogMousePos()
     {
+        zClipPlane = Camera.main.gameObject.transform.position.z + GameConstants.DistanceToCamera;
         while (drawActive)
         {
             TryRecordCurrentPos(GetCurrentPos());
@@ -246,14 +296,21 @@ public class Wand : MonoBehaviour
 
 
     #region Input System Helper Functions
-    private void DrawStarted()
+    // handle -1 for when not using controller
+    private void DrawStarted(int handle = -1)
     {
+        if (handle != -1 && handle != deviceIndex)
+            return;
+
         drawActive = true;
 
         points.Clear();
         catmullPoints.Clear();
         renderedPoints.Clear();
         lastProcessedIndex = -1;
+
+        if (deleteDrawing != null)
+            StopCoroutine(deleteDrawing);
 
         LineRendererInterface.ResetLineRenderer(lineRenderer);
 
@@ -266,10 +323,15 @@ public class Wand : MonoBehaviour
         DrawStarted();
     }
 
-    private void DrawCancelled()
+    private void DrawCancelled(int handle = -1)
     {
+        if (handle != -1 && handle != deviceIndex)
+            return;
+
         if (loggingCoroutine != null)
-            StopCoroutine(loggingCoroutine);    
+            StopCoroutine(loggingCoroutine);
+
+        deleteDrawing = StartCoroutine(EraseBackground());
 
         drawActive = false;
 
@@ -280,6 +342,13 @@ public class Wand : MonoBehaviour
     private void DrawCancelled(InputAction.CallbackContext callback)
     {
         DrawCancelled();
+    }
+
+    private IEnumerator EraseBackground()
+    {
+        yield return new WaitForSeconds(3f);
+
+        lineRenderer.positionCount = 0;
     }
     #endregion
 }

@@ -283,7 +283,7 @@ public static class PointsManipulation
     /// <summary>
     /// Evaluates A Catmull-Rom segment
     /// </summary>
-    public static Vector2[] EvaluateCatmullSegment(Vector2 p0, Vector2 p1, Vector2 p2, Vector3 p3, int resolution)
+    public static Vector2[] EvaluateCatmullSegment(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3, int resolution)
     {
         if (p1 == p2)
             return new Vector2[]{p1};
@@ -377,6 +377,23 @@ public static class PointsManipulation
 
         return new PointBounds(minX, maxX, minY, maxY);
     }
+    public static PointBounds GetBounds(Vector3[] points)
+    {
+        Vector3 first = points[0];
+
+        float maxX = first.x, minX = first.x;
+        float maxY = first.y, minY = first.y;
+
+        foreach (Vector2 point in points)
+        {
+            if (point.x > maxX) maxX = point.x;
+            if (point.x < minX) minX = point.x;
+            if (point.y > maxY) maxY = point.y;
+            if (point.y < minY) minY = point.y;
+        }
+
+        return new PointBounds(minX, maxX, minY, maxY);
+    }
 
     /// <summary>
     /// Total distance between Vector2 points
@@ -394,6 +411,26 @@ public static class PointsManipulation
         Vector2 previousPoint = points[0];
 
         for (int i = 1; i <  points.Length; i++)
+        {
+            totalDistance += Vector2.Distance(previousPoint, points[i]);
+            previousPoint = points[i];
+        }
+
+        return totalDistance;
+    }
+    public static float TotalDistance(Vector3[] points)
+    {
+        if (points.Length <= 1)
+        {
+            Debug.LogWarning("[PointsManipulation.TotalDistance]: points.Length should be more than 1.");
+            return 0;
+        }
+
+        float totalDistance = 0f;
+
+        Vector2 previousPoint = points[0];
+
+        for (int i = 1; i < points.Length; i++)
         {
             totalDistance += Vector2.Distance(previousPoint, points[i]);
             previousPoint = points[i];
@@ -430,52 +467,46 @@ public static class PointsManipulation
 
     #region Scale To Screen Functions
     /// <summary>
-    /// Rescales the points to a percentage of the screen size.
+    /// Rescales points to certain area of the viewPort.
     /// </summary>
-    public static Vector2[] ScaleToScreen(Vector2[] points, Camera mainCamera, float percentage)
-    {
-        return ScaleToScreen(points, mainCamera.orthographicSize, mainCamera.aspect, percentage, new(0, 0));
-    }
-
-    /// <summary>
-    /// Rescales the points to a percentage of the screen size.
-    /// </summary>
-    public static Vector2[] ScaleToScreen(Vector2[] points, Camera mainCamera, float percentage, Vector2 offset)
-    {
-        return ScaleToScreen(points, mainCamera.orthographicSize, mainCamera.aspect, percentage, offset);
-    }
-
-    /// <summary>
-    /// Rescales the points to a percentage of the screen size.
-    /// </summary>
-    public static Vector2[] ScaleToScreen(Vector2[] points, float orthographicSize, float aspectRatio, float percentage)
-    {
-        return ScaleToScreen(points, orthographicSize, aspectRatio, percentage, new(0, 0));
-    }
-
-    /// <summary>
-    /// Rescales the points to a percentage of the screen size.
-    /// </summary>
-    public static Vector2[] ScaleToScreen(Vector2[] points, float orthographicSize, float aspectRatio, float percentage, Vector2 offset)
+    public static Vector3[] ScaleToViewPort(Vector2[] points, Camera mainCamera, float renderDistance, Rect viewportRect, float displayPercent)
     {
         if (points == null || points.Length <= 1)
             return null;
 
-        float halfHeight = orthographicSize;
-        float halfWidth = aspectRatio * orthographicSize;
-        float halfScale = Mathf.Min(halfWidth, halfHeight);
+        Vector3 bottomLeft = mainCamera.ViewportToWorldPoint(new Vector3(
+            viewportRect.xMin,
+            viewportRect.yMin,
+            renderDistance
+            ));
+        Vector3 topRight = mainCamera.ViewportToWorldPoint(new Vector3(
+            viewportRect.xMax,
+            viewportRect.yMax,
+            renderDistance
+            ));
+
+        float rectWorldWidth = topRight.x - bottomLeft.x;
+        float rectWorldHeight = topRight.y - bottomLeft.y;
+
+        float displayWidth = rectWorldWidth * displayPercent;
+        float displayHeight = rectWorldHeight * displayPercent;
+
+        Vector2 rectWorldCentre = new Vector2(
+            (bottomLeft.x + topRight.x) * 0.5f,
+            (bottomLeft.y + topRight.y) * 0.5f
+            );
+
+        float scale = Mathf.Min(displayWidth, displayHeight);
 
         Vector2[] centred = CenterPoints(points);
 
-        Vector2[] results = new Vector2[points.Length];
-
+        Vector3[] results = new Vector3[centred.Length];
         for (int i = 0; i < points.Length; i++)
         {
-            Vector2 point = centred[i];
-
-            results[i] = new Vector2(
-                (point.x - 0.5f) * halfScale * 2 * percentage + offset.x,
-                (point.y - 0.5f) * halfScale * 2 * percentage + offset.y
+            results[i] = new Vector3(
+                (centred[i].x - 0.5f) * scale + rectWorldCentre.x,
+                (centred[i].y - 0.5f) * scale + rectWorldCentre.y,
+                bottomLeft.z
                 );
         }
 

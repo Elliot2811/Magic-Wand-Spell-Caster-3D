@@ -62,7 +62,7 @@ public class ShapeVariantSO : ScriptableObject
     {
         if (GameConstants.PointCount <= 1)
         {
-            Debug.LogWarning($"[{name}]: GameManager Point Count must be greater than 1.");
+            Debug.LogError($"[{name}]: GameManager Point Count must be greater than 1.");
         }
 
         recalcAndNormPoints = PointsManipulation.ResampleAndNormalize(points, GameConstants.PointCount);

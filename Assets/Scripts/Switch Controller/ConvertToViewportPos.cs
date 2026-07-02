@@ -2,32 +2,47 @@ using UnityEngine;
 
 public static class ConvertToViewportPos
 {
-    public static Vector2 Caculate(int deviceId)
+    public static Vector2 GyroToViewPort(int deviceIndex)
     {
-        if (JoyConTracker.Instance == null || JoyConTracker.Instance.Connected == false)
+        if (JoyConTracker.Instance == null || JoyConTracker.Instance.readyToConnect == false)
             return Vector2.zero;
 
-        Vector3 forward = JoyConTracker.Instance.CurrentRotation * Vector3.forward;
+        Vector3 forward = JoyConTracker.Instance.CurrentRotation(deviceIndex) * Vector3.forward;
 
         float yawDegrees = Mathf.Atan2(forward.x, forward.z) * Mathf.Rad2Deg;
         float pitchDegrees = Mathf.Asin(forward.y) * Mathf.Rad2Deg;
 
-        Vector2 posInCamera = new Vector2(
-            yawDegrees / GameConstants.HorizontalFovDeg,
-            pitchDegrees / GameConstants.VerticalFovDeg
+        Vector2 viewport = new Vector2(
+            yawDegrees / GameConstants.HorizontalFovDeg + 0.5f,
+            pitchDegrees / GameConstants.VerticalFovDeg + 0.5f
             );
 
-        Vector2 viewport = posInCamera + new Vector2(0.5f, 0.5f);
-        
-        float left = 0.5f - GameConstants.DrawingAreaPercentage / 2;
-        float right = 0.5f + GameConstants.DrawingAreaPercentage / 2;
 
-        viewport.x = Mathf.Clamp(viewport.x, left, right);
-        viewport.y = Mathf.Clamp(viewport.y, left, right);
+        Rect bounds = deviceIndex == 0 ? GameConstants.DrawingRectLeft : GameConstants.DrawingRectRight;
+
+        Vector2 rectCentre = bounds.center;
+
+        viewport.x = Mathf.Clamp(viewport.x - 0.5f + rectCentre.x, bounds.xMin, bounds.xMax);
+        viewport.y = Mathf.Clamp(viewport.y - 0.5f + rectCentre.y, bounds.yMin, bounds.yMax);
 
         return new Vector2(
             viewport.x * Screen.width,
             viewport.y * Screen.height
             );
     }
+
+    
+    public static Vector2 MousePosToViewPort(Vector2 mousePos, bool left)
+    {
+        Rect bounds = left ? GameConstants.DrawingRectLeft : GameConstants.DrawingRectRight;
+
+        int width = Screen.width;
+        int height = Screen.height;
+
+        mousePos.x = Mathf.Clamp(mousePos.x, bounds.xMin * width, bounds.xMax * width);
+        mousePos.y = Mathf.Clamp(mousePos.y, bounds.yMin * height, bounds.yMax * height);
+
+        return mousePos;
+    }
+    
 }

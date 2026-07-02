@@ -52,10 +52,10 @@ public static class CompareShapes
             }
         }
 
-        if (bestMatch != null)
-            Debug.Log($"Best shape accuracy of {bestShapeAccuracy} from {bestMatch.ShapeName}");
+        //if (bestMatch != null)
+            //Debug.Log($"Best shape accuracy of {bestShapeAccuracy} from {bestMatch.ShapeName}");
 
-        Debug.Log($"Second best shape accuracy of {secondBestShapeAccuracy}");
+        //Debug.Log($"Second best shape accuracy of {secondBestShapeAccuracy}");
 
         return
             (PassedMinAccuracy(bestShapeAccuracy) && UniqueEnough(bestShapeAccuracy, secondBestShapeAccuracy)) ?

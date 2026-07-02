@@ -3,102 +3,89 @@ using UnityEngine;
 public class SpellBook : MonoBehaviour
 {
     [SerializeField]
-    private ShapesCollectionSO shapesCollection;
+    private bool instantiated = true;
+    private bool initialized = false;
 
     [SerializeField]
     private SpellProjectileLookUpTable spellLookupTable;
 
     [SerializeField]
-    private Wand wand;
+    private WandListener wandListener;
 
     [SerializeField]
-    private EntityBase playerEntity;
-
-    public ShapeInfoSO shape1;
-    public ShapeInfoSO shape2;
-
-    public ScriptableObjectSpells spell1;
-    public ScriptableObjectSpells spell2;
+    private CharacterEntity playerEntity;
 
     private bool newData = true;
-    private Vector2[] playerPoints;
+    private ShapeInfoSO shape;
 
     private void Awake()
     {
-        if (wand == null)
-        {
-            Debug.LogError($"[{nameof(SpellBook)}]: No reference to {nameof(Wand)} found on {gameObject.name}.");
-            this.gameObject.SetActive(false);
-        }
-
-        if (spellLookupTable == null)
-        {
-            spellLookupTable = ScriptableObject.CreateInstance<SpellProjectileLookUpTable>();
-            spellLookupTable.AddPair(shape1, spell1);
-            spellLookupTable.AddPair(shape2, spell2);
-        }
+        if (!instantiated)
+            Init();
     }
 
 
     private void Update()
     {
-        if (!newData)
+        if (!initialized || !newData)
             return;
 
         newData = false;
-        ShapeInfoSO shapeInfo = CompareShapeDrawing();
 
-        ScriptableObjectSpells spell = findProjectile(shapeInfo);
+        ScriptableObjectSpells spell = FindProjectile(shape);
 
         if (spell != null)
         {
-            playerEntity.FireSpell(spell);
+            playerEntity.FireSpell(spell, 0f);
         }
-    }
-
-    private void OnEnable()
-    {
-        wand.OnDrawingComplete += playerDrawing;
     }
 
     private void OnDisable()
     {
-        wand.OnDrawingComplete -= playerDrawing;
+        if (wandListener != null)
+            wandListener.MatchedShape -= playerDrawing;
     }
 
-    private void playerDrawing(Vector2[] points)
+    private void Init()
+    {
+        Init(wandListener, playerEntity, spellLookupTable);
+    }
+
+    public void Init(WandListener wandListener, CharacterEntity playerEntity, SpellProjectileLookUpTable lookUpTable)
+    {
+        this.wandListener = wandListener;
+        this.playerEntity = playerEntity;
+        this.spellLookupTable = lookUpTable;
+
+        if (wandListener == null)
+        {
+            Debug.LogWarning("[SpellBook]: No reference to wandListener.");
+            return;
+        }
+
+        wandListener.MatchedShape += playerDrawing;
+
+        if (playerEntity == null)
+        {
+            Debug.LogWarning("[SpellBook]: No reference to player entity");
+        }
+
+        if (spellLookupTable == null)
+        {
+            Debug.LogWarning("[SpellBook]: No spell look up table to compare shapes and find projectile");
+            return;
+        }
+
+        initialized = true;
+    }
+
+    private void playerDrawing(ShapeInfoSO shape)
     {
         newData = true;
-        playerPoints = points;
+        this.shape = shape;
     }
 
-    private ShapeInfoSO CompareShapeDrawing()
-    {
-        ShapeInfoSO[] shapes = spellLookupTable.GetShapes();
-
-        if (playerPoints == null || playerPoints.Length == 0)
-            return null;
-
-        playerPoints = PointsManipulation.ResampleAndNormalize(playerPoints, GameConstants.PointCount);
-
-        if (playerPoints == null)
-        {
-            Debug.LogError($"[{nameof(SpellBook)}]: Failed to resample and normalize player points.");
-            return null;
-        }
-        
-        if (shapesCollection == null)
-        {
-            Debug.LogError($"[{nameof(SpellBook)}]: No reference to {nameof(ShapesCollectionSO)} found on {gameObject.name}.");
-            return null;
-        }   
-
-        ShapeInfoSO shapeInfo = CompareShapes.FindBestMatch(playerPoints, shapesCollection);
-
-        return shapeInfo;
-    }
-
-    private ScriptableObjectSpells findProjectile(ShapeInfoSO shapeInfo)
+    private ScriptableObjectSpells FindProjectile(ShapeInfoSO shapeInfo)
     {
         if (shapeInfo == null)
             return null;
