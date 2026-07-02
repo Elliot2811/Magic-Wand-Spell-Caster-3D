@@ -93,7 +93,7 @@ public class Wand : MonoBehaviour
             lineRenderer.endWidth = GameConstants.LineWidth;
         }
 
-        if (UsingController && joyConTracker != null)
+        if (UsingController && joyConTracker != null && joyConTracker.gameObject.activeInHierarchy && joyConTracker.count != 0)
         {
             joyConTracker.drawingButtonPressed += DrawStarted;
             joyConTracker.drawingButtonReleased += DrawCancelled;
