@@ -8,7 +8,7 @@ public class CoinInsertState : GameState
     public bool DisplayCountdown { get; private set; } = false;
 
     private float transitionTime = 6f;
-    public float transitionTimer { get; private set; } = 0f;
+    public float transitionTimer { get; private set; } = 6f;
     public bool DisplayTransitionTimer { get; private set; } = false;
 
     public bool LeftCoin { get; private set; } = false;
@@ -48,6 +48,7 @@ public class CoinInsertState : GameState
             LeftCoin = true;
             stateManager.gameScenario += 0b_1;
 
+            Countdown = GameConstants.coinInsertionCountdownTime;
             DisplayCountdown = true;
             transitionTimer = transitionTime;
             DisplayTransitionTimer = false;
@@ -69,6 +70,7 @@ public class CoinInsertState : GameState
             RightCoin = true;
             stateManager.gameScenario += 0b_10;
             
+            Countdown = GameConstants.coinInsertionCountdownTime;
             DisplayCountdown = true;
             transitionTime = transitionTimer;
             DisplayTransitionTimer = false;
