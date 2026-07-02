@@ -33,8 +33,12 @@ public abstract class EntityBase : MonoBehaviour
     protected virtual void FireSummonedSpell()
     {
         GameObject spell = Instantiate(prefab);
-        var spellProjectileScript1 = spell.GetComponent<BasicBulletSpell>();
-        spellProjectileScript1.SetProjectilePosAndRot(spellSpawnPosAndRot);
+        BasicBulletSpell bullet = spell.GetComponent<BasicBulletSpell>();
+
+        bullet.SetProjectilePosAndRot(spellSpawnPosAndRot);
+        bullet.SetShooter(gameObject);
+        //var spellProjectileScript1 = spell.GetComponent<BasicBulletSpell>();
+        //spellProjectileScript1.SetProjectilePosAndRot(spellSpawnPosAndRot);
         Debug.Log($"Player launched spell");
     }
 

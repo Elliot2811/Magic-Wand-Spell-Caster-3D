@@ -744,8 +744,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cba66aa51a53ec4aaeecd55b7d3eb84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityPrefab1: {fileID: 6191189529261095157, guid: 64fa31cfeca21e343b1bab7c0af0832e, type: 3}
-  entityPrefab2: {fileID: 190895154334941364, guid: 3476519da4c027541b9170ace70b3a07, type: 3}
+  entityPrefab1: {fileID: 4977361777309603600, guid: 2add7cd46e1d61c47aa7e4d616b1ed14, type: 3}
+  entityPrefab2: {fileID: 8823338530019468438, guid: 73166f35375f6d3439b7e7ba477ef21f, type: 3}
   projectilePrefab: {fileID: 2375220837706918120, guid: a8bc54a7696e3cf4eb42d8e0631e4576, type: 3}
   healthDisplayUI: {fileID: 1427030756}
   currentMapData: {fileID: 0}
