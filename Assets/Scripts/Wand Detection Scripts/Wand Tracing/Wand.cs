@@ -21,7 +21,6 @@ public class Wand : MonoBehaviour
     public int deviceIndex = 0;
 
     private bool UsingController;
-    private bool controllerActive = false;
 
 
     private List<Vector2> points = new List<Vector2>();
@@ -52,14 +51,6 @@ public class Wand : MonoBehaviour
         if (!initialized)
             return;
 
-        joyConTracker = JoyConTracker.Instance;
-
-        if (UsingController && joyConTracker != null && joyConTracker.gameObject.activeInHierarchy)
-        {
-            controllerActive = joyConTracker.readyToConnect;
-            return;
-        }
-
         while (lastProcessedIndex < points.Count - 1)
         {
             lastProcessedIndex++;
@@ -73,6 +64,7 @@ public class Wand : MonoBehaviour
         }
 
         transform.position = GetCurrentPos();
+        //Debug.Log("Wand position: " + transform.position);
     }
 
     private void Init()
@@ -84,6 +76,8 @@ public class Wand : MonoBehaviour
     {
         UsingController = usingController;
         this.deviceIndex = deviceIndex;
+
+        joyConTracker = JoyConTracker.Instance;
 
         lineRenderer = GetComponent<LineRenderer>();
 
