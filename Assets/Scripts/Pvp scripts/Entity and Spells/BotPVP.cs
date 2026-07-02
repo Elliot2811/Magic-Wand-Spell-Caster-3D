@@ -18,7 +18,8 @@ public class BotPVP : EntityBase
     {
         //Gets a reference to the child of the current player to get its position and rotation for spawning future spells
         Debug.Log("This is a bot script!!!");
-        spellSpawnPosAndRot = transform.GetChild(0).gameObject;
+        //spellSpawnPosAndRot = transform.GetChild(0).gameObject;
+        spellSpawnPosAndRot = transform.Find("SpellPosition").gameObject;
         selectRandNum();
     }
     void Update()

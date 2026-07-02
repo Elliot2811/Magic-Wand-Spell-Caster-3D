@@ -5,6 +5,7 @@ public class BasicBulletSpell : MonoBehaviour
     #region Variables
     private int projectileSpeed = 5;
     private GameObject spellSpawnPosAndRot;
+    private GameObject shooter; //to determine where the bullet is shot from
     #endregion
 
     #region Start and Update Function
@@ -49,6 +50,22 @@ public class BasicBulletSpell : MonoBehaviour
     /// </param>
     void OnTriggerEnter(Collider other)
     {
+        // ignore any bullet collision with the shooter
+        if (other.gameObject == shooter)
+        {
+            return;
+        }
+        Debug.Log("----------------");
+        Debug.Log("Hit: " + other.name);
+        Debug.Log("Tag: " + other.tag);
+
+        EntityBase entityBaseScript = other.GetComponent<EntityBase>();
+
+        Debug.Log("EntityBase found? " + (entityBaseScript != null));
+
+        Debug.Log("Projectile hit: " + other.name);
+        Debug.Log("----------------");
+
         if (!(other.CompareTag("Player") || other.CompareTag("Border")))
             return;
 
@@ -56,7 +73,7 @@ public class BasicBulletSpell : MonoBehaviour
         {
             //PlayerPVP playerPVPScript = other.GetComponent<PlayerPVP>();
             //playerPVPScript.TakeDamage(10);
-            EntityBase entityBaseScript = other.GetComponent<EntityBase>();
+            //EntityBase entityBaseScript = other.GetComponent<EntityBase>();
             entityBaseScript.TakeDamage(10);
             Destroy(gameObject);
         }
@@ -66,5 +83,12 @@ public class BasicBulletSpell : MonoBehaviour
             Debug.Log($"Projectile missed!");
         }
     }
+
+    public void SetShooter(GameObject owner)
+    {
+        shooter = owner;
+        Debug.Log("Shooter set to: " + shooter.name);
+    } 
+
     #endregion
 }
