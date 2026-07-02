@@ -58,6 +58,9 @@ public class GameStateManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
 
             dict.Add(StateEnum.Init, () => new InitializationState());
+            dict.Add(StateEnum.PlayersSelect, () => new CoinInsertState());
+            dict.Add(StateEnum.Fight, () => new GamePlayState());
+            dict.Add(StateEnum.Winner, () => new VictoryState());
         }
         else
         {

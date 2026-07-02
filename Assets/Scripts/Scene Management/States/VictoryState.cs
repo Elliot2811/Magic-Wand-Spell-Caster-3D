@@ -55,6 +55,8 @@ using UnityEngine.SceneManagement;
 public class VictoryState : GameState
 {
     protected override AudioClip Music => stateManager?.audioLibrary?.victoryMusic;
+    private bool coroutineStarted = false;
+
     public override void EnterState(GameStateManager gameManager)
     {
         base.EnterState(gameManager);
@@ -66,6 +68,28 @@ public class VictoryState : GameState
     public override void UpdateState()
     {
         base.UpdateState();
+
+        bool leftActive = GameStateManager.Instance.wandLeft != null && GameStateManager.Instance.wandLeft.drawActive;
+        bool rightActive = GameStateManager.Instance.wandRight != null && GameStateManager.Instance.wandRight.drawActive;
+
+        if ((leftActive || rightActive) && coroutineStarted == false)
+        {
+            if ((GameStateManager.Instance.wandLeft.drawActive == true) || (GameStateManager.Instance.wandRight.drawActive == true))
+            {
+                if (GameStateManager.Instance.wandLeft != null)
+                {
+                    MonoBehaviour.Destroy(GameStateManager.Instance.wandLeft.gameObject);
+                    GameStateManager.Instance.wandListenerLeft = null;
+                }
+                if (GameStateManager.Instance.wandRight != null)
+                {
+                    MonoBehaviour.Destroy(GameStateManager.Instance.wandRight.gameObject);
+                    GameStateManager.Instance.wandListenerRight = null;
+                }
+                stateManager.TransitionToState(GameStateManager.StateEnum.Init, 3f);
+                coroutineStarted = true;
+            }
+        }
     }
 
     public override void ExitState()
