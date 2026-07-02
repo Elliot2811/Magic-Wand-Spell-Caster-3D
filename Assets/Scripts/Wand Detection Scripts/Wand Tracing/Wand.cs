@@ -37,7 +37,7 @@ public class Wand : MonoBehaviour
 
     private WandInputActions inputActions;
 
-    private bool drawActive = false;
+    public bool drawActive = false;
 
     private void Start()
     {
