@@ -86,7 +86,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   instatiated: 1
   lineRenderer: {fileID: 0}
-  usingController: 0
+  usingController: 1
   deviceIndex: 0
 --- !u!120 &370561893962454323
 LineRenderer:
