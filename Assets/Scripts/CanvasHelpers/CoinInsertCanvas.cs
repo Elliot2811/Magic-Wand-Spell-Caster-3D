@@ -4,6 +4,7 @@ using UnityEngine;
 public class CoinInsertUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI countdownText;
+    [SerializeField] private TextMeshProUGUI transitionTimer;
     [SerializeField] private TextMeshProUGUI leftSlotStatus;
     [SerializeField] private TextMeshProUGUI leftReadyStatus;
     [SerializeField] private TextMeshProUGUI rightSlotStatus;
@@ -32,7 +33,8 @@ public class CoinInsertUI : MonoBehaviour
             coinInsertState.RightCoin,
             coinInsertState.RightSideConfirmation
             );
-        UpdateCountdownText(coinInsertState.Countdown);
+        UpdateCountdownText(coinInsertState.DisplayCountdown, coinInsertState.Countdown);
+        UpdateTransitionTimerText(coinInsertState.DisplayTransitionTimer, coinInsertState.transitionTimer);
     }
 
     private void UpdateCoinStatus(bool leftCoin, bool rightCoin)
@@ -74,16 +76,32 @@ public class CoinInsertUI : MonoBehaviour
         }
     }
 
-    private void UpdateCountdownText(float countdown)
+    private void UpdateCountdownText(bool displayCountdown, float countdown)
     {
         if (countdownText == null) return;
 
-        bool countdownActive = countdown < GameConstants.coinInsertionCountdownTime
-                               && countdown > 0;
-        countdownText.gameObject.SetActive(countdownActive);
+        if (!displayCountdown)
+        {
+            countdownText.gameObject.SetActive(false);
+            return;
+        }
 
-        if (countdownActive)
-            countdownText.text = Mathf.CeilToInt(countdown).ToString();
+        countdownText.gameObject.SetActive(true);
 
+        countdownText.text = Mathf.CeilToInt(countdown).ToString();
+    }
+
+    private void UpdateTransitionTimerText(bool displayTransitionTimer, float timer)
+    {
+        if (transitionTimer == null) return;
+
+        if (!displayTransitionTimer)
+        {
+            transitionTimer.gameObject.SetActive(false);
+            return;
+        }
+
+        transitionTimer.gameObject.SetActive(true);
+        transitionTimer.text = Mathf.CeilToInt(timer).ToString();
     }
 }
