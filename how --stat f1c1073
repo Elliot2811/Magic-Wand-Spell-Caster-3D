@@ -1,0 +1,41 @@
+*   [33me41a0ea[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mAsset_Character[m[33m, [m[1;31morigin/Asset_Character[m[33m)[m Merge branch 'Asset_Character' of https://github.com/Elliot2811/Magic-Wand-Spell-Caster-3D into Asset_Character
+[31m|[m[32m\[m  
+[31m|[m * [33m26a5df9[m character sprite control
+* [32m|[m [33mf1c1073[m character sprite control
+[32m|[m[32m/[m  
+[32m|[m *   [33m3bbf758[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;31morigin/Asset_Character_V2[m[33m, [m[1;32mmain[m[33m)[m Merge branch 'FixError-PlayerCanInsertCoinWhenOtherPlayerReady'
+[32m|[m [33m|[m[34m\[m  
+[32m|[m [33m|[m * [33m67796d0[m[33m ([m[1;31morigin/FixError-PlayerCanInsertCoinWhenOtherPlayerReady[m[33m)[m Fixed problem when player inserts a coin
+[32m|[m * [34m|[m   [33m9b68d51[m[33m ([m[1;31morigin/ResetVictoryScene[m[33m)[m Merge pull request #54 from Elliot2811/MVP_Scene-UI
+[32m|[m [34m|[m[36m\[m [34m\[m  
+[32m|[m [34m|[m [36m|[m[34m/[m  
+[32m|[m [34m|[m[34m/[m[36m|[m   
+[32m|[m [34m|[m *   [33m39100a4[m[33m ([m[1;31morigin/MVP_Scene-UI[m[33m, [m[1;32mMVP_Scene-UI[m[33m)[m Merge branch 'main' into MVP_Scene-UI
+[32m|[m [34m|[m [1;31m|[m[34m\[m  
+[32m|[m [34m|[m [1;31m|[m[34m/[m  
+[32m|[m [34m|[m[34m/[m[1;31m|[m   
+[32m|[m * [1;31m|[m [33m50ad886[m[33m ([m[1;31morigin/JoyCon&MouseCompliant[m[33m)[m Mouse or joycon input based on whether joycon is connected.
+[32m|[m * [1;31m|[m   [33m2f4490e[m Merge branch 'WebGl-Build'
+[32m|[m [1;33m|[m[1;34m\[m [1;31m\[m  
+[32m|[m [1;33m|[m * [1;31m|[m [33m1b882f5[m[33m ([m[1;31morigin/WebGl-Build[m[33m)[m WebGL build changes
+[32m|[m * [1;34m|[m [1;31m|[m   [33m66ede83[m Merge pull request #53 from Elliot2811/Spell_Casting_Sound_Effects
+[32m|[m [1;35m|[m[1;36m\[m [1;34m\[m [1;31m\[m  
+[32m|[m [1;35m|[m * [1;34m|[m [1;31m|[m [33m07e72c8[m[33m ([m[1;31morigin/Spell_Casting_Sound_Effects[m[33m, [m[1;32mSpell_Casting_Sound_Effects[m[33m)[m Added sound effects when spell is casted
+[32m|[m [1;35m|[m[1;35m/[m [1;34m/[m [1;31m/[m  
+[32m|[m * [1;34m|[m [1;31m|[m   [33m02ac8e2[m Merge pull request #52 from Elliot2811/Fixing_VictoryScene_Art_and_UI_scaling
+[32m|[m [31m|[m[32m\[m [1;34m\[m [1;31m\[m  
+[32m|[m [31m|[m * [1;34m|[m [1;31m|[m [33m898747c[m[33m ([m[1;31morigin/Fixing_VictoryScene_Art_and_UI_scaling[m[33m, [m[1;32mFixing_VictoryScene_Art_and_UI_scaling[m[33m)[m Make Victory scene UI and art scale to size of screen
+[32m|[m * [32m|[m [1;34m|[m [1;31m|[m [33m8086d13[m WebGL-Build
+[32m|[m * [32m|[m [1;34m|[m [1;31m|[m [33m4adf7c6[m Revert "Add files via upload"
+[32m|[m * [32m|[m [1;34m|[m [1;31m|[m [33m00d270e[m Add files via upload
+[32m|[m [32m|[m[32m/[m [1;34m/[m [1;31m/[m  
+[32m|[m * [1;34m|[m [1;31m|[m   [33m9d1ae1c[m Merge pull request #51 from Elliot2811/Adding_BackgroundMusic_into_MVP
+[32m|[m [1;34m|[m[34m\[m [1;34m\[m [1;31m\[m  
+[32m|[m [1;34m|[m [34m|[m[1;34m/[m [1;31m/[m  
+[32m|[m [1;34m|[m[1;34m/[m[34m|[m [1;31m|[m   
+[32m|[m [1;34m|[m * [1;31m|[m [33mb4bbf0a[m[33m ([m[1;31morigin/Adding_BackgroundMusic_into_MVP[m[33m, [m[1;32mAdding_BackgroundMusic_into_MVP[m[33m)[m Added Background Music to MVP
+[32m|[m [1;34m|[m[1;34m/[m [1;31m/[m  
+[32m|[m * [1;31m|[m   [33mcb9fb5b[m[33m ([m[1;31morigin/MVP[m[33m, [m[1;32mMVP[m[33m)[m Merge branch 'main' into MVP
+[32m|[m [35m|[m[32m\[m [1;31m\[m  
+[32m|[m [35m|[m[32m/[m [1;31m/[m  
+[32m|[m[32m/[m[35m|[m [1;31m|[m   

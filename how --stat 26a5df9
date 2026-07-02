@@ -1,0 +1,59 @@
+[33mcommit f1c1073bf2879dad784b196062d49adc02afa35a[m
+Author: shihui <porshihui101@gmail.com>
+Date:   Thu Jul 2 11:46:03 2026 +0800
+
+    character sprite control
+    
+    - replaced placeholder capsules with sprites, rotated them manualy via code since cldnt be adjusted via scene inspector
+    - adjusted bullet height
+    - added debug lines to BasicBulletSpell.cs
+    - adjusted the scripts CharacterSpriteController.cs, BotPVP.cs, PlayerPVP.cs, EntityBase.cs, BasicBulletSpell.cs
+
+ Assets/Images/Characters/Animations.meta           |   8 [32m+[m
+ Assets/Images/Characters/Animations/P1_Attack.anim |  75 [32m++++[m
+ .../Characters/Animations/P1_Attack.anim.meta      |   8 [32m+[m
+ .../Animations/P1_Attack_Animation.controller      |  72 [32m++++[m
+ .../Animations/P1_Attack_Animation.controller.meta |   8 [32m+[m
+ Assets/Images/Characters/Animations/P1_Idle.anim   |  75 [32m++++[m
+ .../Images/Characters/Animations/P1_Idle.anim.meta |   8 [32m+[m
+ .../Animations/P1_Idle_Animation.controller        |  72 [32m++++[m
+ .../Animations/P1_Idle_Animation.controller.meta   |   8 [32m+[m
+ Assets/Images/Characters/Animations/P2_Attack.anim |  75 [32m++++[m
+ .../Characters/Animations/P2_Attack.anim.meta      |   8 [32m+[m
+ .../Animations/P2_Attack_Animation.controller      |  72 [32m++++[m
+ .../Animations/P2_Attack_Animation.controller.meta |   8 [32m+[m
+ Assets/Images/Characters/Animations/P2_Idle.anim   |  75 [32m++++[m
+ .../Images/Characters/Animations/P2_Idle.anim.meta |   8 [32m+[m
+ .../Animations/P2_Idle_Animation.controller        |  72 [32m++++[m
+ .../Animations/P2_Idle_Animation.controller.meta   |   8 [32m+[m
+ Assets/Images/Characters/P1_Attack.png             | Bin [31m0[m -> [32m472857[m bytes
+ Assets/Images/Characters/P1_Attack.png.meta        | 158 [32m++++++++[m
+ Assets/Images/Characters/P1_Idle.png               | Bin [31m0[m -> [32m551318[m bytes
+ Assets/Images/Characters/P1_Idle.png.meta          | 158 [32m++++++++[m
+ Assets/Images/Characters/P2 Attack.png             | Bin [31m0[m -> [32m578847[m bytes
+ Assets/Images/Characters/P2 Attack.png.meta        | 158 [32m++++++++[m
+ Assets/Images/Characters/P2_Idle.png               | Bin [31m0[m -> [32m550918[m bytes
+ Assets/Images/Characters/P2_Idle.png.meta          | 158 [32m++++++++[m
+ .../Player prefabs/Indiv Anim Sprites Prefabs.meta |   8 [32m+[m
+ .../P1_Attack_Animation.prefab                     | 108 [32m++++++[m
+ .../P1_Attack_Animation.prefab.meta                |   7 [32m+[m
+ .../P1_Idle_Animation.prefab                       | 108 [32m++++++[m
+ .../P1_Idle_Animation.prefab.meta                  |   7 [32m+[m
+ .../P2_Attack_Animation.prefab                     | 108 [32m++++++[m
+ .../P2_Attack_Animation.prefab.meta                |   7 [32m+[m
+ .../P2_Idle_Animation.prefab                       | 108 [32m++++++[m
+ .../P2_Idle_Animation.prefab.meta                  |   7 [32m+[m
+ Assets/Prefabs/Player prefabs/Player 1.prefab      | 319 [32m+++++++++++++++[m
+ Assets/Prefabs/Player prefabs/Player 1.prefab.meta |   7 [32m+[m
+ Assets/Prefabs/Player prefabs/Player 2.prefab      | 319 [32m+++++++++++++++[m
+ Assets/Prefabs/Player prefabs/Player 2.prefab.meta |   7 [32m+[m
+ Assets/Scenes/GameScenes/Gameplay.unity            |   4 [32m+[m[31m-[m
+ Assets/Scenes/TestScenes/Character.unity           | 432 [32m+++++++++++++++++++++[m
+ Assets/Scenes/TestScenes/Character.unity.meta      |   7 [32m+[m
+ .../Entity and Spells/BasicBulletSpell.cs          |  26 [32m+[m[31m-[m
+ .../Pvp scripts/Entity and Spells/BotPVP.cs        |   3 [32m+[m[31m-[m
+ .../Entity and Spells/CharacterSpriteController.cs |  70 [32m++++[m
+ .../CharacterSpriteController.cs.meta              |  11 [32m+[m
+ .../Pvp scripts/Entity and Spells/EntityBase.cs    |   8 [32m+[m[31m-[m
+ .../Pvp scripts/Entity and Spells/PlayerPVP.cs     |   6 [32m+[m[31m-[m
+ 47 files changed, 2972 insertions(+), 7 deletions(-)
