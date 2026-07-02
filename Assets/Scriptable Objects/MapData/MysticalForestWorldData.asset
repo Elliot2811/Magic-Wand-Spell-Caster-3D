@@ -15,8 +15,7 @@ MonoBehaviour:
   mapName: MysticalForestWorld
   mapPrefab: {fileID: 0}
   mapMusic: {fileID: 8300000, guid: 0b0c14b1ea3b89a41a9039d98c789b21, type: 3}
-  sceneToLoad: 
-  sceneAsset: {fileID: 102900000, guid: 316e8c4da6fc2c14a81404ed277d8a0f, type: 3}
+  musicVolume: 1
   leftPos: {x: -16, y: 5, z: 8}
   leftRot: {x: 0, y: 90, z: 0}
   leftScale: {x: 5, y: 5, z: 5}

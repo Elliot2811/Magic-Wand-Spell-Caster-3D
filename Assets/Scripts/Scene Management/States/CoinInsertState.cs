@@ -16,7 +16,7 @@ public class CoinInsertState : GameState
     public bool leftSideConfirmation = false;
     public bool RightSideConfirmation = false;
 
-    protected override AudioClip Music => stateManager?.audioLibrary?.coinInsertMusic;
+    protected override AudioPair Music => stateManager?.audioLibrary?.coinInsertMusic;
 
     #region Private values to reduce stateManager queries
     private Wand wandLeft;

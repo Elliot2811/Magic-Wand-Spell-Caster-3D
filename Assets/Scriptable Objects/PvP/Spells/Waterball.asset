@@ -17,7 +17,7 @@ MonoBehaviour:
   spellDamage: 0.125
   spellSpeed: 10
   castSFX: {fileID: 8300000, guid: d0b59d8b22bcced4bb28dba5059711ca, type: 3}
-  castVolume: 1
+  castVolume: 0.363
   randomizePitch: 1
-  pitchVariance: 0.05
+  pitchVariance: 0
   prefab: {fileID: 2375220837706918120, guid: 71624ffce48903645a3847d811ad1316, type: 3}

@@ -12,7 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b7111afa2265c542b8225a4dd81c11e, type: 3}
   m_Name: AudioLibrary
   m_EditorClassIdentifier: 
-  coinInsertMusic: {fileID: 8300000, guid: 1836a097fecb8ac4782c6d3c9932ada5, type: 3}
-  MapSelectionMusic: {fileID: 8300000, guid: 1836a097fecb8ac4782c6d3c9932ada5, type: 3}
-  gameplayMusic: {fileID: 0}
-  victoryMusic: {fileID: 8300000, guid: 4772620070556e745b6f8595df7ae6e4, type: 3}
+  coinInsertMusic:
+    volume: 0.303
+    clip: {fileID: 8300000, guid: 1836a097fecb8ac4782c6d3c9932ada5, type: 3}
+  mapSelectionMusic:
+    volume: 0.308
+    clip: {fileID: 8300000, guid: 1836a097fecb8ac4782c6d3c9932ada5, type: 3}
+  gameplayMusic:
+    volume: 1
+    clip: {fileID: 0}
+  victoryMusic:
+    volume: 0.308
+    clip: {fileID: 8300000, guid: 4772620070556e745b6f8595df7ae6e4, type: 3}
