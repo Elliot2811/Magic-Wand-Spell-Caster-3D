@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuState : GameState
 {
-    protected override AudioClip Music => stateManager?.audioLibrary?.mapSelectionMusic;
+    protected override AudioPair Music => stateManager?.audioLibrary?.mapSelectionMusic;
     public override void EnterState(GameStateManager gameManager)
     {
         if (SceneManager.GetActiveScene().name != "MainMenu")

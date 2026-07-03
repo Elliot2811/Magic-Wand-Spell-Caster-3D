@@ -6,7 +6,7 @@ public class MapData : ScriptableObject
     [Header("Map Info")]
     public string mapName;
     public GameObject mapPrefab;
-    public AudioClip mapMusic;
+    public AudioPair mapMusic;
 
     [Header("Left Player Transform")]
     public Vector3 leftPos = new Vector3(-16f, 5f, 8f);

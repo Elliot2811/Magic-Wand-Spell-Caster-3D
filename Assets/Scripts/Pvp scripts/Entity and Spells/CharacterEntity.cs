@@ -79,10 +79,7 @@ public class CharacterEntity : MonoBehaviour
             projHandler = proj.AddComponent<SpellProjHandler>();
         projHandler.Init(spell);
 
-        float pitch = spell.randomizePitch
-        ? 1f + UnityEngine.Random.Range(-spell.pitchVariance, spell.pitchVariance)
-        : 1f;
-        AudioManager.Instance?.PlaySFX(spell.castSFX, spell.castVolume, pitch);
+        AudioManager.Instance?.PlaySFX(spell.castSFX, spell.castVolume, spell.randomizePitch, spell.pitchVariance);
         //Debug.Log($"Player launched spell");
     }
 

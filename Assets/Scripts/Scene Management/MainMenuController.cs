@@ -5,14 +5,14 @@ using UnityEngine;
 public class MainMenuController : MonoBehaviour
 {
     [Header("Music Settings")]
-    [SerializeField] private AudioClip mainMenuMusic;
+    [SerializeField] private AudioPair mainMenuMusic;
 
     private void Start()
     {
         //Play MainMenuMusic
         if (AudioManager.Instance != null)
         {
-            AudioManager.Instance.PlayMusic(mainMenuMusic);
+            AudioManager.Instance.PlayMusic(mainMenuMusic.clip, mainMenuMusic.volume, mainMenuMusic.randomizePitch, mainMenuMusic.pitchVariance);
         }
     }
 }
