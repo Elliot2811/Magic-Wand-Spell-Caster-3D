@@ -14,7 +14,7 @@ public class CoinInsertState : GameState
     public bool LeftCoin { get; private set; } = false;
     public bool RightCoin { get; private set; } = false;
     public bool leftSideConfirmation = false;
-    public bool RightSideConfirmation = false;
+    public bool rightSideConfirmation = false;
 
     protected override AudioClip Music => stateManager?.audioLibrary?.coinInsertMusic;
 
@@ -63,6 +63,8 @@ public class CoinInsertState : GameState
             wandListenerLeft.Init(wandLeft, shapes: stateManager.allShapesCollectionSO);
             wandListenerLeft.MatchedShape += CheckLeftDrawing;
             stateManager.wandListenerLeft = wandListenerLeft;
+
+            Debug.Log("Left wand has been created");
         }
 
         if (!RightCoin && coinInsertListener.rightCoinInsertion())
@@ -85,30 +87,67 @@ public class CoinInsertState : GameState
             wandListenerRight.Init(wandRight, shapes: stateManager.allShapesCollectionSO);
             wandListenerRight.MatchedShape += CheckRightDrawing;
             stateManager.wandListenerRight = wandListenerRight;
+            Debug.Log("Right wand has been created");
+
         }
 
         if ((LeftCoin && RightCoin))
         {
-            if (leftSideConfirmation && RightSideConfirmation)
+            //if (leftSideConfirmation && rightSideConfirmation)
+            //{
+            //    TransitionToFightState();
+            //    DisplayCountdown = false;
+            //}
+            //else
+            //    Countdown -= Time.deltaTime;
+
+            if (leftSideConfirmation && rightSideConfirmation)
             {
                 TransitionToFightState();
                 DisplayCountdown = false;
             }
-            else
+            else if (Countdown > 0f)
+            {
                 Countdown -= Time.deltaTime;
-
+            }
+            else
+            {
+                LeftCoin = false;
+                RightCoin = false;
+                coinInsertListener.Reset();
+                Countdown = GameConstants.coinInsertionCountdownTime;
+                GameStateManager.Instance.ResetGameAndWand();
+                DisplayCountdown = false;
+                DisplayTransitionTimer = false;
+                leftSideConfirmation = false;
+                rightSideConfirmation = false;
+            }
         }
 
         if (LeftCoin ^ RightCoin)
         {
-            if ((LeftCoin && leftSideConfirmation && !RightCoin) || (RightCoin && RightSideConfirmation && !LeftCoin))
+            if ((LeftCoin && leftSideConfirmation && !RightCoin) || (RightCoin && rightSideConfirmation && !LeftCoin))
             {
                 TransitionToFightState();
                 DisplayCountdown = false;
                 return;
             }
-            else
+            else if (Countdown > 0f)
+            {
                 Countdown -= Time.deltaTime;
+            }
+            else
+            {
+                LeftCoin = false;
+                RightCoin = false;
+                coinInsertListener.Reset();
+                Countdown = GameConstants.coinInsertionCountdownTime;
+                GameStateManager.Instance.ResetGameAndWand();
+                DisplayCountdown = false;
+                DisplayTransitionTimer = false;
+                leftSideConfirmation = false;
+                rightSideConfirmation = false;
+            }
         }
 
         // Implement resetng and dispensing coins back to player.
@@ -146,7 +185,7 @@ public class CoinInsertState : GameState
     private void CheckRightDrawing(ShapeInfoSO shapeInfo)
     {
         if (shapeInfo != null)
-            RightSideConfirmation = true;
+            rightSideConfirmation = true;
     }
 
     private void TransitionToFightState()

@@ -48,6 +48,7 @@
 //    }
 //}
 
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -76,16 +77,8 @@ public class VictoryState : GameState
         {
             if ((GameStateManager.Instance.wandLeft.drawActive == true) || (GameStateManager.Instance.wandRight.drawActive == true))
             {
-                if (GameStateManager.Instance.wandLeft != null)
-                {
-                    MonoBehaviour.Destroy(GameStateManager.Instance.wandLeft.gameObject);
-                    GameStateManager.Instance.wandListenerLeft = null;
-                }
-                if (GameStateManager.Instance.wandRight != null)
-                {
-                    MonoBehaviour.Destroy(GameStateManager.Instance.wandRight.gameObject);
-                    GameStateManager.Instance.wandListenerRight = null;
-                }
+                GameStateManager.Instance.ResetGameAndWand();
+                Debug.Log("Transitioning to Initialising State in 3 seconds...");
                 stateManager.TransitionToState(GameStateManager.StateEnum.Init, 3f);
                 coroutineStarted = true;
             }
