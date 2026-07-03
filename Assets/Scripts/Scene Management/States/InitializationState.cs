@@ -18,7 +18,7 @@ public class InitializationState : GameState
 
     public override void UpdateState()
     {
-        if (stateManager.joyConTracker.count == 0 || stateManager.joyConTracker.gameObject.activeInHierarchy)
+        if (stateManager.joyConTracker.count == 0 || !stateManager.joyConTracker.gameObject.activeInHierarchy)
         {
             stateManager.joyConTracker.gameObject.SetActive(false);
             stateManager.TransitionToState(GameStateManager.StateEnum.PlayersSelect);

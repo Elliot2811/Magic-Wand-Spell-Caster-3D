@@ -104,7 +104,7 @@ public class GamePlayState : GameState
         mapData = GameConstants.Instance.mapPresets[stateManager.mapIndex];
         characterPrefab = GameConstants.Instance.characterPrefab;
 
-        AudioManager.Instance.PlayMusic(mapData.mapMusic);
+        AudioManager.Instance.PlayMusic(mapData.mapMusic.clip, mapData.mapMusic.volume, mapData.mapMusic.randomizePitch);
 
         stateManager.StartCoroutine(LoadGameplayObjects());
     }
