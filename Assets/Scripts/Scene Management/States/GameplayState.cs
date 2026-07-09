@@ -76,6 +76,7 @@
 
 using System;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -94,17 +95,26 @@ public class GamePlayState : GameState
     private SpellBook leftSpellBook;
     private SpellBook rightSpellBook;
 
+    [Header("Mid-Game Events")]
+    [Tooltip("How much the winner of the mid-game event shifts displayPercentage in their favor.")]
+    public float midGameEventEffectMagnitude = 0.2f;
+
+    private IMidGameEvent[] midGameEvents;
+    private IMidGameEvent activeMidGameEvent;
+    private bool midGameEventTriggered = false;
+    private float initialTimer;
+
     public override void EnterState(GameStateManager gameManager)
     {
         base.EnterState(gameManager);
-
         if (SceneManager.GetActiveScene().name != "Gameplay")
             SceneManager.LoadScene("Gameplay");
-
         mapData = GameConstants.Instance.mapPresets[stateManager.mapIndex];
         characterPrefab = GameConstants.Instance.characterPrefab;
-
         AudioManager.Instance.PlayMusic(mapData.mapMusic);
+
+        activeMidGameEvent = null;
+        midGameEventTriggered = false;
 
         stateManager.StartCoroutine(LoadGameplayObjects());
     }
@@ -116,12 +126,16 @@ public class GamePlayState : GameState
         if (timerRunning)
         {
             timer -= Time.deltaTime;
+
+            if (!midGameEventTriggered && timer <= initialTimer * 0.5f)
+            {
+                TriggerMidGameEvent();
+            }
         }
 
         if (timer <= 0 || displayPercentage <= 0 || displayPercentage >= 1)
         {
             Debug.Log($"Timer: {timer}\nDisplay Percentage: {displayPercentage}");
-
             onWin(displayPercentage);
         }
     }
@@ -135,6 +149,61 @@ public class GamePlayState : GameState
 
         if (rightCharacter != null)
             rightCharacter.damageTakenMessage -= RightTakeDamage;
+
+        if (activeMidGameEvent != null)
+        {
+            activeMidGameEvent.OnEventCompleted -= OnMidGameEventCompleted;
+            activeMidGameEvent = null;
+        }
+    }
+
+    //<summary>
+    //Picks one mid-game event at random, pauses the main timer, and starts it.
+    //The main timer resumes automatically when the event's OnEventCompleted fires.
+    //</summary>
+    private void TriggerMidGameEvent()
+    {
+        midGameEventTriggered = true;
+
+        if (midGameEvents == null || midGameEvents.Length == 0)
+        {
+            Debug.LogWarning("GamePlayState: halfway mark reached but no mid-game events are assigned.");
+            return;
+        }
+
+        timerRunning = false;
+
+        int index = UnityEngine.Random.Range(0, midGameEvents.Length);
+        activeMidGameEvent = midGameEvents[index];
+
+        Debug.Log($"GamePlayState: triggering mid-game event #{index} ({((MonoBehaviour)activeMidGameEvent).name}). Timer paused at {timer:F1}.");
+
+        activeMidGameEvent.OnEventCompleted += OnMidGameEventCompleted;
+        activeMidGameEvent.StartEvent();
+    }
+
+    //<summary>winningPlayer: 0 = draw/timeout, 1 = left won, 2 = right won.</summary>
+    private void OnMidGameEventCompleted(int winningPlayer)
+    {
+        if (activeMidGameEvent != null)
+        {
+            activeMidGameEvent.OnEventCompleted -= OnMidGameEventCompleted;
+            activeMidGameEvent = null;
+        }
+
+        ApplyMidGameEventEffect(winningPlayer);
+
+        Debug.Log($"GamePlayState: mid-game event resolved (winningPlayer={winningPlayer}). Resuming timer at {timer:F1}.");
+        timerRunning = true;
+    }
+
+    private void ApplyMidGameEventEffect(int winningPlayer)
+    {
+        if (winningPlayer == 1)
+            displayPercentage = Mathf.Clamp01(displayPercentage + midGameEventEffectMagnitude);
+        else if (winningPlayer == 2)
+            displayPercentage = Mathf.Clamp01(displayPercentage - midGameEventEffectMagnitude);
+        // winningPlayer == 0 (draw/timeout): no shift
     }
 
     public void onWin(float sliderPercent)
@@ -200,7 +269,29 @@ public class GamePlayState : GameState
         rightSpellBook = new GameObject("Right Spell Book").AddComponent<SpellBook>();
         rightSpellBook.Init(stateManager.wandListenerRight, rightCharacter, GameConstants.Instance.lookUpTable);
 
+        DiscoverMidGameEvents();
+
         timerRunning = true;
         timer = 100;
+        initialTimer = timer;
+    }
+
+    //<summary>
+    //Finds every IMidGameEvent component present in the Gameplay scene (active or not)
+    //so they don't need to be manually wired up anywhere — just drop the GameObject
+    //for a new event into the Gameplay scene and it's picked up automatically.
+    //</summary>
+    private void DiscoverMidGameEvents()
+    {
+        var scene = SceneManager.GetSceneByName("Gameplay");
+        var found = new System.Collections.Generic.List<IMidGameEvent>();
+
+        foreach (var root in scene.GetRootGameObjects())
+        {
+            found.AddRange(root.GetComponentsInChildren<MonoBehaviour>(true).OfType<IMidGameEvent>());
+        }
+
+        midGameEvents = found.ToArray();
+        Debug.Log($"GamePlayState: discovered {midGameEvents.Length} mid-game event(s) in the Gameplay scene.");
     }
 }
