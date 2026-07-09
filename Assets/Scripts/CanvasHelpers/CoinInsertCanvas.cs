@@ -31,7 +31,7 @@ public class CoinInsertUI : MonoBehaviour
             coinInsertState.LeftCoin,
             coinInsertState.leftSideConfirmation,
             coinInsertState.RightCoin,
-            coinInsertState.RightSideConfirmation
+            coinInsertState.rightSideConfirmation
             );
         UpdateCountdownText(coinInsertState.DisplayCountdown, coinInsertState.Countdown);
         UpdateTransitionTimerText(coinInsertState.DisplayTransitionTimer, coinInsertState.transitionTimer);

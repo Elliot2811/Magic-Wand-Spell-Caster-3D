@@ -127,6 +127,24 @@ public class GameStateManager : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    public void ResetGameAndWand()
+    {
+        gameScenario = 0;
+
+        if (wandLeft != null)
+        {
+            Destroy(wandLeft.gameObject);
+            wandLeft = null;
+            wandListenerLeft = null;
+        }
+        if (wandRight != null)
+        {
+            Destroy(wandRight.gameObject);
+            wandRight = null;
+            wandListenerRight = null;
+        }
+    }
+
     //public void ResetWands()
     //{
     //    gameScenario = 0;

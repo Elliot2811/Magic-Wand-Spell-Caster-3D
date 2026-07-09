@@ -43,7 +43,11 @@ public class GameConstants : MonoBehaviour
 
     #region Game Play settings
 
-    public static float coinInsertionCountdownTime = 10f;
+    public const float coinInsertionCountdownTime = 10f;
+
+    public const float globalSfxVolume = 0.01f;
+    public const float globalMusicVolume = 0.01f;
+
 
     public static class ProjectileSpawn
     {    

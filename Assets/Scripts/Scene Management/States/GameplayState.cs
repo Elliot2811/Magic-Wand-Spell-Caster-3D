@@ -113,6 +113,8 @@ public class GamePlayState : GameState
         characterPrefab = GameConstants.Instance.characterPrefab;
         AudioManager.Instance.PlayMusic(mapData.mapMusic);
 
+        AudioManager.Instance.PlayMusic(mapData.mapMusic.clip, mapData.mapMusic.volume, mapData.mapMusic.randomizePitch);
+
         activeMidGameEvent = null;
         midGameEventTriggered = false;
 
@@ -278,7 +280,7 @@ public class GamePlayState : GameState
 
     //<summary>
     //Finds every IMidGameEvent component present in the Gameplay scene (active or not)
-    //so they don't need to be manually wired up anywhere — just drop the GameObject
+    //so they don't need to be manually wired up anywhere ï¿½ just drop the GameObject
     //for a new event into the Gameplay scene and it's picked up automatically.
     //</summary>
     private void DiscoverMidGameEvents()
