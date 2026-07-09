@@ -327,7 +327,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 429939951}
-  - component: {fileID: 429939950}
+  - component: {fileID: 429939952}
   m_Layer: 0
   m_Name: JoyConTracker
   m_TagString: Untagged
@@ -335,20 +335,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &429939950
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 429939949}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 280d127323e11d5479384a1122a3c14a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gyroRepresentationLeft: {fileID: 0}
-  gyroRepresentationRight: {fileID: 0}
 --- !u!4 &429939951
 Transform:
   m_ObjectHideFlags: 0
@@ -364,6 +350,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &429939952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 429939949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 280d127323e11d5479384a1122a3c14a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gyroRepresentationLeft: {fileID: 0}
+  gyroRepresentationRight: {fileID: 0}
 --- !u!1 &830538692
 GameObject:
   m_ObjectHideFlags: 0
@@ -462,7 +462,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioLibrary: {fileID: 11400000, guid: e4067a63753644c42967ea85aec8e5f4, type: 2}
-  joyConTracker: {fileID: 429939950}
+  joyConTracker: {fileID: 0}
   wandPrefab: {fileID: 6290188424019819844, guid: e5b9182236c39634b9e8cd75a85c938a, type: 3}
   wandLeft: {fileID: 0}
   wandRight: {fileID: 0}

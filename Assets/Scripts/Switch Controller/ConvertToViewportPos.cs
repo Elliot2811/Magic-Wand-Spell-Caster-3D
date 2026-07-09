@@ -30,8 +30,20 @@ public static class ConvertToViewportPos
             viewport.y * Screen.height
             );
     }
+    public static Vector2 GyroToNormalizedUnclamped(int deviceIndex)
+    {
+        if (JoyConTracker.Instance == null || !JoyConTracker.Instance.readyToConnect)
+            return Vector2.zero;
 
-    
+        Vector3 forward = JoyConTracker.Instance.CurrentRotation(deviceIndex) * Vector3.forward;
+        float yawDegrees = Mathf.Atan2(forward.x, forward.z) * Mathf.Rad2Deg;
+        float pitchDegrees = Mathf.Asin(forward.y) * Mathf.Rad2Deg;
+
+        return new Vector2(
+            yawDegrees / GameConstants.HorizontalFovDeg,
+            pitchDegrees / GameConstants.VerticalFovDeg
+        );
+    }
     public static Vector2 MousePosToViewPort(Vector2 mousePos, bool left)
     {
         Rect bounds = left ? GameConstants.DrawingRectLeft : GameConstants.DrawingRectRight;
