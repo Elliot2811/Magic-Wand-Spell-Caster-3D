@@ -9,15 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e93b0b1c1e95964fbf8d5a844052bd3, type: 3}
-  m_Name: Waterball
+  m_Script: {fileID: 11500000, guid: ee8696101f2b21d48967bdc06853011a, type: 3}
+  m_Name: WaterDart
   m_EditorClassIdentifier: 
-  spellName: Waterball
-  spellType: Basic
-  spellDamage: 0.125
-  spellSpeed: 10
+  spellName: WaterDart
+  spellElement: Water
+  spellType: 0
+  spellDamage: 0.05
+  spellSpeed: 4
+  spellEffect: {fileID: 11400000, guid: 8c89df8da21a442428b061d81b479bac, type: 2}
+  spellEffectChance: 100
   castSFX: {fileID: 8300000, guid: d0b59d8b22bcced4bb28dba5059711ca, type: 3}
-  castVolume: 1
+  castVolume: 0.5
   randomizePitch: 1
   pitchVariance: 0.05
   prefab: {fileID: 2375220837706918120, guid: 71624ffce48903645a3847d811ad1316, type: 3}

@@ -32,7 +32,7 @@ public class SpellBook : MonoBehaviour
 
         newData = false;
 
-        ScriptableObjectSpells spell = FindProjectile(shape);
+        ScriptableObjectSpell spell = FindProjectile(shape);
 
         if (spell != null)
         {
@@ -85,12 +85,12 @@ public class SpellBook : MonoBehaviour
         this.shape = shape;
     }
 
-    private ScriptableObjectSpells FindProjectile(ShapeInfoSO shapeInfo)
+    private ScriptableObjectSpell FindProjectile(ShapeInfoSO shapeInfo)
     {
         if (shapeInfo == null)
             return null;
 
-        ScriptableObjectSpells spell;
+        ScriptableObjectSpell spell;
 
         spellLookupTable.TryGetSpell(shapeInfo, out spell);
         return spell;

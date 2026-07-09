@@ -46,7 +46,7 @@ public class CharacterEntity : MonoBehaviour
     //    Debug.Log($"{gameObject} Total Damage Taken: {entityDmgTaken}");
     //}
 
-    //public virtual void FireSpell(ScriptableObjectSpells spell)
+    //public virtual void FireSpell(ScriptableObjectSpell spell)
     //{
     //    if (spell == null)
     //        return;
@@ -57,12 +57,13 @@ public class CharacterEntity : MonoBehaviour
     //#endregion
 
     public float EntityDmgTaken { get; private set; }
+    public ScriptableObjectStatusEffect statusEffect = null;
 
-    public void FireSpell(ScriptableObjectSpells spell, float delay)
+    public void FireSpell(ScriptableObjectSpell spell, float delay)
     {
         StartCoroutine(WaitFireSpell(spell, delay));
     }
-    public virtual void FireSpell(ScriptableObjectSpells spell)
+    public virtual void FireSpell(ScriptableObjectSpell spell)
     {
         if (spell == null || spell.prefab == null)
             return;
@@ -80,10 +81,9 @@ public class CharacterEntity : MonoBehaviour
         projHandler.Init(spell);
 
         AudioManager.Instance?.PlaySFX(spell.castSFX, spell.castVolume, spell.randomizePitch, spell.pitchVariance);
-        //Debug.Log($"Player launched spell");
     }
 
-    private IEnumerator WaitFireSpell(ScriptableObjectSpells spell, float delay)
+    private IEnumerator WaitFireSpell(ScriptableObjectSpell spell, float delay)
     {
         yield return new WaitForSeconds(delay);
         FireSpell(spell);

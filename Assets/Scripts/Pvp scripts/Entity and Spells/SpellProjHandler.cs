@@ -72,11 +72,11 @@ public class SpellProjHandler : MonoBehaviour
 
     private bool initialized = false;
 
-    private ScriptableObjectSpells spell;
+    private ScriptableObjectSpell spell;
 
     private float projectileSpeed;
 
-    public void Init(ScriptableObjectSpells spell)
+    public void Init(ScriptableObjectSpell spell)
     {
         this.spell = spell;
         projectileSpeed = spell.spellSpeed;
