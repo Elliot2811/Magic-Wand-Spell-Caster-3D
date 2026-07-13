@@ -1937,7 +1937,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c07c4d8d69b9f340b3fade397c7dc38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainGameTime: 90
 --- !u!4 &1846390518
 Transform:
   m_ObjectHideFlags: 0
@@ -2057,11 +2056,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cba66aa51a53ec4aaeecd55b7d3eb84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityPrefab1: {fileID: 6191189529261095157, guid: 64fa31cfeca21e343b1bab7c0af0832e, type: 3}
-  entityPrefab2: {fileID: 190895154334941364, guid: 3476519da4c027541b9170ace70b3a07, type: 3}
-  projectilePrefab: {fileID: 2375220837706918120, guid: a8bc54a7696e3cf4eb42d8e0631e4576, type: 3}
-  healthDisplayUI: {fileID: 2034682892}
-  currentMapData: {fileID: 0}
 --- !u!4 &1886749652
 Transform:
   m_ObjectHideFlags: 0
@@ -2240,9 +2234,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1f02a1de54af2d4c883d7f150428882, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HealthBar: {fileID: 114603453}
-  victoryState: {fileID: 11400000, guid: 0906c7a63be8b67498640284a402df79, type: 2}
-  maxDamageAdvantage: 100
 --- !u!4 &2034682893
 Transform:
   m_ObjectHideFlags: 0
