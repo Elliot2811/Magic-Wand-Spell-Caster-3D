@@ -38,6 +38,12 @@ public class Wand : MonoBehaviour
 
     public bool drawActive = false;
 
+    //last screen-space cursor position actually used this frame, sourced from
+    //whichever input path is live (controller gyro or mouse). Other systems (e.g.
+    //CircleBonusEvent) should read this instead of calling ConvertToViewportPos
+    //themselves, so they always match what this Wand is really drawing with.
+    public Vector2 CurrentScreenPos { get; private set; }
+
     private void Start()
     {
         if (!instatiated)
@@ -132,6 +138,12 @@ public class Wand : MonoBehaviour
         }
 
         initialized = true;
+
+        //register with CircleBonusEvent (if the mid-game event exists yet)
+        //so it can read this wand's drawActive/CurrentScreenPos directly. Wands
+        //are spawned at runtime in the gameplay scene, so there's no Inspector
+        //slot to drag this into — registration has to happen here instead.
+        CircleBonusEvent.Instance?.RegisterWand(this);
     }
 
     public Vector2[] listToArray(List<Vector3> list)
@@ -174,6 +186,10 @@ public class Wand : MonoBehaviour
 
             inputActions.Disable();
         }
+
+        //mirror the registration in Init() so CircleBonusEvent never holds
+        //a stale reference to a wand that's been destroyed/despawned.
+        CircleBonusEvent.Instance?.UnregisterWand(this);
 
         StopAllCoroutines();
     }
@@ -254,6 +270,11 @@ public class Wand : MonoBehaviour
             //Debug.Log("Mouse screen pos: " + screenPos);
         }
 
+        //record whichever position was actually used this frame so other
+        //systems (e.g. CircleBonusEvent) can read the real cursor pos instead of
+        //re-deriving it (and getting it wrong when we're in mouse mode).
+        CurrentScreenPos = screenPos;
+
         return mainCam.ScreenToWorldPoint(new Vector3(
             screenPos.x,
             screenPos.y,
@@ -285,10 +306,16 @@ public class Wand : MonoBehaviour
         }
     }
     #endregion
-    
+
 
     #region Events to send drawing data
     public event Action<Vector2[]> OnDrawingComplete;
+
+    //fired the instant a draw starts/stops, regardless of input source
+    //(controller or mouse). CircleBonusEvent subscribes to these instead of
+    //JoyConTracker's events so bonus-eligibility tracking works for both.
+    public event Action OnDrawStarted;
+    public event Action OnDrawStopped;
 
     public void SendData()
     {
@@ -299,13 +326,14 @@ public class Wand : MonoBehaviour
 
 
     #region Input System Helper Functions
-    // handle -1 for when not using controller
+    //handle -1 for when not using controller
     private void DrawStarted(int handle = -1)
     {
         if (handle != -1 && handle != deviceIndex)
             return;
 
         drawActive = true;
+        OnDrawStarted?.Invoke(); // NEW
 
         points.Clear();
         catmullPoints.Clear();
@@ -337,6 +365,11 @@ public class Wand : MonoBehaviour
         deleteDrawing = StartCoroutine(EraseBackground());
 
         drawActive = false;
+        //fire before Flush/SendData so anything listening for "did the
+        //in-progress draw hit its bonus target" (e.g. CircleBonusEvent) can
+        //check drawActive/CurrentScreenPos state consistently before the
+        //drawing is finalized.
+        OnDrawStopped?.Invoke();
 
         FlushCatmullTail();
         SendData();

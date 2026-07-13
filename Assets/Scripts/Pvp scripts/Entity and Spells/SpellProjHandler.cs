@@ -76,7 +76,9 @@ public class SpellProjHandler : MonoBehaviour
 
     private float projectileSpeed;
 
-    public void Init(ScriptableObjectSpell spell)
+    public float damageMultiplier = 1f;
+
+    public void Init(ScriptableObjectSpells spell)
     {
         this.spell = spell;
         projectileSpeed = spell.spellSpeed;
@@ -118,8 +120,9 @@ public class SpellProjHandler : MonoBehaviour
                 Debug.LogError($"[SpellProjHandler]: No CharacterEntity script on Player tag object");
                 return;
             }
-
-            character.TakeDamage(spell.spellDamage);
+            float damage = spell.spellDamage * damageMultiplier;
+            Debug.Log($"[SpellProjHandler] '{spell.name}' hit {other.name} for {damage} (base {spell.spellDamage} x{damageMultiplier})");
+            character.TakeDamage(damage);
             Destroy(gameObject);
             return;
         }

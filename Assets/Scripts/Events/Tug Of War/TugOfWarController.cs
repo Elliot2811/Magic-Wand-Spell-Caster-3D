@@ -32,6 +32,7 @@ public class TugOfWarController : MonoBehaviour, IMidGameEvent
     public float maxDuration = 0f;
 
     public bool IsActive { get; private set; }
+    public bool PausesMainTimer => true;
 
     private float elapsed;
     private JoyConTracker tracker;
