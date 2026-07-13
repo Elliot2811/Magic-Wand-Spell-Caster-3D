@@ -105,7 +105,7 @@ public class SpellProjHandler : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Player") && !other.CompareTag("Border"))
+        if (!other.CompareTag("Player"))
         {
             return;
         }

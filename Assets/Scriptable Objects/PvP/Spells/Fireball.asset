@@ -16,7 +16,7 @@ MonoBehaviour:
   spellElement: Fire
   spellType: 0
   spellDamage: 0.07
-  spellSpeed: 4
+  spellSpeed: 10
   spellEffect: {fileID: 11400000, guid: c23f5da7ef9e8f643a92574254b2e136, type: 2}
   spellEffectChance: 10
   castSFX: {fileID: 8300000, guid: d0b59d8b22bcced4bb28dba5059711ca, type: 3}
