@@ -4,11 +4,19 @@ using UnityEngine;
 public class CoinInsertUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI countdownText;
-    [SerializeField] private TextMeshProUGUI transitionTimer;
+
+    [SerializeField] private TextMeshProUGUI transitionTimerText;
+    [SerializeField] private TextMeshProUGUI transitionTimerOutline;
+
+    [Space(10)]
+    [SerializeField] private RectTransform leftCharacter;
     [SerializeField] private TextMeshProUGUI leftSlotStatus;
-    [SerializeField] private TextMeshProUGUI leftReadyStatus;
+    [SerializeField] private RectTransform leftReadyPanel;
+
+    [Space(10)]
+    [SerializeField] private RectTransform rightCharacter;
     [SerializeField] private TextMeshProUGUI rightSlotStatus;
-    [SerializeField] private TextMeshProUGUI rightReadyStatus;
+    [SerializeField] private RectTransform rightReadyPanel;
 
     private GameState currentState;
 
@@ -27,53 +35,34 @@ public class CoinInsertUI : MonoBehaviour
     private void Update()
     {
         UpdateCoinStatus(coinInsertState.LeftCoin, coinInsertState.RightCoin);
-        UpdateReadyStatus(
-            coinInsertState.LeftCoin,
-            coinInsertState.leftSideConfirmation,
-            coinInsertState.RightCoin,
-            coinInsertState.rightSideConfirmation
-            );
+        UpdateReadyStatus(coinInsertState.leftSideConfirmation, coinInsertState.rightSideConfirmation);
         UpdateCountdownText(coinInsertState.DisplayCountdown, coinInsertState.Countdown);
         UpdateTransitionTimerText(coinInsertState.DisplayTransitionTimer, coinInsertState.transitionTimer);
     }
 
     private void UpdateCoinStatus(bool leftCoin, bool rightCoin)
     {
+        leftCharacter?.gameObject.SetActive(leftCoin);
+
         if (leftSlotStatus != null)
         {
-            leftSlotStatus.text = leftCoin ? "P1 COIN INESERTED" : "INSERT COIN";
+            leftSlotStatus.text = leftCoin ? "1/1 Credits" : "0/1 Credits";
             leftSlotStatus.color = leftCoin ? Color.green : Color.white;
         }
+
+        rightCharacter?.gameObject.SetActive(rightCoin);
+
         if (rightSlotStatus != null)
         {
-            rightSlotStatus.text = rightCoin ? "P2 COIN INSERTED" : "INSERT COIN";
+            rightSlotStatus.text = rightCoin ? "1/1 Credits" : "0/1 Credits";
             rightSlotStatus.color = rightCoin ? Color.green : Color.white;
         }
     }
 
-    private void UpdateReadyStatus(bool leftCoin, bool leftSideConfirmation, bool rightCoin, bool rightSideConfirmation)
+    private void UpdateReadyStatus(bool leftSideConfirmation,bool rightSideConfirmation)
     {
-        if (leftReadyStatus != null)
-        {
-            if (leftCoin)
-            {
-                leftReadyStatus.text = leftSideConfirmation ? "P1 Ready" : "Ready up?";
-                leftReadyStatus.color = leftSideConfirmation ? Color.green : Color.white;
-            }
-            else
-                leftReadyStatus.text = "";
-        }
-
-        if (rightReadyStatus != null)
-        {
-            if (rightCoin)
-            {
-                rightReadyStatus.text = rightSideConfirmation ? "P2 Ready" : "Ready Up?";
-                rightReadyStatus.color = rightSideConfirmation ? Color.green : Color.white;
-            }
-            else
-                rightReadyStatus.text = "";
-        }
+        leftReadyPanel?.gameObject.SetActive(leftSideConfirmation);
+        rightReadyPanel?.gameObject.SetActive(rightSideConfirmation);
     }
 
     private void UpdateCountdownText(bool displayCountdown, float countdown)
@@ -93,15 +82,28 @@ public class CoinInsertUI : MonoBehaviour
 
     private void UpdateTransitionTimerText(bool displayTransitionTimer, float timer)
     {
-        if (transitionTimer == null) return;
+        if (transitionTimerText == null && transitionTimerOutline == null) return;
 
         if (!displayTransitionTimer)
         {
-            transitionTimer.gameObject.SetActive(false);
+            transitionTimerText?.gameObject.SetActive(false);
+
+            transitionTimerOutline?.gameObject.SetActive(false);
             return;
         }
 
-        transitionTimer.gameObject.SetActive(true);
-        transitionTimer.text = Mathf.CeilToInt(timer).ToString();
+        string timerText = Mathf.CeilToInt(timer).ToString();
+
+        if (transitionTimerText != null)
+        {
+            transitionTimerText.gameObject.SetActive(true);
+            transitionTimerText.text = timerText;
+        }
+
+        if (transitionTimerOutline != null)
+        {
+            transitionTimerOutline.gameObject.SetActive(true);
+            transitionTimerOutline.text = timerText;
+        }
     }
 }

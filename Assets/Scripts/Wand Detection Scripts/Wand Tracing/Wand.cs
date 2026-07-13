@@ -93,8 +93,17 @@ public class Wand : MonoBehaviour
         }
         else
         {
-            lineRenderer.startColor = Color.red;
-            lineRenderer.endColor = Color.red;
+            if (deviceIndex == 0)
+            {
+                lineRenderer.startColor = GameConstants.LeftDrawingColor;
+                lineRenderer.endColor = GameConstants.LeftDrawingColor;
+            }
+            else
+            {
+                lineRenderer.startColor = GameConstants.RightDrawingColor;
+                lineRenderer.endColor = GameConstants.RightDrawingColor;
+            }
+
             lineRenderer.startWidth = GameConstants.LineWidth;
             lineRenderer.endWidth = GameConstants.LineWidth;
         }

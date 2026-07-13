@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ee8696101f2b21d48967bdc06853011a, type: 3}
-  m_Name: Fireball
+  m_Name: WindOrb
   m_EditorClassIdentifier: 
-  spellName: Fireball
-  spellElement: Fire
+  spellName: WindOrb
+  spellElement: Air
   spellType: 0
-  spellDamage: 0.07
-  spellSpeed: 10
-  spellEffect: {fileID: 11400000, guid: c23f5da7ef9e8f643a92574254b2e136, type: 2}
-  spellEffectChance: 10
+  spellDamage: 0.05
+  spellSpeed: 7
+  spellEffect: {fileID: 11400000, guid: d47530f73c1a2ee4b8cd4f9b1065e6d7, type: 2}
+  spellEffectChance: 50
   castSFX: {fileID: 8300000, guid: d0b59d8b22bcced4bb28dba5059711ca, type: 3}
   castVolume: 0.5
   randomizePitch: 1
   pitchVariance: 0.05
-  prefab: {fileID: 2375220837706918120, guid: a8bc54a7696e3cf4eb42d8e0631e4576, type: 3}
+  prefab: {fileID: 0}

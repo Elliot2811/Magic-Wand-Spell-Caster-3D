@@ -16,7 +16,7 @@ public class SpellBook : MonoBehaviour
     private CharacterEntity playerEntity;
 
     [SerializeField]
-    private int playerNumber = 1; // 1 = left, 2 = right — must match CircleBonusEvent's player1Index/player2Index mapping
+    private int playerNumber = 1; // 1 = left, 2 = right ï¿½ must match CircleBonusEvent's player1Index/player2Index mapping
 
     private bool newData = true;
     private ShapeInfoSO shape;
@@ -92,12 +92,12 @@ public class SpellBook : MonoBehaviour
         this.shape = shape;
     }
 
-    private ScriptableObjectSpells FindProjectile(ShapeInfoSO shapeInfo)
+    private ScriptableObjectSpell FindProjectile(ShapeInfoSO shapeInfo)
     {
         if (shapeInfo == null)
             return null;
 
-        ScriptableObjectSpells spell;
+        ScriptableObjectSpell spell;
 
         spellLookupTable.TryGetSpell(shapeInfo, out spell);
         return spell;

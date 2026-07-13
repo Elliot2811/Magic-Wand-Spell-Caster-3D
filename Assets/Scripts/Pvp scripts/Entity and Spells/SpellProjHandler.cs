@@ -72,7 +72,7 @@ public class SpellProjHandler : MonoBehaviour
 
     private bool initialized = false;
 
-    private ScriptableObjectSpells spell;
+    private ScriptableObjectSpell spell;
 
     private float projectileSpeed;
 
@@ -107,7 +107,7 @@ public class SpellProjHandler : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Player") && !other.CompareTag("Border"))
+        if (!other.CompareTag("Player"))
         {
             return;
         }

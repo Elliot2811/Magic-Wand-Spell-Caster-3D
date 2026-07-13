@@ -9,7 +9,7 @@ public class SpellProjectileLookUpTable : ScriptableObject, IEnumerable<SpellPro
     public struct SpellProjectilePair
     {
         public ShapeInfoSO shape;
-        public ScriptableObjectSpells spell;
+        public ScriptableObjectSpell spell;
     }
 
     public SpellProjectileLookUpTable()
@@ -18,9 +18,9 @@ public class SpellProjectileLookUpTable : ScriptableObject, IEnumerable<SpellPro
 
     [SerializeField] private SpellProjectilePair[] pairs;
 
-    private Dictionary<ShapeInfoSO, ScriptableObjectSpells> lookupDictionary;
+    private Dictionary<ShapeInfoSO, ScriptableObjectSpell> lookupDictionary;
 
-    public void AddPair(ShapeInfoSO shape, ScriptableObjectSpells spell)
+    public void AddPair(ShapeInfoSO shape, ScriptableObjectSpell spell)
     {
         if (shape == null || spell == null)
         {
@@ -49,7 +49,7 @@ public class SpellProjectileLookUpTable : ScriptableObject, IEnumerable<SpellPro
         return shapes;
     }
 
-    public bool TryGetSpell(ShapeInfoSO shape, out ScriptableObjectSpells spell)
+    public bool TryGetSpell(ShapeInfoSO shape, out ScriptableObjectSpell spell)
     {
         return lookupDictionary.TryGetValue(shape, out spell);
     }
@@ -64,7 +64,7 @@ public class SpellProjectileLookUpTable : ScriptableObject, IEnumerable<SpellPro
         if (lookupDictionary != null)
             return;
 
-        lookupDictionary = new Dictionary<ShapeInfoSO, ScriptableObjectSpells>();
+        lookupDictionary = new Dictionary<ShapeInfoSO, ScriptableObjectSpell>();
         foreach (SpellProjectilePair pair in pairs)
         {
             if (pair.shape == null || pair.spell == null)

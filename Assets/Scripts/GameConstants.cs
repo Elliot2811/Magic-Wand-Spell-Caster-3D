@@ -24,6 +24,9 @@ public class GameConstants : MonoBehaviour
     public const float DisplayShapePercentage = 0.75f;
     public static readonly Vector2 DisplayShapeOffset = Vector2.zero;
 
+    public static readonly Color LeftDrawingColor = Color.blue;
+    public static readonly Color RightDrawingColor = Color.red;
+
     public const int CatmullResolution = 10;
     public const float sharpAngleThreshold = 45f;
     #endregion

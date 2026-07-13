@@ -46,7 +46,7 @@ public class CharacterEntity : MonoBehaviour
     //    Debug.Log($"{gameObject} Total Damage Taken: {entityDmgTaken}");
     //}
 
-    //public virtual void FireSpell(ScriptableObjectSpells spell)
+    //public virtual void FireSpell(ScriptableObjectSpell spell)
     //{
     //    if (spell == null)
     //        return;
@@ -78,12 +78,11 @@ public class CharacterEntity : MonoBehaviour
         projHandler.damageMultiplier = damageMultiplier;
         projHandler.Init(spell);
         AudioManager.Instance?.PlaySFX(spell.castSFX, spell.castVolume, spell.randomizePitch, spell.pitchVariance);
-        //Debug.Log($"Player launched spell");
     }
     private IEnumerator WaitFireSpell(ScriptableObjectSpells spell, float delay, float damageMultiplier)
     {
         yield return new WaitForSeconds(delay);
-        Debug.Log($"[CharacterEntity] Firing '{spell.name}' — base damage {spell.spellDamage}, multiplier x{damageMultiplier}, expected damage {spell.spellDamage * damageMultiplier}");
+        Debug.Log($"[CharacterEntity] Firing '{spell.name}' ï¿½ base damage {spell.spellDamage}, multiplier x{damageMultiplier}, expected damage {spell.spellDamage * damageMultiplier}");
         FireSpellWithMultiplier(spell, damageMultiplier);
     }
 
