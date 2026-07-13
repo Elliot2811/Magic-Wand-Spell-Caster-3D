@@ -16,12 +16,12 @@
 //    #region Event Functions
 //    private void OnEnable()
 //    {
-//        GameSceneInitialiser.StartMainGame += StartMainGameTimer;
+//        //GameSceneInitialiser.StartMainGame += StartMainGameTimer;
 //    }
 
 //    private void OnDisable()
 //    {
-//        GameSceneInitialiser.StartMainGame -= StartMainGameTimer;
+//        //GameSceneInitialiser.StartMainGame -= StartMainGameTimer;
 //    }
 //    #endregion
 //    #region Update Function
@@ -50,15 +50,15 @@
 //    }
 //    #endregion
 //    #region Timer Functions
-//    private void StartMainGameTimer(GameSceneInitialiser.GameRunStatus state)
-//    {
-//        //Only runs the rest of the function's code if enum value = GameStarted
-//        if (state != GameSceneInitialiser.GameRunStatus.GameStarted)
-//                return;
+//    //private void StartMainGameTimer(GameSceneInitialiser.GameRunStatus state)
+//    //{
+//    //    //Only runs the rest of the function's code if enum value = GameStarted
+//    //    if (state != GameSceneInitialiser.GameRunStatus.GameStarted)
+//    //        return;
 
-//        currentTime = mainGameTime;
-//        isTimerRunning = true;
-//    }
+//    //    currentTime = mainGameTime;
+//    //    isTimerRunning = true;
+//    //}
 //    #endregion
 
 //    #endregion

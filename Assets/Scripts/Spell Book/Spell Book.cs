@@ -15,6 +15,9 @@ public class SpellBook : MonoBehaviour
     [SerializeField]
     private CharacterEntity playerEntity;
 
+    [SerializeField]
+    private int playerNumber = 1; // 1 = left, 2 = right — must match CircleBonusEvent's player1Index/player2Index mapping
+
     private bool newData = true;
     private ShapeInfoSO shape;
 
@@ -26,19 +29,22 @@ public class SpellBook : MonoBehaviour
 
 
     private void Update()
+{
+    if (!initialized || !newData)
+        return;
+    newData = false;
+    ScriptableObjectSpells spell = FindProjectile(shape);
+    if (spell != null)
     {
-        if (!initialized || !newData)
-            return;
-
-        newData = false;
-
-        ScriptableObjectSpells spell = FindProjectile(shape);
-
-        if (spell != null)
+        float damageMultiplier = 1f;
+        if (CircleBonusEvent.Instance != null && CircleBonusEvent.Instance.ConsumeBonus(playerNumber))
         {
-            playerEntity.FireSpell(spell, 0f);
+            damageMultiplier = CircleBonusEvent.Instance.bonusDamageMultiplier;
+            Debug.Log($"[SpellBook] player {playerNumber}: circle bonus applied (x{damageMultiplier}).");
         }
+        playerEntity.FireSpell(spell, 0f, damageMultiplier);
     }
+}
 
     private void OnDisable()
     {
@@ -48,11 +54,12 @@ public class SpellBook : MonoBehaviour
 
     private void Init()
     {
-        Init(wandListener, playerEntity, spellLookupTable);
+        Init(wandListener, playerEntity, spellLookupTable, playerNumber);
     }
 
-    public void Init(WandListener wandListener, CharacterEntity playerEntity, SpellProjectileLookUpTable lookUpTable)
+    public void Init(WandListener wandListener, CharacterEntity playerEntity, SpellProjectileLookUpTable lookUpTable, int playerNumber)
     {
+        this.playerNumber = playerNumber;
         this.wandListener = wandListener;
         this.playerEntity = playerEntity;
         this.spellLookupTable = lookUpTable;

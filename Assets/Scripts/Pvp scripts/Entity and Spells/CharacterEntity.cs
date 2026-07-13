@@ -57,46 +57,41 @@ public class CharacterEntity : MonoBehaviour
     //#endregion
 
     public float EntityDmgTaken { get; private set; }
-
-    public void FireSpell(ScriptableObjectSpells spell, float delay)
+    public virtual void FireSpell(ScriptableObjectSpells spell, float delay = 0f, float damageMultiplier = 1f)
     {
-        StartCoroutine(WaitFireSpell(spell, delay));
+        StartCoroutine(WaitFireSpell(spell, delay, damageMultiplier));
     }
-    public virtual void FireSpell(ScriptableObjectSpells spell)
+
+    //original FireSpell(spell) body, with a multiplier applied to the projectile before launch
+    public virtual void FireSpellWithMultiplier(ScriptableObjectSpells spell, float damageMultiplier)
     {
         if (spell == null || spell.prefab == null)
             return;
-
         GameObject proj = Instantiate(spell.prefab);
-
         proj.transform.localScale = GameConstants.ProjectileSpawn.scale;
         proj.transform.SetParent(transform);
         proj.transform.localPosition = GameConstants.ProjectileSpawn.relativePos;
         proj.transform.localRotation = GameConstants.ProjectileSpawn.relativeRotation;
-
         SpellProjHandler projHandler = proj.GetComponent<SpellProjHandler>();
         if (projHandler == null)
             projHandler = proj.AddComponent<SpellProjHandler>();
+        projHandler.damageMultiplier = damageMultiplier;
         projHandler.Init(spell);
-
         AudioManager.Instance?.PlaySFX(spell.castSFX, spell.castVolume, spell.randomizePitch, spell.pitchVariance);
         //Debug.Log($"Player launched spell");
     }
-
-    private IEnumerator WaitFireSpell(ScriptableObjectSpells spell, float delay)
+    private IEnumerator WaitFireSpell(ScriptableObjectSpells spell, float delay, float damageMultiplier)
     {
         yield return new WaitForSeconds(delay);
-        FireSpell(spell);
+        Debug.Log($"[CharacterEntity] Firing '{spell.name}' — base damage {spell.spellDamage}, multiplier x{damageMultiplier}, expected damage {spell.spellDamage * damageMultiplier}");
+        FireSpellWithMultiplier(spell, damageMultiplier);
     }
 
     public void TakeDamage(float damage)
     {
         EntityDmgTaken += damage;
-
         damageTakenMessage?.Invoke(damage);
-
         //Debug.Log($"Sending message of damage taken: {damage}");
     }
-
     public event Action<float> damageTakenMessage;
 }

@@ -102,6 +102,7 @@ public class GamePlayState : GameState
     private IMidGameEvent[] midGameEvents;
     private IMidGameEvent activeMidGameEvent;
     private bool midGameEventTriggered = false;
+    private bool activeEventPausedTimer;
     private float initialTimer;
 
     public override void EnterState(GameStateManager gameManager)
@@ -172,12 +173,15 @@ public class GamePlayState : GameState
             return;
         }
 
-        timerRunning = false;
-
         int index = UnityEngine.Random.Range(0, midGameEvents.Length);
         activeMidGameEvent = midGameEvents[index];
+        activeEventPausedTimer = activeMidGameEvent.PausesMainTimer;
 
-        Debug.Log($"GamePlayState: triggering mid-game event #{index} ({((MonoBehaviour)activeMidGameEvent).name}). Timer paused at {timer:F1}.");
+        if (activeEventPausedTimer)
+            timerRunning = false;
+
+        Debug.Log($"GamePlayState: triggering mid-game event #{index} ({((MonoBehaviour)activeMidGameEvent).name}). " +
+                  $"PausesMainTimer={activeEventPausedTimer}. Timer at {timer:F1}.");
 
         activeMidGameEvent.OnEventCompleted += OnMidGameEventCompleted;
         activeMidGameEvent.StartEvent();
@@ -194,8 +198,10 @@ public class GamePlayState : GameState
 
         ApplyMidGameEventEffect(winningPlayer);
 
-        Debug.Log($"GamePlayState: mid-game event resolved (winningPlayer={winningPlayer}). Resuming timer at {timer:F1}.");
-        timerRunning = true;
+        Debug.Log($"GamePlayState: mid-game event resolved (winningPlayer={winningPlayer}). Timer at {timer:F1}.");
+
+        if (activeEventPausedTimer)
+            timerRunning = true;
     }
 
     private void ApplyMidGameEventEffect(int winningPlayer)
@@ -258,7 +264,7 @@ public class GamePlayState : GameState
         leftCharacter.damageTakenMessage += LeftTakeDamage;
 
         leftSpellBook = new GameObject("Left Spell Book").AddComponent<SpellBook>();
-        leftSpellBook.Init(stateManager.wandListenerLeft, leftCharacter, GameConstants.Instance.lookUpTable);
+        leftSpellBook.Init(stateManager.wandListenerLeft, leftCharacter, GameConstants.Instance.lookUpTable, 1);
 
         rightCharacter = MonoBehaviour.Instantiate(characterPrefab);
         rightCharacter.transform.position = mapData.rightPos;
@@ -268,7 +274,7 @@ public class GamePlayState : GameState
         rightCharacter.damageTakenMessage += RightTakeDamage;
 
         rightSpellBook = new GameObject("Right Spell Book").AddComponent<SpellBook>();
-        rightSpellBook.Init(stateManager.wandListenerRight, rightCharacter, GameConstants.Instance.lookUpTable);
+        rightSpellBook.Init(stateManager.wandListenerRight, rightCharacter, GameConstants.Instance.lookUpTable, 2);
 
         DiscoverMidGameEvents();
 
