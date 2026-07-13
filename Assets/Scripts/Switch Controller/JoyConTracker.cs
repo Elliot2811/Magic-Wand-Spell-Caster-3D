@@ -211,7 +211,7 @@ public class JoyConTracker : MonoBehaviour
 
     private IEnumerator ConnectAfterDelay()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(2f);
 
         int devices = JSL.JslConnectDevices();
         Debug.Log($"Connected Devices: {devices}");

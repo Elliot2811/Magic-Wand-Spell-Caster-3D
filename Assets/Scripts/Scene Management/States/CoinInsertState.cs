@@ -12,8 +12,9 @@ public class CoinInsertState : GameState
     public bool DisplayTransitionTimer { get; private set; } = false;
 
     public bool LeftCoin { get; private set; } = false;
-    public bool RightCoin { get; private set; } = false;
     public bool leftSideConfirmation = false;
+
+    public bool RightCoin { get; private set; } = false;
     public bool rightSideConfirmation = false;
 
     protected override AudioPair Music => stateManager?.audioLibrary?.coinInsertMusic;

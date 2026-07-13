@@ -88,6 +88,7 @@ MonoBehaviour:
   lineRenderer: {fileID: 0}
   usingController: 1
   deviceIndex: 0
+  drawActive: 0
 --- !u!120 &370561893962454323
 LineRenderer:
   serializedVersion: 2
@@ -129,7 +130,7 @@ LineRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Positions: []
   m_Parameters:
     serializedVersion: 3
