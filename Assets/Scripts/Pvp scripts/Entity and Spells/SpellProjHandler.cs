@@ -78,7 +78,7 @@ public class SpellProjHandler : MonoBehaviour
 
     public float damageMultiplier = 1f;
 
-    public void Init(ScriptableObjectSpells spell)
+    public void Init(ScriptableObjectSpell spell)
     {
         this.spell = spell;
         projectileSpeed = spell.spellSpeed;

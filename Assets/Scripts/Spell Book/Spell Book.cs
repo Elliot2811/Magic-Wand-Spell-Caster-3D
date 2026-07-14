@@ -33,7 +33,7 @@ public class SpellBook : MonoBehaviour
     if (!initialized || !newData)
         return;
     newData = false;
-    ScriptableObjectSpells spell = FindProjectile(shape);
+    ScriptableObjectSpell spell = FindProjectile(shape);
     if (spell != null)
     {
         float damageMultiplier = 1f;
