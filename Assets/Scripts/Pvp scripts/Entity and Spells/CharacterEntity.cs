@@ -57,13 +57,13 @@ public class CharacterEntity : MonoBehaviour
     //#endregion
 
     public float EntityDmgTaken { get; private set; }
-    public virtual void FireSpell(ScriptableObjectSpells spell, float delay = 0f, float damageMultiplier = 1f)
+    public virtual void FireSpell(ScriptableObjectSpell spell, float delay = 0f, float damageMultiplier = 1f)
     {
         StartCoroutine(WaitFireSpell(spell, delay, damageMultiplier));
     }
 
     //original FireSpell(spell) body, with a multiplier applied to the projectile before launch
-    public virtual void FireSpellWithMultiplier(ScriptableObjectSpells spell, float damageMultiplier)
+    public virtual void FireSpellWithMultiplier(ScriptableObjectSpell spell, float damageMultiplier)
     {
         if (spell == null || spell.prefab == null)
             return;
@@ -79,7 +79,7 @@ public class CharacterEntity : MonoBehaviour
         projHandler.Init(spell);
         AudioManager.Instance?.PlaySFX(spell.castSFX, spell.castVolume, spell.randomizePitch, spell.pitchVariance);
     }
-    private IEnumerator WaitFireSpell(ScriptableObjectSpells spell, float delay, float damageMultiplier)
+    private IEnumerator WaitFireSpell(ScriptableObjectSpell spell, float delay, float damageMultiplier)
     {
         yield return new WaitForSeconds(delay);
         Debug.Log($"[CharacterEntity] Firing '{spell.name}' � base damage {spell.spellDamage}, multiplier x{damageMultiplier}, expected damage {spell.spellDamage * damageMultiplier}");
