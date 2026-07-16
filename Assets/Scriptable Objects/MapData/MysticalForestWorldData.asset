@@ -13,13 +13,15 @@ MonoBehaviour:
   m_Name: MysticalForestWorldData
   m_EditorClassIdentifier: 
   mapName: MysticalForestWorld
-  mapPrefab: {fileID: 0}
-  mapMusic: {fileID: 8300000, guid: 0b0c14b1ea3b89a41a9039d98c789b21, type: 3}
-  sceneToLoad: 
-  sceneAsset: {fileID: 102900000, guid: 316e8c4da6fc2c14a81404ed277d8a0f, type: 3}
-  leftPos: {x: -16, y: 5, z: 8}
-  leftRot: {x: 0, y: 90, z: 0}
-  leftScale: {x: 5, y: 5, z: 5}
-  rightPos: {x: 16, y: 5, z: 8}
-  rightRot: {x: 0, y: -90, z: 0}
-  rightScale: {x: 5, y: 5, z: 5}
+  mapPrefab: {fileID: 4022804489116557225, guid: 9cc7e785e29806b4793136e1cebc7b5a, type: 3}
+  mapMusic:
+    clip: {fileID: 0}
+    volume: 0.5
+    randomizePitch: 0
+    pitchVariance: 0
+  leftPos: {x: -4.5, y: 0.81, z: -2.04}
+  leftRot: {x: 0, y: 0, z: 0}
+  leftScale: {x: 0.6116006, y: 0.6116006, z: 0.6116006}
+  rightPos: {x: 4.5, y: 0, z: -2.04}
+  rightRot: {x: 0, y: 0, z: 0}
+  rightScale: {x: 0.5, y: 0.5, z: 0.5}
