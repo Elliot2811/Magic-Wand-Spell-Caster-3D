@@ -462,7 +462,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioLibrary: {fileID: 11400000, guid: e4067a63753644c42967ea85aec8e5f4, type: 2}
-  joyConTracker: {fileID: 0}
+  joyConTracker: {fileID: 429939952}
   wandPrefab: {fileID: 6290188424019819844, guid: e5b9182236c39634b9e8cd75a85c938a, type: 3}
   wandLeft: {fileID: 0}
   wandRight: {fileID: 0}

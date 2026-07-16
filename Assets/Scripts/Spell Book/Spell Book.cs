@@ -36,7 +36,7 @@ public class SpellBook : MonoBehaviour
 
         if (spell != null)
         {
-            playerEntity.FireSpell(spell, 0f);
+            playerEntity.FireSpell(spell);
         }
     }
 

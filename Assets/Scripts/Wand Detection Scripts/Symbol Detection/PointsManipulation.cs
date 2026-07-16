@@ -325,7 +325,7 @@ public static class PointsManipulation
     /// And normalize the Vector2 x and y values to be between 0 to 1.
     /// </summary>
     /// <param name="preserveScale">
-    /// Drawing keeps scale (true). Drawing is stretched (false).
+    /// Drawing keeps spellScale (true). Drawing is stretched (false).
     /// </param>
     public static Vector2[] ResampleAndNormalize(List<Vector2> points, int newNumberOfPoints)
     {
@@ -343,7 +343,7 @@ public static class PointsManipulation
     /// And normalize the Vector2 x and y values to be between 0 to 1.
     /// </summary>
     /// <param name="preserveScale">
-    /// Drawing keeps scale (true). Drawing is stretched (false).
+    /// Drawing keeps spellScale (true). Drawing is stretched (false).
     /// </param>
     public static Vector2[] ResampleAndNormalize(Vector2[] points, int newNumberOfPoints)
     {

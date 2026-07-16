@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spellName: WaterDart
   spellElement: Water
-  spellType: 0
+  spellPriority: 1
+  shieldSpell: 0
+  destroyLowerTierSpells: 0
   spellDamage: 0.05
-  spellSpeed: 4
-  spellEffect: {fileID: 11400000, guid: 8c89df8da21a442428b061d81b479bac, type: 2}
-  spellEffectChance: 100
+  spellSpeed: 9
+  spellDelay: 0
   castSFX: {fileID: 8300000, guid: d0b59d8b22bcced4bb28dba5059711ca, type: 3}
   castVolume: 0.5
   randomizePitch: 1

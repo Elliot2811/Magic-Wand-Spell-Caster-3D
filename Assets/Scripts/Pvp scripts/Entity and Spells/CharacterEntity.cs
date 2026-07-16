@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class CharacterEntity : MonoBehaviour
@@ -46,7 +48,7 @@ public class CharacterEntity : MonoBehaviour
     //    Debug.Log($"{gameObject} Total Damage Taken: {entityDmgTaken}");
     //}
 
-    //public virtual void FireSpell(ScriptableObjectSpell spell)
+    //public virtual void FireSpell(ScriptableObjectSpells spell)
     //{
     //    if (spell == null)
     //        return;
@@ -57,36 +59,80 @@ public class CharacterEntity : MonoBehaviour
     //#endregion
 
     public float EntityDmgTaken { get; private set; }
-    public ScriptableObjectStatusEffect statusEffect = null;
+    public bool entityShielded = false;
+    private bool canCastSpell = true;
+    private GameObject shieldGameObj;
 
-    public void FireSpell(ScriptableObjectSpell spell, float delay)
-    {
-        StartCoroutine(WaitFireSpell(spell, delay));
-    }
     public virtual void FireSpell(ScriptableObjectSpell spell)
     {
         if (spell == null || spell.prefab == null)
             return;
+        if (!canCastSpell)
+        {
+            return;
+        }
+        if (spell.shieldSpell == true)
+        {
+            if (entityShielded == true)
+            {
+                return;
+            }
+            shieldGameObj = Instantiate(spell.prefab);
+            shieldGameObj.transform.SetParent(transform);
+            shieldGameObj.transform.localPosition = GameConstants.ProjectileSpawn.shieldRelativePos;
+            shieldGameObj.transform.localRotation = GameConstants.ProjectileSpawn.relativeRotation;
+            shieldGameObj.transform.localScale = GameConstants.ProjectileSpawn.shieldScale;
 
+            ShieldSpellProjHandler shieldSpellProjHandler = shieldGameObj.GetComponent<ShieldSpellProjHandler>();
+            if (shieldSpellProjHandler == null)
+            {
+                shieldSpellProjHandler = shieldGameObj.AddComponent<ShieldSpellProjHandler>();
+            }
+            shieldSpellProjHandler.Init(spell);
+            entityShielded = true;
+        }
+        else
+        {
+            StartCoroutine(FireSpellAfterDelay(spell, spell.spellDelay));
+        }
+        AudioManager.Instance?.PlaySFX(spell.castSFX, spell.castVolume, spell.randomizePitch, spell.pitchVariance);
+    }
+
+    private IEnumerator FireSpellAfterDelay(ScriptableObjectSpell spell, float delay)
+    {
+        GameObject spellEffectPrefab = null;
+
+        if ((spell.spellChargeEffect != null) && (spell.destroyLowerTierSpells))
+        {
+            spellEffectPrefab = Instantiate(spell.spellChargeEffect);
+            spellEffectPrefab.transform.localScale = this.transform.localScale;
+            spellEffectPrefab.transform.localPosition = this.transform.position;
+        }
+        canCastSpell = false;
+        if (entityShielded)
+        {
+            entityShielded = !entityShielded;
+            Destroy(shieldGameObj);
+
+        }
+        yield return new WaitForSeconds(delay);
+        canCastSpell = true;
+        if (spellEffectPrefab != null)
+        {
+            Destroy(spellEffectPrefab);
+            spellEffectPrefab = null;
+        }
         GameObject proj = Instantiate(spell.prefab);
-
-        proj.transform.localScale = GameConstants.ProjectileSpawn.scale;
         proj.transform.SetParent(transform);
-        proj.transform.localPosition = GameConstants.ProjectileSpawn.relativePos;
+        proj.transform.localPosition = GameConstants.ProjectileSpawn.spellRelativePos;
         proj.transform.localRotation = GameConstants.ProjectileSpawn.relativeRotation;
+        proj.transform.localScale = GameConstants.ProjectileSpawn.spellScale;
 
         SpellProjHandler projHandler = proj.GetComponent<SpellProjHandler>();
         if (projHandler == null)
             projHandler = proj.AddComponent<SpellProjHandler>();
         projHandler.Init(spell);
 
-        AudioManager.Instance?.PlaySFX(spell.castSFX, spell.castVolume, spell.randomizePitch, spell.pitchVariance);
-    }
-
-    private IEnumerator WaitFireSpell(ScriptableObjectSpell spell, float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        FireSpell(spell);
     }
 
     public void TakeDamage(float damage)

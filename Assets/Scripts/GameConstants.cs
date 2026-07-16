@@ -50,10 +50,12 @@ public class GameConstants : MonoBehaviour
 
 
     public static class ProjectileSpawn
-    {    
-        public static readonly Vector3 relativePos = new Vector3(0, 0.25f, 0.85f);
+    {
+        public static readonly Vector3 shieldRelativePos = new Vector3(0, 0, 0.8f);
+        public static readonly Vector3 shieldScale = new Vector3(1f, 1.8f, 0.2f);
+        public static readonly Vector3 spellRelativePos = new Vector3(0, 0.25f, 0.8f);
+        public static readonly Vector3 spellScale = new Vector3(0.2f, 0.2f, 0.2f);
         public static readonly Quaternion relativeRotation = Quaternion.identity;
-        public static readonly Vector3 scale = Vector3.one;
     }
     public static readonly Rect DrawingRectLeft = new Rect(0.05f, 0.05f, 0.425f, 0.9f);
     public static readonly Rect DrawingRectRight = new Rect(0.55f, 0.05f, 0.425f, 0.9f);
