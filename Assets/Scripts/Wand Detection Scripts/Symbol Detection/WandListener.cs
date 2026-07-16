@@ -46,7 +46,9 @@ public class WandListener : MonoBehaviour
         {
             this.lineRenderer = GetComponent<LineRenderer>();
             if (this.lineRenderer == null)
-                Debug.LogWarning("No linerender found.");
+            {
+                Debug.LogError("No linerender found.");
+            }
         }
 
         this.lineRenderer.startColor = Color.white;
@@ -59,20 +61,13 @@ public class WandListener : MonoBehaviour
         initialized = true;
     }
 
-    private void ChangeComparedShapes(ShapesCollectionSO shapes)
-    {
-        this.shapes = shapes;
-
-        if (this.shapes == null)
-            Debug.LogWarning("No ShapesCollectionSO passed.");
-    }
-
     private void FindBestShape(Vector2[] points)
     {
         if (!initialized)
         {
             Debug.LogWarning("[WandListener]: No ShapesCollectionSO to compare to.");
             MatchedShape?.Invoke(null);
+            return;
         }
 
         Vector2[] processedPoints = PointsManipulation.ResampleAndNormalize(points, GameConstants.PointCount);
@@ -113,6 +108,11 @@ public class WandListener : MonoBehaviour
             );
 
         LineRendererInterface.Points(lineRenderer, rescaledData);
+    }
+
+    public void ChangeShapesCollection(ShapesCollectionSO shapes)
+    {
+        this.shapes = shapes;
     }
 
     public event Action<ShapeInfoSO> MatchedShape;

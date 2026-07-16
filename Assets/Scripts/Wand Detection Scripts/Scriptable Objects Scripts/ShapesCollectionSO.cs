@@ -5,9 +5,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ShapesStorage", menuName = "Shapes/Shapes Storage")]
 public class ShapesCollectionSO : ScriptableObject, IEnumerable<ShapeInfoSO>
 {
-    [SerializeField] private ShapeInfoSO[] shapes;
+    public ShapeInfoSO[] shapes;
 
     private HashSet<ShapeInfoSO> shapesSet;
+
+    private ShapeInfoSO[] storedShapes;
 
     public IEnumerable<ShapeInfoSO> Shapes => shapesSet;
 
@@ -15,11 +17,31 @@ public class ShapesCollectionSO : ScriptableObject, IEnumerable<ShapeInfoSO>
 
     public ShapeInfoSO GetShapeInfoSO(int index)
     {
-        shapesSet.TryGetValue(shapes[index], out ShapeInfoSO shape);
-
-        return shape;
+        return storedShapes[index];
     }
-    public bool TryGetShapeInfoSO(int index, out ShapeInfoSO shape) => shapesSet.TryGetValue(shapes[index], out shape);
+
+    private void OnEnable()
+    {
+        if (shapes != null)
+            BuildShapesSet();
+    }
+
+    public bool TryGetShapeInfoSO(int index, out ShapeInfoSO shape)
+    {
+        if (index < 0 || index >= storedShapes.Length)
+        {
+            shape = null;
+            return false;
+        }
+
+        shape = storedShapes[index];
+        return true;
+    }
+
+    public ShapeInfoSO[] GetAllShapes()
+    {
+        return storedShapes;
+    }
 
     public ShapeInfoSO GetShapeInfoSO(string shapeName)
     {
@@ -31,12 +53,7 @@ public class ShapesCollectionSO : ScriptableObject, IEnumerable<ShapeInfoSO>
         return null;
     }
 
-    private void OnEnable()
-    {
-        BuildShapesSet();
-    }
-
-    private void BuildShapesSet()
+    public void BuildShapesSet()
     {
         shapesSet = new HashSet<ShapeInfoSO>();
         foreach (ShapeInfoSO shape in shapes)
@@ -53,9 +70,30 @@ public class ShapesCollectionSO : ScriptableObject, IEnumerable<ShapeInfoSO>
         }
 
         if (shapesSet.Count == 0)
+        {
             Debug.Log($"[{name}]: No valid shapes in ShapesStorage");
+            return;
+        }
+
+        BuildCompletedArray();
     }
 
-    public IEnumerator<ShapeInfoSO> GetEnumerator() => shapesSet.GetEnumerator();
+    private void BuildCompletedArray()
+    {
+        storedShapes = new ShapeInfoSO[shapesSet.Count];
+
+        int i = 0;
+        foreach (ShapeInfoSO shape in shapesSet)
+        {
+            storedShapes[i] = shape;
+            i++;
+        }
+    }
+
+    public IEnumerator<ShapeInfoSO> GetEnumerator()
+    {
+        foreach (ShapeInfoSO shape in storedShapes)
+            yield return shape;
+    }
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

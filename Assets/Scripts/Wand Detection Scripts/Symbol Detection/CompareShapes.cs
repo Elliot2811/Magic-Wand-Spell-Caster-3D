@@ -25,13 +25,15 @@ public static class CompareShapes
         if (
             playerPoints == null ||
             availableShapes == null ||
-            playerPoints.Length <= 1
+            playerPoints.Length <= 1 ||
+            availableShapes == null
             )
             return null;
 
         ShapeInfoSO bestMatch = null;
         float bestShapeAccuracy = 0;
         float secondBestShapeAccuracy = 0;
+
         foreach (ShapeInfoSO shape in availableShapes)
         {
             //Debug.Log($"Parsing through {shape.ShapeName}");

@@ -61,7 +61,7 @@ public class CoinInsertState : GameState
 
 
             wandListenerLeft = MonoBehaviour.Instantiate(stateManager.wandListenerPrefab, wandLeft.transform);
-            wandListenerLeft.Init(wandLeft, shapes: stateManager.allShapesCollectionSO);
+            wandListenerLeft.Init(wandLeft, shapes: GameConstants.Instance.allShapes);
             wandListenerLeft.MatchedShape += CheckLeftDrawing;
             stateManager.wandListenerLeft = wandListenerLeft;
 
@@ -85,7 +85,7 @@ public class CoinInsertState : GameState
 
 
             wandListenerRight = MonoBehaviour.Instantiate(stateManager.wandListenerPrefab, wandRight.transform);
-            wandListenerRight.Init(wandRight, shapes: stateManager.allShapesCollectionSO);
+            wandListenerRight.Init(wandRight, shapes: GameConstants.Instance.allShapes);
             wandListenerRight.MatchedShape += CheckRightDrawing;
             stateManager.wandListenerRight = wandListenerRight;
             Debug.Log("Right wand has been created");

@@ -83,6 +83,7 @@ public class GameConstants : MonoBehaviour
     public CharacterEntity characterPrefab;
 
     public SpellProjectileLookUpTable lookUpTable;
+    public ShapesCollectionSO allShapes;
 
     private void Start()
     {

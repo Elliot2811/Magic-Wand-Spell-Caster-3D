@@ -8,7 +8,6 @@ public class DisplaySpellDrawing : MonoBehaviour
     [SerializeField]
     private UILineRenderer uiLineRenderer;
 
-    [SerializeField]
     private ShapeInfoSO shapeInfoSO;
 
     private Vector2[] shapeData;
@@ -26,9 +25,6 @@ public class DisplaySpellDrawing : MonoBehaviour
             if (uiLineRenderer == null)
                 Debug.LogError("[DisplaySpellDrawing]: UILineRenderer component not found.");
         }
-
-        if (shapeInfoSO == null)
-            Debug.LogError("[DisplaySpellDrawing]: No ShapeInfoSO scriptable object assigned.");
     }
 
     private void Start()
@@ -36,12 +32,11 @@ public class DisplaySpellDrawing : MonoBehaviour
         StartCoroutine(DrawAfterLayout());
     }
 
-    private IEnumerator DrawAfterLayout()
+    private void DrawShape()
     {
-        yield return new WaitForEndOfFrame();
+        if (rectTransform == null || uiLineRenderer == null || shapeInfoSO == null)
+            return;
 
-        // Local rect space — no camera / screen conversion needed at all,
-        // so this works identically for Overlay, Camera, and World canvases.
         Rect rect = rectTransform.rect;
 
         shapeData = shapeInfoSO.RandomVariantData;
@@ -53,9 +48,47 @@ public class DisplaySpellDrawing : MonoBehaviour
             shapeDataLocalPos[i] = new Vector2(
                 Mathf.Lerp(rect.xMin, rect.xMax, shapeData[i].x),
                 Mathf.Lerp(rect.yMin, rect.yMax, shapeData[i].y)
-            );
+                );
         }
 
         uiLineRenderer.SetPoints(shapeDataLocalPos);
+    }
+
+    public void Redraw()
+    {
+        if (shapeInfoSO = null)
+        {
+            Debug.LogError("[DisplaySpellDrawing]: No ShapeInfoSO scriptable object assigned.");
+            return;
+        }
+
+        DrawShape();
+    }
+
+    public void Redraw(ShapeInfoSO newShape)
+    {
+        if (newShape == null)
+        {
+            Debug.LogError("[DisplaySpellDrawing]: Redraw called with a null ShapeInfoSO.");
+            return;
+        }
+
+        shapeInfoSO = newShape;
+        DrawShape();
+    }
+
+    public void RedrawIfNew(ShapeInfoSO newShape)
+    {
+        if (newShape == shapeInfoSO)
+            return;
+
+        Redraw(newShape);
+    }
+
+    private IEnumerator DrawAfterLayout()
+    {
+        yield return new WaitForEndOfFrame();
+
+        DrawShape();
     }
 }

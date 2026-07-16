@@ -320,7 +320,10 @@ public class Wand : MonoBehaviour
     public void SendData()
     {
         if (!drawActive && points.Count > 1)
+        {
+            //Debug.Log("Drawing finished");
             OnDrawingComplete?.Invoke(points.ToArray());
+        }
     }
     #endregion
 
