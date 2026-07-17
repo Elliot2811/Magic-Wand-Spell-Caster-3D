@@ -14,30 +14,30 @@ public class CharacterSpriteController : MonoBehaviour
 
     private void Start()
     {
-        if (transform.position.x < 0)
-        {
-            // Left player
-            idleSprite.transform.localRotation = Quaternion.Euler(0f, -90f, 0f);
-            attackSprite.transform.localRotation = Quaternion.Euler(0f, -90f, 0f);
-            // Scale
-            idleSprite.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
-            attackSprite.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
-            // Move upwards
-            idleSprite.transform.localPosition = new Vector3(0f, 1f, 0f);
-            attackSprite.transform.localPosition = new Vector3(0f, 1f, 0f);
-        }
-        else
-        {
-            // Right player
-            idleSprite.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
-            attackSprite.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
-            // Scale
-            idleSprite.transform.localScale = new Vector3(0.33f, 0.33f, 0.33f);
-            attackSprite.transform.localScale = new Vector3(0.33f, 0.33f, 0.33f);
-            // Move upwards
-            idleSprite.transform.localPosition = new Vector3(0f, 0.7f, 0f);
-            attackSprite.transform.localPosition = new Vector3(0f, 0.7f, 0f);
-        }
+        //if (transform.position.x < 0)
+        //{
+        //    // Left player
+        //    idleSprite.transform.localRotation = Quaternion.Euler(0f, -90f, 0f);
+        //    attackSprite.transform.localRotation = Quaternion.Euler(0f, -90f, 0f);
+        //    // Scale
+        //    idleSprite.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
+        //    attackSprite.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
+        //    // Move upwards
+        //    idleSprite.transform.localPosition = new Vector3(0f, 1f, 0f);
+        //    attackSprite.transform.localPosition = new Vector3(0f, 1f, 0f);
+        //}
+        //else
+        //{
+        //    // Right player
+        //    idleSprite.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
+        //    attackSprite.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
+        //    // Scale
+        //    idleSprite.transform.localScale = new Vector3(0.33f, 0.33f, 0.33f);
+        //    attackSprite.transform.localScale = new Vector3(0.33f, 0.33f, 0.33f);
+        //    // Move upwards
+        //    idleSprite.transform.localPosition = new Vector3(0f, 0.7f, 0f);
+        //    attackSprite.transform.localPosition = new Vector3(0f, 0.7f, 0f);
+        //}
 
         ShowIdle();
     }

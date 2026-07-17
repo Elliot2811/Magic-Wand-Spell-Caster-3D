@@ -80,7 +80,9 @@ public class GameConstants : MonoBehaviour
     public static GameConstants Instance;
 
     public MapData[] mapPresets;
-    public CharacterEntity characterPrefab;
+    //public CharacterEntity characterPrefab;
+    public CharacterEntity player1Prefab;
+    public CharacterEntity player2Prefab;
 
     public SpellProjectileLookUpTable lookUpTable;
     public ShapesCollectionSO allShapes;

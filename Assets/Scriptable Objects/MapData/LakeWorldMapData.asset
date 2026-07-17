@@ -14,11 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapName: LakeWorld
   mapPrefab: {fileID: 2367531490860711055, guid: 01d3dabf65e423447bfb3af634824ef2, type: 3}
-  mapMusic: {fileID: 8300000, guid: 0a351e52cb60b9e44aa1eb0a14e3a171, type: 3}
-  sceneAsset: {fileID: 102900000, guid: 316e8c4da6fc2c14a81404ed277d8a0f, type: 3}
-  leftPos: {x: -16, y: 5, z: 8}
-  leftRot: {x: 0, y: 90, z: 0}
-  leftScale: {x: 5, y: 5, z: 5}
-  rightPos: {x: 16, y: 5, z: 8}
-  rightRot: {x: 0, y: -90, z: 0}
-  rightScale: {x: 5, y: 5, z: 5}
+  mapMusic:
+    clip: {fileID: 0}
+    volume: 0.5
+    randomizePitch: 0
+    pitchVariance: 0
+  leftPos: {x: -16, y: 11, z: 9.1}
+  leftRot: {x: 0, y: 0, z: 0}
+  leftScale: {x: 2.412423, y: 2.412423, z: 2.412423}
+  rightPos: {x: 16, y: 9.91, z: 9.1}
+  rightRot: {x: 0, y: 0, z: 0}
+  rightScale: {x: 2.029634, y: 2.029634, z: 2.029634}
