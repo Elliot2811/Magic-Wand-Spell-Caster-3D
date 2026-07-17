@@ -41,7 +41,7 @@ public class WandListener : MonoBehaviour
 
         wand.OnDrawingComplete += FindBestShape;
 
-        this.lineRenderer = lineRenderer;
+        this.lineRenderer = wand.lineRenderer; //use wand.lineRenderer so shape replaces the spell drawn by player
         if (this.lineRenderer == null)
         {
             this.lineRenderer = GetComponent<LineRenderer>();
@@ -51,10 +51,10 @@ public class WandListener : MonoBehaviour
             }
         }
 
-        this.lineRenderer.startColor = Color.white;
-        this.lineRenderer.endColor = Color.white;
-        this.lineRenderer.startWidth = GameConstants.LineWidth;
-        this.lineRenderer.endWidth = GameConstants.LineWidth;
+        //this.lineRenderer.startColor = Color.white;
+        //this.lineRenderer.endColor = Color.white;
+        //this.lineRenderer.startWidth = GameConstants.LineWidth;
+        //this.lineRenderer.endWidth = GameConstants.LineWidth;
 
         this.shapes = shapes;
 
@@ -78,11 +78,11 @@ public class WandListener : MonoBehaviour
 
         if (lineRenderer != null)
         {
-            DisplayBestShape(shapeInfo);
+            DisplayBestShape(shapeInfo, points); // pass the raw points, not processedPoints
         }
     }
 
-    private void DisplayBestShape(ShapeInfoSO shapeInfo)
+    private void DisplayBestShape(ShapeInfoSO shapeInfo, Vector2[] originalDrawnPoints)
     {
         if (shapeInfo == null)
         {
@@ -99,13 +99,11 @@ public class WandListener : MonoBehaviour
         }
 
         Vector2[] catmulledData = PointsManipulation.CatmullRomLine(shapeData);
-        Vector3[] rescaledData = PointsManipulation.ScaleToViewPort(
-            catmulledData,
-            Camera.main,
-            10,
-            wand.deviceIndex == 0 ? GameConstants.DisplayRectLeft : GameConstants.DisplayRectRight,
-            GameConstants.DisplayShapePercentage
-            );
+
+        // Match the depth the drawing was rendered at (see Wand.LogMousePos's zClipPlane calc).
+        float zDepth = Camera.main.transform.position.z + GameConstants.DistanceToCamera;
+
+        Vector3[] rescaledData = PointsManipulation.FitToOriginalDrawing(catmulledData, originalDrawnPoints, zDepth);
 
         LineRendererInterface.Points(lineRenderer, rescaledData);
     }
