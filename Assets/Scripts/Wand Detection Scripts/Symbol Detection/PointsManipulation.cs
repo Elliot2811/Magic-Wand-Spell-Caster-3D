@@ -542,4 +542,45 @@ public static class PointsManipulation
         Debug.Log(result);
     }
     #endregion
+
+    #region Scale displayed drawn spell
+    /// <summary>
+    /// Rescales normalized/catmulled shape points to match the position and
+    /// size of the player's original drawing. originalDrawnPoints must be in
+    /// the same world-space coordinates the drawing was rendered in.
+    /// </summary>
+    public static Vector3[] FitToOriginalDrawing(Vector2[] shapePoints, Vector2[] originalDrawnPoints, float zDepth)
+    {
+        if (shapePoints == null || shapePoints.Length <= 1 ||
+            originalDrawnPoints == null || originalDrawnPoints.Length == 0)
+            return null;
+
+        PointBounds drawnBounds = GetBounds(originalDrawnPoints);
+
+        Vector2 drawnCentre = new Vector2(
+            (drawnBounds.MinX + drawnBounds.MaxX) * 0.5f,
+            (drawnBounds.MinY + drawnBounds.MaxY) * 0.5f
+            );
+
+        // Uniform scale (keeps the template shape's proportions) sized to
+        // whichever axis the player drew bigger along.
+        float scale = Mathf.Max(drawnBounds.Width, drawnBounds.Height);
+        if (scale <= 0f)
+            scale = 1f; // fallback for a near-single-point drawing
+
+        Vector2[] centredShape = CenterPoints(shapePoints);
+
+        Vector3[] results = new Vector3[centredShape.Length];
+        for (int i = 0; i < centredShape.Length; i++)
+        {
+            results[i] = new Vector3(
+                (centredShape[i].x - 0.5f) * scale + drawnCentre.x,
+                (centredShape[i].y - 0.5f) * scale + drawnCentre.y,
+                zDepth
+                );
+        }
+
+        return results;
+    }
+    #endregion
 }
