@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 1233100230422219799}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -1.76, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -43,7 +43,7 @@ Animator:
   m_GameObject: {fileID: 1233100230422219799}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: c86d5fff471c7af4399d80ef33dbb269, type: 2}
+  m_Controller: {fileID: 9100000, guid: 5637b518c1db17f4a99fd9c4612defc5, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -95,7 +95,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 2003876613, guid: 42bff9c4ea452b1478af1ddfb7140390, type: 3}
+  m_Sprite: {fileID: 1045623598, guid: 2c8a50828f6370d4ca4606ee1fccaa67, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -236,13 +236,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6762565861250146862}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.9, z: 0.85}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -3.15, y: 0.25, z: 0.85}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6254211365526147096}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &8823338530019468438
 GameObject:
   m_ObjectHideFlags: 0
@@ -254,6 +254,7 @@ GameObject:
   - component: {fileID: 6254211365526147096}
   - component: {fileID: 5462788499810452421}
   - component: {fileID: 7361549348153025928}
+  - component: {fileID: -6340232479803948096}
   m_Layer: 0
   m_Name: Player 2
   m_TagString: Player
@@ -298,10 +299,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.7197465
-  m_Height: 9.803911
+  m_Radius: 0.6
+  m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0.08748186, y: 0.18237972, z: -0.1849699}
+  m_Center: {x: 0.08748186, y: -0.25, z: 0.85}
 --- !u!114 &7361549348153025928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -317,3 +318,15 @@ MonoBehaviour:
   idleSprite: {fileID: 4303375767082966804}
   attackSprite: {fileID: 1233100230422219799}
   attackDuration: 0.6
+--- !u!114 &-6340232479803948096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8823338530019468438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8814bd4baf6a5e242a4dc0e5d9b7aa22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

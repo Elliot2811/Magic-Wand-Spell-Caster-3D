@@ -10,10 +10,16 @@ public class SpellProjHandler : MonoBehaviour
 
     public float damageMultiplier = 1f;
 
-    public void Init(ScriptableObjectSpell spell)
+    private Vector3 direction;
+
+    private CharacterEntity owner;
+
+    public void Init(ScriptableObjectSpell spell, Vector3 direction, CharacterEntity owner)
     {
         this.spell = spell;
         projectileSpeed = spell.spellSpeed;
+        this.direction = direction.normalized;
+        this.owner = owner;
 
         if (spell == null)
         {
@@ -34,11 +40,15 @@ public class SpellProjHandler : MonoBehaviour
         if (!initialized)
             return;
 
-        transform.position += transform.forward * projectileSpeed * Time.deltaTime;
+        //transform.position += transform.forward * projectileSpeed * Time.deltaTime;
+        //Vector3 direction = transform.position.x < 0 ? Vector3.right : Vector3.left;
+        transform.position += direction * projectileSpeed * Time.deltaTime;
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("TRIGGER: " + other.name + " Tag: " + other.tag);
+
         if (!other.CompareTag("Player"))
         {
             return;
@@ -52,6 +62,11 @@ public class SpellProjHandler : MonoBehaviour
                 Debug.LogError($"[SpellProjHandler]: No CharacterEntity script on Player tag object");
                 return;
             }
+
+            // Don't hit the player who fired this projectile
+            if (character == owner)
+                return;
+
             float damage = spell.spellDamage * damageMultiplier;
             Debug.Log($"[SpellProjHandler] '{spell.name}' hit {other.name} for {damage} (base {spell.spellDamage} x{damageMultiplier})");
             character.TakeDamage(damage);
