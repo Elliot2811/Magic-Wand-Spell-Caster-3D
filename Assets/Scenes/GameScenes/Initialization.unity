@@ -565,7 +565,7 @@ GameObject:
   - component: {fileID: 1881772484}
   - component: {fileID: 1881772483}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Game Constant
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -583,6 +583,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 789a2052bb759a042a0a85cc2eae0d62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shapeDrawDuration: 0.8
   mapPresets:
   - {fileID: 11400000, guid: f25c9fd3308e0ca4e825daac643f61ab, type: 2}
   characterPrefab: {fileID: -7457795878227265963, guid: 64fa31cfeca21e343b1bab7c0af0832e, type: 3}

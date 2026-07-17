@@ -20,7 +20,7 @@ public class GameConstants : MonoBehaviour
     public const float DrawingAreaPercentage = 0.90f;
 
     public const bool DisplayBestShape = true;
-    public const float LineWidth = 0.05f;
+    public const float LineWidth = 0.1f;
     public const float DisplayShapePercentage = 0.75f;
     public static readonly Vector2 DisplayShapeOffset = Vector2.zero;
 
@@ -75,6 +75,10 @@ public class GameConstants : MonoBehaviour
     #endregion
 
     public const float controllerCallibrationTime = 2f;
+
+    [Tooltip("Seconds for the matched spell shape to fully draw out.")]
+    [SerializeField] private float shapeDrawDuration = 0.8f;
+    public float ShapeDrawDuration => shapeDrawDuration;
 
     //-------------------------------------------------------------------------------------------------------------
     public static GameConstants Instance;
