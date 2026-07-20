@@ -26,7 +26,7 @@ public class WandListener : MonoBehaviour
     private Coroutine eraseShapeCoroutine;
 
     private void Start()
-    {
+    { 
         if (!instantiated)
         {
             Init();

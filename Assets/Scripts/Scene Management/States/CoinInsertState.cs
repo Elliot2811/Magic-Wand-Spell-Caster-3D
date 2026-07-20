@@ -61,7 +61,7 @@ public class CoinInsertState : GameState
 
 
             wandListenerLeft = MonoBehaviour.Instantiate(stateManager.wandListenerPrefab, wandLeft.transform);
-            wandListenerLeft.Init(wandLeft, shapes: GameConstants.Instance.allShapes);
+            wandListenerLeft.Init(wandLeft, shapes: stateManager.squareOnlyShapeCollection);
             wandListenerLeft.MatchedShape += CheckLeftDrawing;
             stateManager.wandListenerLeft = wandListenerLeft;
 
@@ -85,7 +85,7 @@ public class CoinInsertState : GameState
 
 
             wandListenerRight = MonoBehaviour.Instantiate(stateManager.wandListenerPrefab, wandRight.transform);
-            wandListenerRight.Init(wandRight, shapes: GameConstants.Instance.allShapes);
+            wandListenerRight.Init(wandRight, shapes: stateManager.squareOnlyShapeCollection);
             wandListenerRight.MatchedShape += CheckRightDrawing;
             stateManager.wandListenerRight = wandListenerRight;
             Debug.Log("Right wand has been created");
@@ -180,13 +180,19 @@ public class CoinInsertState : GameState
     private void CheckLeftDrawing(ShapeInfoSO shapeInfo)
     {
         if (shapeInfo != null)
+        {
             leftSideConfirmation = true;
+            TutorialPanelController.Instance?.HideAfterDelay();
+        }
     }
 
     private void CheckRightDrawing(ShapeInfoSO shapeInfo)
     {
         if (shapeInfo != null)
+        {
             rightSideConfirmation = true;
+            TutorialPanelController.Instance?.HideAfterDelay();
+        }
     }
 
     private void TransitionToFightState()
