@@ -38,7 +38,9 @@ public class GamePlayState : GameState
         base.EnterState(gameManager);
 
         mapData = GameConstants.Instance.mapPresets[stateManager.mapIndex];
-        characterPrefab = GameConstants.Instance.characterPrefab;
+        //characterPrefab = GameConstants.Instance.characterPrefab;
+        leftCharacter = GameConstants.Instance.player1Prefab;
+        rightCharacter = GameConstants.Instance.player2Prefab;
 
         AudioManager.Instance.PlayMusic(mapData.mapMusic.clip, mapData.mapMusic.volume, mapData.mapMusic.randomizePitch);
 
@@ -183,13 +185,13 @@ public class GamePlayState : GameState
 
         MonoBehaviour.Instantiate(mapData.mapPrefab);
 
-        leftCharacter = MonoBehaviour.Instantiate(characterPrefab);
+        leftCharacter = MonoBehaviour.Instantiate(GameConstants.Instance.player1Prefab);
         leftCharacter.transform.position = mapData.leftPos;
         leftCharacter.transform.rotation = Quaternion.Euler(mapData.leftRot);
         leftCharacter.transform.localScale = mapData.leftScale;
         leftCharacter.damageTakenMessage += LeftTakeDamage;
 
-        rightCharacter = MonoBehaviour.Instantiate(characterPrefab);
+        rightCharacter = MonoBehaviour.Instantiate(GameConstants.Instance.player2Prefab);
         rightCharacter.transform.position = mapData.rightPos;
         rightCharacter.transform.rotation = Quaternion.Euler(mapData.rightRot);
         rightCharacter.transform.localScale = mapData.rightScale;

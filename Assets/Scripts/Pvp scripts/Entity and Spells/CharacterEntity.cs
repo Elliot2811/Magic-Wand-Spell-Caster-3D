@@ -55,10 +55,27 @@ public class CharacterEntity : MonoBehaviour
     //    StartCoroutine(CastAndFireSpell(3));
     //}
     //#endregion
+    private CharacterSpriteController spriteController;
+
+    private void Awake()
+    {
+        spriteController = GetComponent<CharacterSpriteController>();
+
+        if (spriteController == null)
+            spriteController = GetComponentInChildren<CharacterSpriteController>();
+    }
 
     public float EntityDmgTaken { get; private set; }
     public virtual void FireSpell(ScriptableObjectSpell spell, float delay = 0f, float damageMultiplier = 1f)
     {
+        Debug.Log("FireSpell called!");
+
+        if (spell == null || spell.prefab == null)
+        {
+            Debug.LogError("Spell or prefab is null!");
+            return;
+        }
+
         StartCoroutine(WaitFireSpell(spell, delay, damageMultiplier));
     }
 
@@ -67,16 +84,30 @@ public class CharacterEntity : MonoBehaviour
     {
         if (spell == null || spell.prefab == null)
             return;
+        //GameObject proj = Instantiate(spell.prefab);
+        //proj.transform.localScale = GameConstants.ProjectileSpawn.scale;
+        //proj.transform.SetParent(transform);
+        //proj.transform.localPosition = GameConstants.ProjectileSpawn.relativePos;
+        //proj.transform.localRotation = GameConstants.ProjectileSpawn.relativeRotation;
+        spriteController?.PlayAttack();
+
+        Transform spellSpawn = transform.Find("SpellPosition");
+
         GameObject proj = Instantiate(spell.prefab);
+
+        proj.transform.position = spellSpawn.position;
+        proj.transform.rotation = spellSpawn.rotation;
         proj.transform.localScale = GameConstants.ProjectileSpawn.scale;
-        proj.transform.SetParent(transform);
-        proj.transform.localPosition = GameConstants.ProjectileSpawn.relativePos;
-        proj.transform.localRotation = GameConstants.ProjectileSpawn.relativeRotation;
+
         SpellProjHandler projHandler = proj.GetComponent<SpellProjHandler>();
         if (projHandler == null)
             projHandler = proj.AddComponent<SpellProjHandler>();
         projHandler.damageMultiplier = damageMultiplier;
-        projHandler.Init(spell);
+        // Left player shoots right, right player shoots left
+        Vector3 direction = transform.position.x < 0
+            ? Vector3.right
+            : Vector3.left;
+        projHandler.Init(spell, direction, this);
         AudioManager.Instance?.PlaySFX(spell.castSFX, spell.castVolume, spell.randomizePitch, spell.pitchVariance);
     }
     private IEnumerator WaitFireSpell(ScriptableObjectSpell spell, float delay, float damageMultiplier)

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameStateManager : MonoBehaviour
 {
@@ -127,6 +128,10 @@ public class GameStateManager : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        ClearAllDrawings();
+    }
 
     public void ResetGameAndWand()
     {
@@ -144,6 +149,18 @@ public class GameStateManager : MonoBehaviour
             wandRight = null;
             wandListenerRight = null;
         }
+    }
+    private void ClearAllDrawings()
+    {
+        if (wandLeft != null)
+            wandLeft.ClearDrawnLine();
+        if (wandRight != null)
+            wandRight.ClearDrawnLine();
+
+        if (wandListenerLeft != null)
+            wandListenerLeft.ClearShape();
+        if (wandListenerRight != null)
+            wandListenerRight.ClearShape();
     }
 
     //public void ResetWands()
