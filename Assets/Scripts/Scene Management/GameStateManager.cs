@@ -40,6 +40,7 @@ public class GameStateManager : MonoBehaviour
     public bool rightWon = false;
 
     public ShapesCollectionSO allShapesCollectionSO;
+    public ShapesCollectionSO squareOnlyShapeCollection;
 
     private Dictionary<StateEnum, Func<GameState>> dict = new Dictionary<StateEnum, Func<GameState>>();
 

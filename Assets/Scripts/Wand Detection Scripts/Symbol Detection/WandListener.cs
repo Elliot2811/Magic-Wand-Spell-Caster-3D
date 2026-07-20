@@ -21,7 +21,7 @@ public class WandListener : MonoBehaviour
     private Coroutine drawShapeCoroutine;
 
     private void Start()
-    {
+    { 
         if (!instantiated)
         {
             Init();

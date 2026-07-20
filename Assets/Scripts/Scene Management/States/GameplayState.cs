@@ -187,18 +187,26 @@ public class GamePlayState : GameState
         leftCharacter.transform.position = mapData.leftPos;
         leftCharacter.transform.rotation = Quaternion.Euler(mapData.leftRot);
         leftCharacter.transform.localScale = mapData.leftScale;
-
         leftCharacter.damageTakenMessage += LeftTakeDamage;
-
-        leftSpellBook = new GameObject("Left Spell Book").AddComponent<SpellBook>();
-        leftSpellBook.Init(stateManager.wandListenerLeft, leftCharacter, GameConstants.Instance.lookUpTable, GameConstants.Instance.allShapes, 0);
 
         rightCharacter = MonoBehaviour.Instantiate(characterPrefab);
         rightCharacter.transform.position = mapData.rightPos;
         rightCharacter.transform.rotation = Quaternion.Euler(mapData.rightRot);
         rightCharacter.transform.localScale = mapData.rightScale;
-
         rightCharacter.damageTakenMessage += RightTakeDamage;
+
+        bool leftActive = (stateManager.gameScenario & 0b01) != 0;
+        bool rightActive = (stateManager.gameScenario & 0b10) != 0;
+
+        if (leftActive) stateManager.wandListenerLeft.ChangeShapesCollection(GameConstants.Instance.allShapes);
+        if (rightActive) stateManager.wandListenerRight.ChangeShapesCollection(GameConstants.Instance.allShapes);
+
+        yield return WaitForHowToPlayConfirmation(leftActive, rightActive);
+
+        HowToPlayPanelController.Instance?.Hide();
+
+        leftSpellBook = new GameObject("Left Spell Book").AddComponent<SpellBook>();
+        leftSpellBook.Init(stateManager.wandListenerLeft, leftCharacter, GameConstants.Instance.lookUpTable, GameConstants.Instance.allShapes, 0);
 
         rightSpellBook = new GameObject("Right Spell Book").AddComponent<SpellBook>();
         rightSpellBook.Init(stateManager.wandListenerRight, rightCharacter, GameConstants.Instance.lookUpTable, GameConstants.Instance.allShapes, 1);
@@ -208,6 +216,22 @@ public class GamePlayState : GameState
         timerRunning = true;
         timer = 100;
         initialTimer = timer;
+    }
+    private IEnumerator WaitForHowToPlayConfirmation(bool leftActive, bool rightActive)
+    {
+        bool leftReady = !leftActive;   // inactive side auto-satisfied
+        bool rightReady = !rightActive;
+
+        Action<ShapeInfoSO> onLeftMatch = shape => { if (shape != null) leftReady = true; };
+        Action<ShapeInfoSO> onRightMatch = shape => { if (shape != null) rightReady = true; };
+
+        if (leftActive) stateManager.wandListenerLeft.MatchedShape += onLeftMatch;
+        if (rightActive) stateManager.wandListenerRight.MatchedShape += onRightMatch;
+
+        yield return new WaitUntil(() => leftReady && rightReady);
+
+        if (leftActive) stateManager.wandListenerLeft.MatchedShape -= onLeftMatch;
+        if (rightActive) stateManager.wandListenerRight.MatchedShape -= onRightMatch;
     }
 
     //<summary>
