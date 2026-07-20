@@ -390,4 +390,16 @@ public class Wand : MonoBehaviour
         lineRenderer.positionCount = 0;
     }
     #endregion
+
+    public void ClearDrawnLine()
+    {
+        if (lineRenderer != null)
+            lineRenderer.positionCount = 0;
+
+        if (deleteDrawing != null)
+        {
+            StopCoroutine(deleteDrawing);
+            deleteDrawing = null;
+        }
+    }
 }
