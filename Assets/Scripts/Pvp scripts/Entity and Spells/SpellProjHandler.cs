@@ -8,10 +8,12 @@ public class SpellProjHandler : MonoBehaviour
     public ScriptableObjectSpell spell;
 
     private float projectileSpeed;
+    private int spellPriority;
 
     public void Init(ScriptableObjectSpell spell)
     {
         this.spell = spell;
+        this.spellPriority = spell.spellPriority;
         projectileSpeed = spell.spellSpeed;
 
         if (spell == null)
@@ -54,16 +56,26 @@ public class SpellProjHandler : MonoBehaviour
 
             character.TakeDamage(spell.spellDamage);
             Destroy(gameObject);
+            character.shieldGameObj = null;
             return;
         }
         else if (other.CompareTag("spell") && (spell.destroyLowerTierSpells == true))
         {
             SpellProjHandler otherProjHandler = other.GetComponent<SpellProjHandler>();
-            if (otherProjHandler.spell.spellPriority < spell.spellPriority)
+            ShieldSpellProjHandler otherShieldSpellHandler = other.GetComponent<ShieldSpellProjHandler>();
+            if (otherShieldSpellHandler != null)
+            {
+                Debug.Log("Projectile destroyed shield");
+            }
+            else if (otherProjHandler == null)
+            {
+                Debug.LogWarning("Warning - Heavy spell unable to retrieve other projectile handler script component");
+            }
+            else if (otherProjHandler.spellPriority < this.spellPriority)
             {
                 Destroy(other.gameObject);
             }
-            else if (otherProjHandler.spell.spellPriority == spell.spellPriority)
+            else if (otherProjHandler.spellPriority == this.spellPriority)
             {
                 Destroy(other.gameObject);
                 Destroy(gameObject);

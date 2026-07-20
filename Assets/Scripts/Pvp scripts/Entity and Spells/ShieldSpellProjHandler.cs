@@ -26,7 +26,7 @@ public class ShieldSpellProjHandler : MonoBehaviour
             character.entityShielded = false;
             Destroy(other.gameObject);
             Destroy(gameObject);
-            Debug.Log("Collision between shield and projectile detected");
+            Debug.Log("Shield blocked projectile");
             return;
         }
         else

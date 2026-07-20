@@ -61,9 +61,13 @@ public class CharacterEntity : MonoBehaviour
     public float EntityDmgTaken { get; private set; }
     public bool entityShielded = false;
     private bool canCastSpell = true;
-    private GameObject shieldGameObj;
+    private bool chargingHeavySpell = false;
+    private GameObject spellProj = null;
+    public GameObject shieldGameObj = null;
+    private GameObject spellEffectPrefab = null;
+    private Coroutine spellCoroutine = null;
 
-    public virtual void FireSpell(ScriptableObjectSpell spell)
+    public virtual void FireSpell(ScriptableObjectSpell spell)  
     {
         if (spell == null || spell.prefab == null)
             return;
@@ -93,16 +97,16 @@ public class CharacterEntity : MonoBehaviour
         }
         else
         {
-            StartCoroutine(FireSpellAfterDelay(spell, spell.spellDelay));
+            spellCoroutine = StartCoroutine(FireProjAfterDelay(spell, spell.spellDelay));
         }
         AudioManager.Instance?.PlaySFX(spell.castSFX, spell.castVolume, spell.randomizePitch, spell.pitchVariance);
     }
 
-    private IEnumerator FireSpellAfterDelay(ScriptableObjectSpell spell, float delay)
+    private IEnumerator FireProjAfterDelay(ScriptableObjectSpell spell, float delay)
     {
-        GameObject spellEffectPrefab = null;
+        spellEffectPrefab = null;
 
-        if ((spell.spellChargeEffect != null) && (spell.destroyLowerTierSpells))
+        if ((spell.spellChargeEffect != null) && (spell.destroyLowerTierSpells == true))
         {
             spellEffectPrefab = Instantiate(spell.spellChargeEffect);
             spellEffectPrefab.transform.localScale = this.transform.localScale;
@@ -113,34 +117,63 @@ public class CharacterEntity : MonoBehaviour
         {
             entityShielded = !entityShielded;
             Destroy(shieldGameObj);
-
+        }
+        if (delay > 0)
+        {
+            chargingHeavySpell = true;
         }
         yield return new WaitForSeconds(delay);
-        canCastSpell = true;
         if (spellEffectPrefab != null)
         {
             Destroy(spellEffectPrefab);
             spellEffectPrefab = null;
         }
-        GameObject proj = Instantiate(spell.prefab);
-        proj.transform.SetParent(transform);
-        proj.transform.localPosition = GameConstants.ProjectileSpawn.spellRelativePos;
-        proj.transform.localRotation = GameConstants.ProjectileSpawn.relativeRotation;
-        proj.transform.localScale = GameConstants.ProjectileSpawn.spellScale;
 
-        SpellProjHandler projHandler = proj.GetComponent<SpellProjHandler>();
+        //Firing of spell (works for all spell tiers 1,2 and 3)
+        spellProj = Instantiate(spell.prefab);
+        spellProj.transform.SetParent(transform);
+        spellProj.transform.localPosition = GameConstants.ProjectileSpawn.spellRelativePos;
+        spellProj.transform.localRotation = GameConstants.ProjectileSpawn.relativeRotation;
+        spellProj.transform.localScale = GameConstants.ProjectileSpawn.spellScale;
+
+        SpellProjHandler projHandler = spellProj.GetComponent<SpellProjHandler>();
         if (projHandler == null)
-            projHandler = proj.AddComponent<SpellProjHandler>();
+            projHandler = spellProj.AddComponent<SpellProjHandler>();
         projHandler.Init(spell);
 
+        canCastSpell = true;
+        chargingHeavySpell = false;
+        spellCoroutine = null;
+        spellProj = null;
     }
 
     public void TakeDamage(float damage)
     {
         EntityDmgTaken += damage;
-
         damageTakenMessage?.Invoke(damage);
+        if (chargingHeavySpell)
+        {
+            if (spellEffectPrefab != null)
+            {
+                Destroy(spellEffectPrefab);
+                spellEffectPrefab = null;
+            }
+            if (spellCoroutine != null)
+            {
+                StopCoroutine(spellCoroutine);
+                spellCoroutine = null;
 
+                //Reset code run by coroutine (*Rare case* precaution against case where some lines of code are run)
+                canCastSpell = true;
+                chargingHeavySpell = false;
+                if (spellProj != null)
+                {
+                    Destroy(spellProj);
+                    spellProj = null;
+                }
+            }
+            Debug.Log("Charge intercepted!");
+        }
         //Debug.Log($"Sending message of damage taken: {damage}");
     }
 
