@@ -93,7 +93,7 @@ public class CharacterEntity : MonoBehaviour
         }
         Transform spellSpawn = transform.Find("SpellPosition");
         spriteController?.PlayAttack();
-        //Firing of spell (works for all spell tiers 1,2 and 3)
+        //Firing of projSpell (works for all projSpell tiers 1,2 and 3)
         spellProj = Instantiate(spell.prefab);
         spellProj.transform.SetParent(transform);
         spellProj.transform.localPosition = spellSpawn.position;
@@ -103,10 +103,7 @@ public class CharacterEntity : MonoBehaviour
         SpellProjHandler projHandler = spellProj.GetComponent<SpellProjHandler>();
         if (projHandler == null)
             projHandler = spellProj.AddComponent<SpellProjHandler>();
-        Vector3 direction = transform.position.x < 0
-            ? Vector3.right
-            : Vector3.left;
-        projHandler.Init(spell, direction, damageMultiplier);
+        projHandler.Init(spell, damageMultiplier);
         
         Debug.Log($"[CharacterEntity] Firing '{spell.name}' � base damage {spell.spellDamage}, multiplier x{damageMultiplier}, expected damage {spell.spellDamage * damageMultiplier}");
         

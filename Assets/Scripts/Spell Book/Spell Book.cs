@@ -55,7 +55,7 @@ public class SpellBook : MonoBehaviour
                 damageMultiplier = CircleBonusEvent.Instance.bonusDamageMultiplier;
                 Debug.Log($"[SpellBook] player {playerNumber}: circle bonus applied (x{damageMultiplier}).");
             }
-            // Function to cast spell
+            // Function to cast projSpell
             playerEntity.CastSpell(spell, damageMultiplier);
         }
     }
@@ -89,14 +89,14 @@ public class SpellBook : MonoBehaviour
 
         if (lookUpTable == null)
         {
-            Debug.LogWarning("[SpellBook]: No spell look up table to compare shapes and find projectile");
+            Debug.LogWarning("[SpellBook]: No projSpell look up table to compare shapes and find projectile");
             gameObject.SetActive(false);
             return;
         }
 
         if (allShapes == null)
         {
-            Debug.LogWarning("[SpellBook]: No spell collection to compare shapes and find best shape");
+            Debug.LogWarning("[SpellBook]: No projSpell collection to compare shapes and find best shape");
             gameObject.SetActive(false);
             return;
         }

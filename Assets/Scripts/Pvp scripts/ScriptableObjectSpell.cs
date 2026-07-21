@@ -12,7 +12,7 @@ public class ScriptableObjectSpell : ScriptableObject
     public float spellDelay = 0f;
     public bool shieldSpell = false;
     public bool destroyLowerTierSpells = false;
-    //public string spellElement = "Input spell Element";
+    //public string spellElement = "Input projSpell Element";
     //public ScriptableObjectStatusEffect spellChargeEffect = null;
     //public int spellEffectChance = 0;
     //public enum SpellType
@@ -26,7 +26,7 @@ public class ScriptableObjectSpell : ScriptableObject
     [Header("Audio")]
     public AudioClip castSFX;
     [Range(0f, 1f)] public float castVolume = 0.5f;
-    [Tooltip("Randomize pitch slightly so spell casted doesn't sound same all the time")]
+    [Tooltip("Randomize pitch slightly so projSpell casted doesn't sound same all the time")]
     public bool randomizePitch = true;
     [Range(0f, 0.2f)] public float pitchVariance = 0.05f;
 

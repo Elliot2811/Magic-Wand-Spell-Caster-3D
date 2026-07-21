@@ -48,7 +48,7 @@ public class WandListener : MonoBehaviour
 
         wand.OnDrawingComplete += FindBestShape;
 
-        this.lineRenderer = wand.lineRenderer; //use wand.lineRenderer so shape replaces the spell drawn by player
+        this.lineRenderer = wand.lineRenderer; //use wand.lineRenderer so shape replaces the projSpell drawn by player
         if (this.lineRenderer == null)
         {
             this.lineRenderer = GetComponent<LineRenderer>();

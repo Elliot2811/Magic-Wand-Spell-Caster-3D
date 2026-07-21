@@ -13,15 +13,15 @@ public class ShieldSpellProjHandler : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //return if collision isnt with a spell or the spell has the same parent as the shield
-        if ((!other.CompareTag("spell")) || (other.transform.parent == transform.parent))
+        //return if collision isnt with a projSpell or the projSpell has the same parent as the shield
+        if ((!other.CompareTag("projSpell")) || (other.transform.parent == transform.parent))
         {
             return;
         }
 
         SpellProjHandler otherProjHandler = other.GetComponent<SpellProjHandler>();
         CharacterEntity character = transform.parent.gameObject.GetComponent<CharacterEntity>();
-        if (otherProjHandler.spell.spellPriority <= spell.spellPriority)
+        if (otherProjHandler.projSpell.spellPriority <= spell.spellPriority)
         {
             character.entityShielded = false;
             Destroy(other.gameObject);
