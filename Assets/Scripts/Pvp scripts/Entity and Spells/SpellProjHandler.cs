@@ -1,12 +1,14 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SpellProjHandler : MonoBehaviour
 {
     private bool initialized = false;
 
-    private ScriptableObjectSpell spell;
+    public ScriptableObjectSpell spell;
 
     private float projectileSpeed;
+    private int spellPriority;
 
     public float damageMultiplier = 1f;
 
@@ -14,12 +16,14 @@ public class SpellProjHandler : MonoBehaviour
 
     private CharacterEntity owner;
 
-    public void Init(ScriptableObjectSpell spell, Vector3 direction, CharacterEntity owner)
+    public void Init(ScriptableObjectSpell spell, Vector3 direction, float damageMultiplier = 1f)
     {
         this.spell = spell;
+        this.spellPriority = spell.spellPriority;
         projectileSpeed = spell.spellSpeed;
         this.direction = direction.normalized;
-        this.owner = owner;
+        this.owner = this.transform.parent.gameObject;
+        this.damageMultiplier = damageMultiplier;
 
         if (spell == null)
         {
@@ -47,9 +51,7 @@ public class SpellProjHandler : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("TRIGGER: " + other.name + " Tag: " + other.tag);
-
-        if (!other.CompareTag("Player"))
+        if (this.transform.parent == other.transform)
         {
             return;
         }
@@ -63,23 +65,34 @@ public class SpellProjHandler : MonoBehaviour
                 return;
             }
 
-            // Don't hit the player who fired this projectile
-            if (character == owner)
-                return;
-
             float damage = spell.spellDamage * damageMultiplier;
             Debug.Log($"[SpellProjHandler] '{spell.name}' hit {other.name} for {damage} (base {spell.spellDamage} x{damageMultiplier})");
             character.TakeDamage(damage);
             Destroy(gameObject);
+            character.shieldGameObj = null;
             return;
         }
-
-        if (other.CompareTag("Border"))
+        else if (other.CompareTag("spell") && (spell.destroyLowerTierSpells == true))
         {
-            Debug.Log("Projectile missed!");
-            Destroy(gameObject);
-
-            return;
+            SpellProjHandler otherProjHandler = other.GetComponent<SpellProjHandler>();
+            ShieldSpellProjHandler otherShieldSpellHandler = other.GetComponent<ShieldSpellProjHandler>();
+            if (otherShieldSpellHandler != null)
+            {
+                Debug.Log("Projectile destroyed shield");
+            }
+            else if (otherProjHandler == null)
+            {
+                Debug.LogWarning("Warning - Heavy spell unable to retrieve other projectile handler script component");
+            }
+            else if (otherProjHandler.spellPriority < this.spellPriority)
+            {
+                Destroy(other.gameObject);
+            }
+            else if (otherProjHandler.spellPriority == this.spellPriority)
+            {
+                Destroy(other.gameObject);
+                Destroy(gameObject);
+            }
         }
     }
 }

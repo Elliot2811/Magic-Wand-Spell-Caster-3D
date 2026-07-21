@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5368958188845907392}
   m_Layer: 0
   m_Name: TempProjectile 2
-  m_TagString: Undefined
+  m_TagString: spell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -146,3 +146,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e25965233753354a8f50248140694d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spell: {fileID: 0}

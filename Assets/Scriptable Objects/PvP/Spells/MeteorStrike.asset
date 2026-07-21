@@ -10,17 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ee8696101f2b21d48967bdc06853011a, type: 3}
-  m_Name: RockThrow
+  m_Name: MeteorStrike
   m_EditorClassIdentifier: 
-  spellName: RockThrow
-  spellElement: Rock
-  spellType: 0
-  spellDamage: 0.1
-  spellSpeed: 5
-  spellEffect: {fileID: 11400000, guid: de999eec5cecda24d9c0dbc22348c3c3, type: 2}
-  spellEffectChance: 20
+  spellName: MeteorStrike
+  spellPriority: 3
+  spellDamage: 0.15
+  spellSpeed: 15
+  spellDelay: 3
+  shieldSpell: 0
+  destroyLowerTierSpells: 1
   castSFX: {fileID: 8300000, guid: d0b59d8b22bcced4bb28dba5059711ca, type: 3}
   castVolume: 0.5
   randomizePitch: 1
   pitchVariance: 0.05
-  prefab: {fileID: 0}
+  prefab: {fileID: 9187025582938824265, guid: 30a3d438232d9b44ca5a6c02f9b90bbe, type: 3}
+  spellChargeEffect: {fileID: 6280475943631958520, guid: 54c8b59d7b4c5684ba8f8aec5122823f, type: 3}
