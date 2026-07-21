@@ -15,13 +15,18 @@ public class WandListener : MonoBehaviour
     public Wand wand;
 
     [Header("Shape Draw Animation")]
-    [Tooltip("Controls the pacing of the draw — e.g. ease-out for a fast start that settles in.")]
+    [Tooltip("Controls the pacing of the draw ï¿½ e.g. ease-out for a fast start that settles in.")]
     [SerializeField] private AnimationCurve shapeDrawCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
     private Coroutine drawShapeCoroutine;
 
+    [Tooltip("Seconds the matched shape stays visible before fading/clearing.")]
+    [SerializeField] private float shapeVisibleDuration = 3f;
+
+    private Coroutine eraseShapeCoroutine;
+
     private void Start()
-    {
+    { 
         if (!instantiated)
         {
             Init();
@@ -48,14 +53,20 @@ public class WandListener : MonoBehaviour
 
         wand.OnDrawingComplete += FindBestShape;
 
-        this.lineRenderer = wand.lineRenderer; //use wand.lineRenderer so shape replaces the projSpell drawn by player
+        this.lineRenderer = lineRenderer; // own renderer, separate from wand.lineRenderer
         if (this.lineRenderer == null)
         {
             this.lineRenderer = GetComponent<LineRenderer>();
             if (this.lineRenderer == null)
-            {
-                Debug.LogError("No linerender found.");
-            }
+                Debug.LogError("No LineRenderer found for WandListener.");
+        }
+
+        if (this.lineRenderer != null)
+        {
+            this.lineRenderer.startColor = wand.deviceIndex == 0 ? GameConstants.LeftDrawingColor : GameConstants.RightDrawingColor;
+            this.lineRenderer.endColor = this.lineRenderer.startColor;
+            this.lineRenderer.startWidth = GameConstants.LineWidth;
+            this.lineRenderer.endWidth = GameConstants.LineWidth;
         }
 
         //this.lineRenderer.startColor = Color.white;
@@ -85,6 +96,7 @@ public class WandListener : MonoBehaviour
 
         if (lineRenderer != null)
         {
+            wand.ClearDrawnLine();
             DisplayBestShape(shapeInfo, points); //pass the raw points, not processedPoints
         }
     }
@@ -93,6 +105,8 @@ public class WandListener : MonoBehaviour
     {
         if (drawShapeCoroutine != null)
             StopCoroutine(drawShapeCoroutine);
+        if (eraseShapeCoroutine != null)
+            StopCoroutine(eraseShapeCoroutine);
 
         if (shapeInfo == null)
         {
@@ -137,9 +151,9 @@ public class WandListener : MonoBehaviour
             float frac = exactIndex - fullyDrawnIndex;
             bool hasTip = fullyDrawnIndex < points.Length - 1;
 
-            // Grow positionCount as more of the shape reveals, rather than
-            // pre-filling hidden points — avoids a stray line snapping back
-            // to the start point.
+            //Grow positionCount as more of the shape reveals, rather than
+            //pre-filling hidden points ï¿½ avoids a stray line snapping back
+            //to the start point.
             lineRenderer.positionCount = fullyDrawnIndex + 1 + (hasTip ? 1 : 0);
 
             for (int i = 0; i <= fullyDrawnIndex; i++)
@@ -151,12 +165,41 @@ public class WandListener : MonoBehaviour
             yield return null;
         }
 
-        // Snap to the exact final shape in case of frame-timing drift.
+        //Snap to the exact final shape in case of frame-timing drift.
         lineRenderer.positionCount = points.Length;
         for (int i = 0; i < points.Length; i++)
             lineRenderer.SetPosition(i, points[i]);
 
         drawShapeCoroutine = null;
+
+        //Shape fully revealed ï¿½ start its own clear timer, since this
+        //renderer is separate from Wand's and nothing else clears it
+        if (eraseShapeCoroutine != null)
+            StopCoroutine(eraseShapeCoroutine);
+        eraseShapeCoroutine = StartCoroutine(EraseShapeAfterDelay());
+    }
+    private IEnumerator EraseShapeAfterDelay()
+    {
+        yield return new WaitForSeconds(shapeVisibleDuration);
+
+        lineRenderer.positionCount = 0;
+        eraseShapeCoroutine = null;
+    }
+    public void ClearShape()
+    {
+        if (drawShapeCoroutine != null)
+        {
+            StopCoroutine(drawShapeCoroutine);
+            drawShapeCoroutine = null;
+        }
+        if (eraseShapeCoroutine != null)
+        {
+            StopCoroutine(eraseShapeCoroutine);
+            eraseShapeCoroutine = null;
+        }
+
+        if (lineRenderer != null)
+            lineRenderer.positionCount = 0;
     }
 
     public void ChangeShapesCollection(ShapesCollectionSO shapes)
