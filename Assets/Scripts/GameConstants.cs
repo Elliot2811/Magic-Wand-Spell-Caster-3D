@@ -26,6 +26,7 @@ public class GameConstants : MonoBehaviour
 
     public static readonly Color LeftDrawingColor = Color.blue;
     public static readonly Color RightDrawingColor = Color.red;
+    [Range(0.1f, 1f)] public const float PlayerDrawDarkenFactor = 0.7f; //player's raw stroke is darker than the system-drawn shape
 
     public const int CatmullResolution = 10;
     public const float sharpAngleThreshold = 45f;
