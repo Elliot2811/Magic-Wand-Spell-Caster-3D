@@ -4,19 +4,15 @@ using UnityEngine;
 public class SpellProjHandler : MonoBehaviour
 {
     private bool initialized = false;
-
-    public ScriptableObjectSpell projSpell;
-
-    private float projectileSpeed;
+    private float projectileSpeed = 0;
     private int spellPriority;
-
     public float damageMultiplier = 1f;
-
     private Vector3 normalizedDirection;
+    public ScriptableObjectSpell spell;
 
     public void Init(ScriptableObjectSpell spell, float damageMultiplier = 1f)
     {
-        projSpell = spell;
+        this.spell = spell;
         projectileSpeed = spell.spellSpeed;
         this.spellPriority = spell.spellPriority;
         this.damageMultiplier = damageMultiplier;
@@ -67,14 +63,14 @@ public class SpellProjHandler : MonoBehaviour
                 return;
             }
 
-            float damage = projSpell.spellDamage * damageMultiplier;
-            Debug.Log($"[SpellProjHandler] '{projSpell.name}' hit {other.name} for {damage} (base {projSpell.spellDamage} x{damageMultiplier})");
+            float damage = spell.spellDamage * damageMultiplier;
+            Debug.Log($"[SpellProjHandler] '{spell.name}' hit {other.name} for {damage} (base {spell.spellDamage} x{damageMultiplier})");
             character.TakeDamage(damage);
             Destroy(gameObject);
             character.shieldGameObj = null;
             return;
         }
-        else if (other.CompareTag("projSpell") && (projSpell.destroyLowerTierSpells == true))
+        else if (other.CompareTag("spell") && (spell.destroyLowerTierSpells == true))
         {
             SpellProjHandler otherProjHandler = other.GetComponent<SpellProjHandler>();
             ShieldSpellProjHandler otherShieldSpellHandler = other.GetComponent<ShieldSpellProjHandler>();
@@ -84,7 +80,7 @@ public class SpellProjHandler : MonoBehaviour
             }
             else if (otherProjHandler == null)
             {
-                Debug.LogWarning("Warning - Heavy projSpell unable to retrieve other projectile handler script component");
+                Debug.LogWarning("Warning - Heavy spell unable to retrieve other projectile handler script component");
             }
             else if (otherProjHandler.spellPriority < this.spellPriority)
             {

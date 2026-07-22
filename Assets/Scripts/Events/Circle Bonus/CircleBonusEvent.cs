@@ -36,7 +36,7 @@ public class CircleBonusEvent : MonoBehaviour, IMidGameEvent
     public float hitFlashDuration = 0.15f;
 
     [Header("Visual")]
-    [Range(0f, 1f)] public float circleIdleAlpha = 0.35f; //let the projSpell drawing show through the circle
+    [Range(0f, 1f)] public float circleIdleAlpha = 0.35f; //let the spell drawing show through the circle
 
     [Header("Testing")]
     public bool autoStartForTesting = false;

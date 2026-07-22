@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8592166208276904834}
   - component: {fileID: 5368958188845907392}
   m_Layer: 0
-  m_Name: TempProjectile
+  m_Name: TempProjectile 1
   m_TagString: spell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

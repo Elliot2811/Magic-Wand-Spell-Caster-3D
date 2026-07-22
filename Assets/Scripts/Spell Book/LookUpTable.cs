@@ -24,7 +24,7 @@ public class SpellProjectileLookUpTable : ScriptableObject, IEnumerable<SpellPro
     {
         if (shape == null || spell == null)
         {
-            Debug.LogWarning("Cannot add null shape or projSpell to SpellProjectileLookUpTable.");
+            Debug.LogWarning("Cannot add null shape or spell to SpellProjectileLookUpTable.");
             return;
         }
 
@@ -69,7 +69,7 @@ public class SpellProjectileLookUpTable : ScriptableObject, IEnumerable<SpellPro
         {
             if (pair.shape == null || pair.spell == null)
             {
-                Debug.LogWarning("Null shape or projSpell in SpellProjectilePair. Skipping.");
+                Debug.LogWarning("Null shape or spell in SpellProjectilePair. Skipping.");
                 continue;
             }
 

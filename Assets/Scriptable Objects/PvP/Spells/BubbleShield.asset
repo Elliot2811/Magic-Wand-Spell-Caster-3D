@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ee8696101f2b21d48967bdc06853011a, type: 3}
-  m_Name: WaterDart
+  m_Name: BubbleShield
   m_EditorClassIdentifier: 
-  spellName: WaterDart
-  spellElement: Water
-  spellPriority: 1
-  shieldSpell: 0
-  destroyLowerTierSpells: 0
-  spellDamage: 0.05
-  spellSpeed: 9
+  spellName: BubbleShield
+  spellPriority: 2
+  spellDamage: 0
+  spellSpeed: 0
   spellDelay: 0
-  castSFX: {fileID: 8300000, guid: d0b59d8b22bcced4bb28dba5059711ca, type: 3}
+  shieldSpell: 1
+  destroyLowerTierSpells: 0
+  castSFX: {fileID: 0}
   castVolume: 0.5
   randomizePitch: 1
   pitchVariance: 0.05
-  prefab: {fileID: 2375220837706918120, guid: 71624ffce48903645a3847d811ad1316, type: 3}
+  prefab: {fileID: 3486244923626809280, guid: f60316685abb0734d950ff8eac7afd9d, type: 3}
+  spellChargeEffect: {fileID: 0}

@@ -42,13 +42,25 @@ public class CharacterEntity : MonoBehaviour
             {
                 return;
             }
+            Vector3 direction = transform.position.x < 0
+                ? Vector3.right
+                : Vector3.left;
             spriteController?.PlayAttack();
-            Transform spellSpawn = transform.Find("SpellPosition");
             shieldGameObj = Instantiate(spell.prefab);
             shieldGameObj.transform.SetParent(transform);
-            shieldGameObj.transform.localPosition = spellSpawn.position;
-            shieldGameObj.transform.localRotation = spellSpawn.rotation;
-            shieldGameObj.transform.localScale = GameConstants.ProjectileSpawn.shieldScale;
+            if (transform.position.x < 0)
+            {
+                shieldGameObj.transform.localPosition = GameConstants.ProjectileSpawn.shieldRelativePos;
+            }
+            else if (transform.position.x > 0)
+            {
+                shieldGameObj.transform.localPosition = new Vector3(-GameConstants.ProjectileSpawn.shieldRelativePos.x, GameConstants.ProjectileSpawn.shieldRelativePos.y, GameConstants.ProjectileSpawn.shieldRelativePos.z);
+            }
+            else
+            {
+                Debug.LogError("Warning - position of player = 0 so direcion cannot be determined");
+            }
+            shieldGameObj.transform.localScale = GameConstants.ProjectileSpawn.shieldScale * spell.spellScale;
 
             ShieldSpellProjHandler shieldSpellProjHandler = shieldGameObj.GetComponent<ShieldSpellProjHandler>();
             if (shieldSpellProjHandler == null)
@@ -72,8 +84,8 @@ public class CharacterEntity : MonoBehaviour
         if ((spell.spellChargeEffect != null) && (spell.destroyLowerTierSpells == true))
         {
             spellEffectPrefab = Instantiate(spell.spellChargeEffect);
-            spellEffectPrefab.transform.localScale = this.transform.localScale;
-            spellEffectPrefab.transform.localPosition = this.transform.position;
+            spellEffectPrefab.transform.localScale = GameConstants.ProjectileSpawn.spellChargeEffectScale;
+            spellEffectPrefab.transform.localPosition = new Vector3(this.transform.position.x, 2f, this.transform.position.z);
         }
         canCastSpell = false;
         if (entityShielded)
@@ -91,14 +103,24 @@ public class CharacterEntity : MonoBehaviour
             Destroy(spellEffectPrefab);
             spellEffectPrefab = null;
         }
-        Transform spellSpawn = transform.Find("SpellPosition");
         spriteController?.PlayAttack();
-        //Firing of projSpell (works for all projSpell tiers 1,2 and 3)
+        //Firing of spell (works for all spell tiers 1,2 and 3)
         spellProj = Instantiate(spell.prefab);
         spellProj.transform.SetParent(transform);
-        spellProj.transform.localPosition = spellSpawn.position;
-        spellProj.transform.localRotation = spellSpawn.rotation;
-        spellProj.transform.localScale = GameConstants.ProjectileSpawn.spellScale;
+        //If player left, cast spells from x = pos, right then -x = pos
+        if (transform.position.x < 0)
+        {
+            spellProj.transform.localPosition = GameConstants.ProjectileSpawn.spellRelativePos;
+        }
+        else if (transform.position.x > 0)
+        {
+            spellProj.transform.localPosition = new Vector3(-GameConstants.ProjectileSpawn.spellRelativePos.x, GameConstants.ProjectileSpawn.spellRelativePos.y, GameConstants.ProjectileSpawn.spellRelativePos.z);
+        }
+        else
+        {
+            Debug.LogError("Warning - position of player = 0 so direcion cannot be determined");
+        }
+        spellProj.transform.localScale = GameConstants.ProjectileSpawn.spellScale * spell.spellScale;
 
         SpellProjHandler projHandler = spellProj.GetComponent<SpellProjHandler>();
         if (projHandler == null)
