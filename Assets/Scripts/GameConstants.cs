@@ -48,8 +48,8 @@ public class GameConstants : MonoBehaviour
 
     public const float coinInsertionCountdownTime = 10f;
 
-    public const float globalSfxVolume = 0.01f;
-    public const float globalMusicVolume = 0.01f;
+    public const float globalSfxVolume = 0.05f;
+    public const float globalMusicVolume = 0.05f;
 
 
     public static class ProjectileSpawn
