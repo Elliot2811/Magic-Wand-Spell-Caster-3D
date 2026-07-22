@@ -46,20 +46,23 @@ public class GameConstants : MonoBehaviour
 
     #region Game Play settings
 
-    public const float coinInsertionCountdownTime = 10f;
+    public const float coinInsertionCountdownTime = 100f;
 
-    public const float globalSfxVolume = 0.05f;
-    public const float globalMusicVolume = 0.05f;
+    public const float globalSfxVolume = 0.08f;
+    public const float globalMusicVolume = 0.08f;
 
 
     public static class ProjectileSpawn
-    {    
-        public static readonly Vector3 relativePos = new Vector3(0, 0.25f, 0.85f);
+    {
+        public static readonly Vector3 shieldRelativePos = new Vector3(3.2f, 0, 0f);
+        public static readonly Vector3 shieldScale = new Vector3(0.4f, 9f, 2f);
+        public static readonly Vector3 spellRelativePos = new Vector3(3.4f, 0.25f, 1f);
+        public static readonly Vector3 spellScale = new Vector3(0.8f, 0.8f, 0.8f);
+        public static readonly Vector3 spellChargeEffectScale = new Vector3(6.5f, 6.5f ,1f);
         public static readonly Quaternion relativeRotation = Quaternion.identity;
-        public static readonly Vector3 scale = Vector3.one;
     }
     public static readonly Rect DrawingRectLeft = new Rect(0.05f, 0.05f, 0.425f, 0.9f);
-    public static readonly Rect DrawingRectRight = new Rect(0.55f, 0.05f, 0.425f, 0.9f);
+    public static readonly Rect DrawingRectRight = new Rect(0.525f, 0.05f, 0.425f, 0.9f);
     public static readonly Rect DisplayRectLeft = new Rect(0.025f, 0.05f, 0.1f, 0.1f);
     public static readonly Rect DisplayRectRight = new Rect(0.875f, 0.05f, 0.1f, 0.1f);
 

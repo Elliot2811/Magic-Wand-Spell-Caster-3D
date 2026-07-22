@@ -15,7 +15,7 @@ public class WandListener : MonoBehaviour
     public Wand wand;
 
     [Header("Shape Draw Animation")]
-    [Tooltip("Controls the pacing of the draw — e.g. ease-out for a fast start that settles in.")]
+    [Tooltip("Controls the pacing of the draw ï¿½ e.g. ease-out for a fast start that settles in.")]
     [SerializeField] private AnimationCurve shapeDrawCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
     private Coroutine drawShapeCoroutine;
@@ -152,7 +152,7 @@ public class WandListener : MonoBehaviour
             bool hasTip = fullyDrawnIndex < points.Length - 1;
 
             //Grow positionCount as more of the shape reveals, rather than
-            //pre-filling hidden points — avoids a stray line snapping back
+            //pre-filling hidden points ï¿½ avoids a stray line snapping back
             //to the start point.
             lineRenderer.positionCount = fullyDrawnIndex + 1 + (hasTip ? 1 : 0);
 
@@ -172,7 +172,7 @@ public class WandListener : MonoBehaviour
 
         drawShapeCoroutine = null;
 
-        //Shape fully revealed — start its own clear timer, since this
+        //Shape fully revealed ï¿½ start its own clear timer, since this
         //renderer is separate from Wand's and nothing else clears it
         if (eraseShapeCoroutine != null)
             StopCoroutine(eraseShapeCoroutine);

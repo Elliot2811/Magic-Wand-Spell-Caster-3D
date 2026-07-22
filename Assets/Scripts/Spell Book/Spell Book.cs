@@ -55,8 +55,8 @@ public class SpellBook : MonoBehaviour
                 damageMultiplier = CircleBonusEvent.Instance.bonusDamageMultiplier;
                 Debug.Log($"[SpellBook] player {playerNumber}: circle bonus applied (x{damageMultiplier}).");
             }
-
-            playerEntity.FireSpell(spell, 0f, damageMultiplier);
+            // Function to cast spell
+            playerEntity.CastSpell(spell, damageMultiplier);
         }
     }
 

@@ -19,9 +19,9 @@ MonoBehaviour:
     volume: 0.5
     randomizePitch: 0
     pitchVariance: 0
-  leftPos: {x: -16, y: 11, z: 9.1}
+  leftPos: {x: -18, y: 10, z: 9}
   leftRot: {x: 0, y: 0, z: 0}
-  leftScale: {x: 2.412423, y: 2.412423, z: 2.412423}
-  rightPos: {x: 16, y: 9.91, z: 9.1}
+  leftScale: {x: 2, y: 2, z: 1}
+  rightPos: {x: 18, y: 10, z: 9}
   rightRot: {x: 0, y: 0, z: 0}
-  rightScale: {x: 2.029634, y: 2.029634, z: 2.029634}
+  rightScale: {x: 2, y: 2, z: 1}

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8592166208276904834}
   - component: {fileID: 5368958188845907392}
   m_Layer: 0
-  m_Name: TempProjectile 2
+  m_Name: TempProjectile 1
   m_TagString: spell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 55857f7eb279fe743b7d05ddc1927340, type: 2}
+  - {fileID: 2100000, guid: 9ff64af041a938d4d8398ae3a42babe2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

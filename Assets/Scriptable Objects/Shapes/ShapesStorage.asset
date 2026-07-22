@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: ShapesStorage
   m_EditorClassIdentifier: 
   shapes:
-  - {fileID: 11400000, guid: 5aeb6187e5666004abf06d629f704e63, type: 2}
+  - {fileID: 11400000, guid: e3b5a41d64d7ed542bf7ed308313bf77, type: 2}
   - {fileID: 11400000, guid: 8afbf38d9c1d493418f5343165dad675, type: 2}
-  - {fileID: 11400000, guid: fc4c27c7d368ac2458bacd70dd726664, type: 2}
+  - {fileID: 11400000, guid: 5aeb6187e5666004abf06d629f704e63, type: 2}
+  - {fileID: 11400000, guid: 73c1057aa12d13e46b33c86870179325, type: 2}
