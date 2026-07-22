@@ -93,16 +93,12 @@ public class Wand : MonoBehaviour
         }
         else
         {
-            if (deviceIndex == 0)
-            {
-                lineRenderer.startColor = GameConstants.LeftDrawingColor;
-                lineRenderer.endColor = GameConstants.LeftDrawingColor;
-            }
-            else
-            {
-                lineRenderer.startColor = GameConstants.RightDrawingColor;
-                lineRenderer.endColor = GameConstants.RightDrawingColor;
-            }
+            Color baseColor = deviceIndex == 0 ? GameConstants.LeftDrawingColor : GameConstants.RightDrawingColor;
+            Color darker = baseColor * GameConstants.PlayerDrawDarkenFactor;
+            darker.a = baseColor.a; // multiplying scales alpha too — restore it
+
+            lineRenderer.startColor = darker;
+            lineRenderer.endColor = darker;
 
             lineRenderer.startWidth = GameConstants.LineWidth;
             lineRenderer.endWidth = GameConstants.LineWidth;
