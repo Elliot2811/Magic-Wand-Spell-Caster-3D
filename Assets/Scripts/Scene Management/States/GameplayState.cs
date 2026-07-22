@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -221,7 +222,7 @@ public class GamePlayState : GameState
     }
     private IEnumerator WaitForHowToPlayConfirmation(bool leftActive, bool rightActive)
     {
-        bool leftReady = !leftActive;   // inactive side auto-satisfied
+        bool leftReady = !leftActive;   //inactive side auto-satisfied
         bool rightReady = !rightActive;
 
         Action<ShapeInfoSO> onLeftMatch = shape => { if (shape != null) leftReady = true; };
@@ -235,6 +236,30 @@ public class GamePlayState : GameState
         if (leftActive) stateManager.wandListenerLeft.MatchedShape -= onLeftMatch;
         if (rightActive) stateManager.wandListenerRight.MatchedShape -= onRightMatch;
     }
+
+    //If tutorial requires players to draw all four spells once
+    //private IEnumerator WaitForHowToPlayConfirmation(bool leftActive, bool rightActive)
+    //{
+    //    var allShapes = GameConstants.Instance.allShapes.GetAllShapes();
+    //    int requiredCount = allShapes.Length;
+
+    //    var leftDrawn = new HashSet<ShapeInfoSO>();
+    //    var rightDrawn = new HashSet<ShapeInfoSO>();
+
+    //    Action<ShapeInfoSO> onLeftMatch = shape => { if (shape != null) leftDrawn.Add(shape); };
+    //    Action<ShapeInfoSO> onRightMatch = shape => { if (shape != null) rightDrawn.Add(shape); };
+
+    //    if (leftActive) stateManager.wandListenerLeft.MatchedShape += onLeftMatch;
+    //    if (rightActive) stateManager.wandListenerRight.MatchedShape += onRightMatch;
+
+    //    bool LeftDone() => !leftActive || leftDrawn.Count >= requiredCount;
+    //    bool RightDone() => !rightActive || rightDrawn.Count >= requiredCount;
+
+    //    yield return new WaitUntil(() => LeftDone() && RightDone());
+
+    //    if (leftActive) stateManager.wandListenerLeft.MatchedShape -= onLeftMatch;
+    //    if (rightActive) stateManager.wandListenerRight.MatchedShape -= onRightMatch;
+    //}
 
     //<summary>
     //Finds every IMidGameEvent component present in the Gameplay scene (active or not)
