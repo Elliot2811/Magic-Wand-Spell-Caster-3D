@@ -14,21 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coinInsertMusic:
     clip: {fileID: 8300000, guid: 1836a097fecb8ac4782c6d3c9932ada5, type: 3}
-    volume: 0.512
+    volume: 0.8
     randomizePitch: 0
     pitchVariance: 0
   mapSelectionMusic:
     clip: {fileID: 8300000, guid: 1836a097fecb8ac4782c6d3c9932ada5, type: 3}
-    volume: 0.507
+    volume: 0.8
     randomizePitch: 0
     pitchVariance: 0
   gameplayMusic:
     clip: {fileID: 0}
-    volume: 0.5
+    volume: 0.8
     randomizePitch: 0
     pitchVariance: 0
   victoryMusic:
     clip: {fileID: 8300000, guid: 4772620070556e745b6f8595df7ae6e4, type: 3}
-    volume: 0.5
+    volume: 0.8
     randomizePitch: 0
     pitchVariance: 0
