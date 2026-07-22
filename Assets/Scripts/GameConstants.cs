@@ -62,7 +62,7 @@ public class GameConstants : MonoBehaviour
         public static readonly Quaternion relativeRotation = Quaternion.identity;
     }
     public static readonly Rect DrawingRectLeft = new Rect(0.05f, 0.05f, 0.425f, 0.9f);
-    public static readonly Rect DrawingRectRight = new Rect(0.5f, 0.05f, 0.425f, 0.9f);
+    public static readonly Rect DrawingRectRight = new Rect(0.525f, 0.05f, 0.425f, 0.9f);
     public static readonly Rect DisplayRectLeft = new Rect(0.025f, 0.05f, 0.1f, 0.1f);
     public static readonly Rect DisplayRectRight = new Rect(0.875f, 0.05f, 0.1f, 0.1f);
 

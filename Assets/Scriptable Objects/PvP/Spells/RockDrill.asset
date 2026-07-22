@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee8696101f2b21d48967bdc06853011a, type: 3}
   m_Name: RockDrill
   m_EditorClassIdentifier: 
-  spellName: Fireball
+  spellName: RockDrill
   spellPriority: 2
   spellDamage: 0.07
-  spellSpeed: 9
+  spellSpeed: 15
   spellDelay: 0
+  spellScale: 2
   shieldSpell: 0
   destroyLowerTierSpells: 0
   castSFX: {fileID: 8300000, guid: d0b59d8b22bcced4bb28dba5059711ca, type: 3}

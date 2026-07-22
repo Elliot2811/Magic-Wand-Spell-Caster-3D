@@ -15,8 +15,9 @@ MonoBehaviour:
   spellName: Icicle
   spellPriority: 1
   spellDamage: 0.05
-  spellSpeed: 9
+  spellSpeed: 25
   spellDelay: 0
+  spellScale: 1
   shieldSpell: 0
   destroyLowerTierSpells: 0
   castSFX: {fileID: 8300000, guid: d0b59d8b22bcced4bb28dba5059711ca, type: 3}

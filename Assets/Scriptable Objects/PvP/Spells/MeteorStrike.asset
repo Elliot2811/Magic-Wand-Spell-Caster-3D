@@ -15,8 +15,9 @@ MonoBehaviour:
   spellName: MeteorStrike
   spellPriority: 3
   spellDamage: 0.15
-  spellSpeed: 15
+  spellSpeed: 22
   spellDelay: 3
+  spellScale: 3
   shieldSpell: 0
   destroyLowerTierSpells: 1
   castSFX: {fileID: 8300000, guid: d0b59d8b22bcced4bb28dba5059711ca, type: 3}
