@@ -40,6 +40,11 @@ public class GameStateManager : MonoBehaviour
     [HideInInspector]
     public bool rightWon = false;
 
+    [HideInInspector]
+    //only actually render/cast a matched shape while this is true
+    //Prevents a shape that matches right as the round ends/transitions from casting into a scene/character that's already gone
+    public bool renderSpellBookSpell = false; 
+
     public ShapesCollectionSO allShapesCollectionSO;
     public ShapesCollectionSO squareOnlyShapeCollection;
 
