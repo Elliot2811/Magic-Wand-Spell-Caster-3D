@@ -44,7 +44,11 @@ public class SpellBook : MonoBehaviour
     {
         if (!initialized || !newData)
             return;
+
         newData = false;
+
+        if (!GameStateManager.Instance.renderSpellBookSpell)
+            return;
 
         ScriptableObjectSpell spell = FindProjectile(shape);
         if (spell != null)

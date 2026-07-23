@@ -76,6 +76,8 @@ public class GamePlayState : GameState
     {
         base.ExitState();
 
+        stateManager.renderSpellBookSpell = false; //gameplay's over — stop rendering/casting spells
+
         if (leftCharacter != null)
             leftCharacter.damageTakenMessage -= LeftTakeDamage;
 
@@ -219,6 +221,8 @@ public class GamePlayState : GameState
         timerRunning = true;
         timer = 100;
         initialTimer = timer;
+
+        stateManager.renderSpellBookSpell = true; //gameplay is live — safe for SpellBook to render/cast now
     }
     //private IEnumerator WaitForHowToPlayConfirmation(bool leftActive, bool rightActive)
     //{
