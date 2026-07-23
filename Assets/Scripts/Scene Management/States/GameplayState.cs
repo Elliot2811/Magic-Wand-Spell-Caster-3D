@@ -220,46 +220,60 @@ public class GamePlayState : GameState
         timer = 100;
         initialTimer = timer;
     }
-    private IEnumerator WaitForHowToPlayConfirmation(bool leftActive, bool rightActive)
-    {
-        bool leftReady = !leftActive;   //inactive side auto-satisfied
-        bool rightReady = !rightActive;
-
-        Action<ShapeInfoSO> onLeftMatch = shape => { if (shape != null) leftReady = true; };
-        Action<ShapeInfoSO> onRightMatch = shape => { if (shape != null) rightReady = true; };
-
-        if (leftActive) stateManager.wandListenerLeft.MatchedShape += onLeftMatch;
-        if (rightActive) stateManager.wandListenerRight.MatchedShape += onRightMatch;
-
-        yield return new WaitUntil(() => leftReady && rightReady);
-
-        if (leftActive) stateManager.wandListenerLeft.MatchedShape -= onLeftMatch;
-        if (rightActive) stateManager.wandListenerRight.MatchedShape -= onRightMatch;
-    }
-
-    //If tutorial requires players to draw all four spells once
     //private IEnumerator WaitForHowToPlayConfirmation(bool leftActive, bool rightActive)
     //{
-    //    var allShapes = GameConstants.Instance.allShapes.GetAllShapes();
-    //    int requiredCount = allShapes.Length;
+    //    bool leftReady = !leftActive;   //inactive side auto-satisfied
+    //    bool rightReady = !rightActive;
 
-    //    var leftDrawn = new HashSet<ShapeInfoSO>();
-    //    var rightDrawn = new HashSet<ShapeInfoSO>();
-
-    //    Action<ShapeInfoSO> onLeftMatch = shape => { if (shape != null) leftDrawn.Add(shape); };
-    //    Action<ShapeInfoSO> onRightMatch = shape => { if (shape != null) rightDrawn.Add(shape); };
+    //    Action<ShapeInfoSO> onLeftMatch = shape => { if (shape != null) leftReady = true; };
+    //    Action<ShapeInfoSO> onRightMatch = shape => { if (shape != null) rightReady = true; };
 
     //    if (leftActive) stateManager.wandListenerLeft.MatchedShape += onLeftMatch;
     //    if (rightActive) stateManager.wandListenerRight.MatchedShape += onRightMatch;
 
-    //    bool LeftDone() => !leftActive || leftDrawn.Count >= requiredCount;
-    //    bool RightDone() => !rightActive || rightDrawn.Count >= requiredCount;
-
-    //    yield return new WaitUntil(() => LeftDone() && RightDone());
+    //    yield return new WaitUntil(() => leftReady && rightReady);
 
     //    if (leftActive) stateManager.wandListenerLeft.MatchedShape -= onLeftMatch;
     //    if (rightActive) stateManager.wandListenerRight.MatchedShape -= onRightMatch;
     //}
+
+    //If tutorial requires players to draw all four spells once
+    private IEnumerator WaitForHowToPlayConfirmation(bool leftActive, bool rightActive)
+    {
+        var allShapes = GameConstants.Instance.allShapes.GetAllShapes();
+        int requiredCount = allShapes.Length;
+
+        var leftDrawn = new HashSet<ShapeInfoSO>();
+        var rightDrawn = new HashSet<ShapeInfoSO>();
+
+        Action<ShapeInfoSO> onLeftMatch = shape =>
+        {
+            if (shape != null)
+            {
+                leftDrawn.Add(shape);
+                HowToPlayPanelController.Instance?.MarkLeftDrawn(shape);
+            }
+        };
+        Action<ShapeInfoSO> onRightMatch = shape =>
+        {
+            if (shape != null)
+            {
+                rightDrawn.Add(shape);
+                HowToPlayPanelController.Instance?.MarkRightDrawn(shape);
+            }
+        };
+
+        if (leftActive) stateManager.wandListenerLeft.MatchedShape += onLeftMatch;
+        if (rightActive) stateManager.wandListenerRight.MatchedShape += onRightMatch;
+
+        bool LeftDone() => !leftActive || leftDrawn.Count >= requiredCount;
+        bool RightDone() => !rightActive || rightDrawn.Count >= requiredCount;
+
+        yield return new WaitUntil(() => LeftDone() && RightDone());
+
+        if (leftActive) stateManager.wandListenerLeft.MatchedShape -= onLeftMatch;
+        if (rightActive) stateManager.wandListenerRight.MatchedShape -= onRightMatch;
+    }
 
     //<summary>
     //Finds every IMidGameEvent component present in the Gameplay scene (active or not)
