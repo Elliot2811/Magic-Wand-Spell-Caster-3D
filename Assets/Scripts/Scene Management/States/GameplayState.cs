@@ -28,6 +28,10 @@ public class GamePlayState : GameState
     [Tooltip("How much the winner of the mid-game event shifts displayPercentage in their favor.")]
     public float midGameEventEffectMagnitude = 0.2f;
 
+    [Header("Match End")]
+    [Tooltip("Non-finishing damage dealt to the losing player once the match resolves.")]
+    [SerializeField] private float matchEndDamage = 8f;
+
     private IMidGameEvent[] midGameEvents;
     private IMidGameEvent activeMidGameEvent;
     private bool midGameEventTriggered = false;
@@ -109,13 +113,30 @@ public class GamePlayState : GameState
         activeMidGameEvent = midGameEvents[index];
         activeEventPausedTimer = activeMidGameEvent.PausesMainTimer;
 
-        if (activeEventPausedTimer)
-            timerRunning = false;
+        timerRunning = false;
 
         Debug.Log($"GamePlayState: triggering mid-game event #{index} ({((MonoBehaviour)activeMidGameEvent).name}). " +
                   $"PausesMainTimer={activeEventPausedTimer}. Timer at {timer:F1}.");
 
         activeMidGameEvent.OnEventCompleted += OnMidGameEventCompleted;
+
+        if (MidGameEventBannerController.Instance != null)
+        {
+            stateManager.StartCoroutine(MidGameEventBannerController.Instance.ShowBanner(
+                "BONUS EVENT!", StartActiveEventAfterBanner));
+        }
+        else
+        {
+            Debug.LogWarning("GamePlayState: no MidGameEventBannerController in scene — starting event with no banner.");
+            StartActiveEventAfterBanner();
+        }
+    }
+
+    //<summary>Called once the pre-event banner finishes — applies the event's
+    //actual timer-pause preference and kicks it off for real.</summary>
+    private void StartActiveEventAfterBanner()
+    {
+        timerRunning = !activeEventPausedTimer;
         activeMidGameEvent.StartEvent();
     }
 
@@ -153,16 +174,21 @@ public class GamePlayState : GameState
         {
             stateManager.leftWon = false;
             stateManager.rightWon = true;
+
+            leftCharacter?.TakeDamage(matchEndDamage); //left lost the match
         }
         else if (sliderPercent > 0.5f)
         {
             stateManager.leftWon = true;
             stateManager.rightWon = false;
+
+            rightCharacter?.TakeDamage(matchEndDamage); //right lost the match
         }
         else
         {
             stateManager.leftWon = false;
             stateManager.rightWon = false;
+            // draw — nobody takes match-end damage
         }
 
         stateManager.TransitionToState(GameStateManager.StateEnum.Winner);
