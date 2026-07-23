@@ -21,16 +21,18 @@ public class ShapeChecklistUI : MonoBehaviour
             icon.image.color = undrawnColor;
     }
 
-    //Call this from the WandListener.MatchedShape callback for this side
     public void MarkDrawn(ShapeInfoSO shape)
     {
+        Debug.Log($"[ShapeChecklistUI] MarkDrawn entered on {gameObject.name} with shape={shape?.ShapeName ?? "null"}, icons.Length={icons.Length}");
         if (shape == null) return;
 
         foreach (var icon in icons)
         {
+            Debug.Log($"  comparing against icon slot: {icon.shape?.ShapeName ?? "null"}, match={icon.shape == shape}");
             if (icon.shape == shape)
             {
                 icon.image.color = drawnColor;
+                Debug.Log($"  -> color set to drawnColor");
                 break;
             }
         }
