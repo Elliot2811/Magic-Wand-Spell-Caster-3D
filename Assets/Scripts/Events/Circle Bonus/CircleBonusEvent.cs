@@ -32,7 +32,7 @@ public class CircleBonusEvent : MonoBehaviour, IMidGameEvent
     public float circleMoveSpeed = 10f;      //pixels/sec while wandering
     public float retargetIntervalMin = 3f;
     public float retargetIntervalMax = 6f;
-    public Color hitFlashColor = Color.yellow;
+    public Color hitFlashColor = Color.white;
     public float hitFlashDuration = 0.15f;
 
     [Header("Visual")]
@@ -53,6 +53,7 @@ public class CircleBonusEvent : MonoBehaviour, IMidGameEvent
     //index 0 = player1 (left), index 1 = player2 (right)
     private bool[] touchedCircleThisDraw = new bool[2];
     private bool[] pendingBonus = new bool[2];
+    private bool[] circleGlowing = new bool[2];
 
     private Wand[] playerWands = new Wand[2];
 
@@ -286,13 +287,11 @@ public class CircleBonusEvent : MonoBehaviour, IMidGameEvent
 
         if (!IsActive || wand == null || !wand.drawActive)
         {
-            //if (IsActive) Debug.Log($"[CircleBonusEvent] player {playerNumber}: drawActive={wand != null && wand.drawActive}");
+            //drawing stopped entirely — revert to idle and free the circle to relocate
+            EndGlow(playerIndex, playerNumber);
             return;
         }
 
-        //read the wand's own live cursor pos, which is correct whether that
-        //wand is using a controller (gyro) or a mouse — instead of always calling
-        //ConvertToViewportPos.GyroToViewPort directly, which broke mouse testing.
         Vector2 cursorScreenPos = wand.CurrentScreenPos;
         Vector2 circleScreenPos = circle.position;
         bool isInside = Vector2.Distance(cursorScreenPos, circleScreenPos) <= GetCircleRadius(circle);
@@ -302,33 +301,64 @@ public class CircleBonusEvent : MonoBehaviour, IMidGameEvent
         //staying armed forever once touched
         pendingBonus[playerIndex] = isInside;
 
-        if (isInside && !touchedCircleThisDraw[playerIndex])
+        if (isInside)
         {
-            touchedCircleThisDraw[playerIndex] = true;
-            OnCircleHit?.Invoke(playerNumber);
-            //Debug.Log($"CircleBonusEvent: player {playerNumber} hit their circle — bonus armed for their next cast.");
-            StartCoroutine(FlashCircle(
-                playerNumber == 1 ? leftCircleImage : rightCircleImage,
-                playerNumber == 1 ? leftBaseColor : rightBaseColor,
-                playerNumber == 1 ? leftCircle : rightCircle));
-            PickNewTarget(playerNumber == 1); //relocate so it's not a free repeat hit
+            if (!circleGlowing[playerIndex])
+            {
+                //cursor just entered — light up and hold, instead of a timed flash
+                circleGlowing[playerIndex] = true;
+                SetCircleColor(playerNumber, hitFlashColor);
+
+                if (!touchedCircleThisDraw[playerIndex])
+                {
+                    touchedCircleThisDraw[playerIndex] = true;
+                    OnCircleHit?.Invoke(playerNumber);
+                }
+            }
+        }
+        else if (circleGlowing[playerIndex])
+        {
+            //cursor just left the circle while still drawing — revert and relocate now
+            EndGlow(playerIndex, playerNumber);
         }
     }
-    private IEnumerator FlashCircle(Image img, Color baseColor, RectTransform circleTransform)
+
+    //<summary>
+    //Reverts a circle to its idle color and relocates it — called once the player
+    //leaves the circle or stops drawing entirely, rather than on a fixed timer.
+    //</summary>
+    private void EndGlow(int playerIndex, int playerNumber)
     {
-        if (img == null) yield break;
+        if (!circleGlowing[playerIndex])
+            return;
 
-        Vector3 baseScale = circleTransform != null ? circleTransform.localScale : Vector3.one;
-        Vector3 punchScale = baseScale * 1.4f;
-
-        img.color = hitFlashColor;
-        if (circleTransform != null) circleTransform.localScale = punchScale;
-
-        yield return new WaitForSeconds(hitFlashDuration);
-
-        img.color = baseColor;
-        if (circleTransform != null) circleTransform.localScale = baseScale;
+        circleGlowing[playerIndex] = false;
+        SetCircleColor(playerNumber, playerNumber == 1 ? leftBaseColor : rightBaseColor);
+        PickNewTarget(playerNumber == 1); //relocate now that the interaction's actually over
     }
+
+    private void SetCircleColor(int playerNumber, Color color)
+    {
+        Image img = playerNumber == 1 ? leftCircleImage : rightCircleImage;
+        if (img != null)
+            img.color = color;
+    }
+
+    //private IEnumerator FlashCircle(Image img, Color baseColor, RectTransform circleTransform)
+    //{
+    //    if (img == null) yield break;
+
+    //    Vector3 baseScale = circleTransform != null ? circleTransform.localScale : Vector3.one;
+    //    Vector3 punchScale = baseScale * 1.4f;
+
+    //    img.color = hitFlashColor;
+    //    if (circleTransform != null) circleTransform.localScale = punchScale;
+
+    //    yield return new WaitForSeconds(hitFlashDuration);
+
+    //    img.color = baseColor;
+    //    if (circleTransform != null) circleTransform.localScale = baseScale;
+    //}
 
     #endregion
 
