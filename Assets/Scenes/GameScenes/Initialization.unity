@@ -659,6 +659,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 789a2052bb759a042a0a85cc2eae0d62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shapeLineRendererPrefab: {fileID: 5698408928449513716, guid: d12f4e38549d31441bd455b814315fdd, type: 3}
   shapeDrawDuration: 0.8
   mapPresets:
   - {fileID: 11400000, guid: f25c9fd3308e0ca4e825daac643f61ab, type: 2}

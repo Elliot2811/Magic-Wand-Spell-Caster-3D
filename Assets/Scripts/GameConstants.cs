@@ -28,6 +28,9 @@ public class GameConstants : MonoBehaviour
     public static readonly Color RightDrawingColor = Color.red;
     [Range(0.1f, 1f)] public const float PlayerDrawDarkenFactor = 0.7f; //player's raw stroke is darker than the system-drawn shape
 
+    [Header("Shape Draw Animation")]
+    public LineRenderer shapeLineRendererPrefab;
+
     public const int CatmullResolution = 10;
     public const float sharpAngleThreshold = 45f;
     #endregion
