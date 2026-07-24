@@ -234,7 +234,8 @@ public class GamePlayState : GameState
 
         yield return WaitForHowToPlayConfirmation(leftActive, rightActive);
 
-        HowToPlayPanelController.Instance?.Hide();
+        if (HowToPlayPanelController.Instance != null)
+            yield return HowToPlayPanelController.Instance.ShowRecapThenHide();
 
         leftSpellBook = new GameObject("Left Spell Book").AddComponent<SpellBook>();
         leftSpellBook.Init(stateManager.wandListenerLeft, leftCharacter, GameConstants.Instance.lookUpTable, GameConstants.Instance.allShapes, 0);
