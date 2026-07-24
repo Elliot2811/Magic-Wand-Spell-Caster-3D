@@ -11,6 +11,11 @@ public interface IMidGameEvent
 
     bool PausesMainTimer { get; }   //will pause the game timer or not based of event: tug-of-war = true, circle event = false
 
+    //<summary>Short title shown on the pre-event banner (e.g. "TUG OF WAR!").</summary>
+    string EventTitle { get; }
+    //<summary>Short instructional text shown on the pre-event instruction panel.</summary>
+    string EventInstructions { get; }
+
     //<summary>Begin the event (activate its panel, start listening for input, etc).</summary>
     void StartEvent();
 

@@ -120,20 +120,30 @@ public class GamePlayState : GameState
 
         activeMidGameEvent.OnEventCompleted += OnMidGameEventCompleted;
 
+        stateManager.StartCoroutine(RunPreEventSequence());
+    }
+
+    //Bonus Event Banner -> instructions -> actual event start, run in sequence. Each step is
+    //skipped gracefully (with a warning) if its controller isn't in the scene.
+    //</summary>
+    private IEnumerator RunPreEventSequence()
+    {
         if (MidGameEventBannerController.Instance != null)
-        {
-            stateManager.StartCoroutine(MidGameEventBannerController.Instance.ShowBanner(
-                "BONUS EVENT!", StartActiveEventAfterBanner));
-        }
+            yield return MidGameEventBannerController.Instance.ShowBanner(activeMidGameEvent.EventTitle, () => { });
         else
-        {
-            Debug.LogWarning("GamePlayState: no MidGameEventBannerController in scene — starting event with no banner.");
-            StartActiveEventAfterBanner();
-        }
+            Debug.LogWarning("GamePlayState: no MidGameEventBannerController in scene — skipping banner.");
+
+        if (MidGameEventInstructionController.Instance != null)
+            yield return MidGameEventInstructionController.Instance.ShowInstructions(activeMidGameEvent.EventTitle, activeMidGameEvent.EventInstructions);
+        else
+            Debug.LogWarning("GamePlayState: no MidGameEventInstructionController in scene — skipping instructions.");
+
+        StartActiveEventAfterBanner();
     }
 
     //<summary>Called once the pre-event banner finishes — applies the event's
     //actual timer-pause preference and kicks it off for real.</summary>
+    //<summary>
     private void StartActiveEventAfterBanner()
     {
         timerRunning = !activeEventPausedTimer;

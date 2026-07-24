@@ -31,6 +31,9 @@ public class TugOfWarController : MonoBehaviour, IMidGameEvent
     [Tooltip("Optional: auto-end the event after this many seconds if nobody wins. 0 = no limit for testing.")]
     public float maxDuration = 0f;
 
+    public string EventTitle => "TUG OF WAR!";
+    public string EventInstructions => "SHAKE YOUR CONTROLLER!";
+
     public bool IsActive { get; private set; }
     public bool PausesMainTimer => true;
 
