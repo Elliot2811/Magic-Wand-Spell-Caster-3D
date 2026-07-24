@@ -7,7 +7,7 @@ public class TutorialPanelController : MonoBehaviour
     public static TutorialPanelController Instance { get; private set; }
 
     [SerializeField] private GameObject panel;
-    [SerializeField] private float hideDelay = 2f;
+    [SerializeField] private float hideDelay = 3f;
 
     private bool hiding = false;
 
