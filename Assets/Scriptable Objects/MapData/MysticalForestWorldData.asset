@@ -15,7 +15,7 @@ MonoBehaviour:
   mapName: MysticalForestWorld
   mapPrefab: {fileID: 4022804489116557225, guid: 9cc7e785e29806b4793136e1cebc7b5a, type: 3}
   mapMusic:
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: 0b0c14b1ea3b89a41a9039d98c789b21, type: 3}
     volume: 0.5
     randomizePitch: 0
     pitchVariance: 0
