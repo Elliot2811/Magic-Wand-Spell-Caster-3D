@@ -255,6 +255,12 @@ public class GamePlayState : GameState
 
         DiscoverMidGameEvents();
 
+        //3-2-1 Countdown before game starts
+        if (CountdownController.Instance != null)
+            yield return CountdownController.Instance.ShowCountdown();
+        else
+            Debug.LogWarning("GamePlayState: no CountdownController in scene — skipping countdown.");
+
         timerRunning = true;
         timer = 100;
         initialTimer = timer;
