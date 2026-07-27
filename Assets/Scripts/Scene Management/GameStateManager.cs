@@ -68,6 +68,8 @@ public class GameStateManager : MonoBehaviour
             dict.Add(StateEnum.PlayersSelect, () => new CoinInsertState());
             dict.Add(StateEnum.Fight, () => new GamePlayState());
             dict.Add(StateEnum.Winner, () => new VictoryState());
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
