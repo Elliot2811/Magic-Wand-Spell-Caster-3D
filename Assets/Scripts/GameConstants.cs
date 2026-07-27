@@ -24,8 +24,8 @@ public class GameConstants : MonoBehaviour
     public const float DisplayShapePercentage = 0.75f;
     public static readonly Vector2 DisplayShapeOffset = Vector2.zero;
 
-    public static readonly Color LeftDrawingColor = Color.blue;
-    public static readonly Color RightDrawingColor = Color.red;
+    public static readonly Color LeftDrawingColor = Color.red;
+    public static readonly Color RightDrawingColor = Color.blue;
     [Range(0.1f, 1f)] public const float PlayerDrawDarkenFactor = 0.7f; //player's raw stroke is darker than the system-drawn shape
 
     [Header("Shape Draw Animation")]
