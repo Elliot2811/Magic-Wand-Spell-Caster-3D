@@ -19,14 +19,21 @@ public class TugOfWarController : MonoBehaviour, IMidGameEvent
     public int player2Index = 1;  //right player's JoyCon device index
 
     [Header("Tuning")]
-    [Tooltip("How strongly normalized cursor-movement difference moves the slider per second.")]
-    public float pushPower = 0.5f; // tuned for normalized (0-1) movement, not pixels
+    [Tooltip("How strongly normalized cursor-movement difference moves the slider per second. LOWERED from 0.5 so a match takes a real back-and-forth instead of one shake burst deciding it.")]
+    public float pushPower = 0.3f;
 
-    [Tooltip("How fast the accumulated shake energy decays per second when the player stops shaking.")]
-    public float shakeDecayRate = 4f;
+    [Tooltip("How fast the accumulated shake energy decays per second when the player stops shaking. Slightly raised so lulls in shaking actually cost you momentum.")]
+    public float shakeDecayRate = 5f;
 
     [Tooltip("Cursor movement below this (as a fraction of screen size, ~0-1) is treated as noise/drift and ignored.")]
     public float shakeNoiseFloor = 0.005f;
+
+    [Tooltip("Hard cap on a single player's accumulated shake intensity. Prevents one big shake spike from swinging (or ending) the match instantly - forces sustained shaking to keep an advantage.")]
+    public float maxShakeIntensity = 0.5f;
+
+    [Tooltip("How much harder the bar is to push the closer it gets to a win (0 = no extra resistance at the edges, 1 = fully stuck). Creates the 'last stretch is the hardest' feel instead of a flat slide to victory.")]
+    [Range(0f, 0.95f)]
+    public float edgeResistanceFactor = 0.55f;
 
     [Tooltip("Optional: auto-end the event after this many seconds if nobody wins. 0 = no limit for testing.")]
     public float maxDuration = 0f;
@@ -156,7 +163,12 @@ public class TugOfWarController : MonoBehaviour, IMidGameEvent
 
         float diff = p1Shake - p2Shake;
 
-        tugSlider.value = Mathf.Clamp01(tugSlider.value + diff * pushPower * Time.deltaTime);
+        // Edge resistance: the further the bar is from center, the harder it is to keep pushing
+        // in that same direction. distanceFromCenter is 0 at the middle, 1 at either edge.
+        float distanceFromCenter = Mathf.Abs(tugSlider.value - 0.5f) * 2f;
+        float resistance = Mathf.Lerp(1f, 1f - edgeResistanceFactor, distanceFromCenter);
+
+        tugSlider.value = Mathf.Clamp01(tugSlider.value + diff * pushPower * resistance * Time.deltaTime);
 
         if (tugSlider.value >= 1f)
         {
@@ -200,7 +212,11 @@ public class TugOfWarController : MonoBehaviour, IMidGameEvent
             movement = 0f;
 
         float decay = Mathf.Exp(-shakeDecayRate * Time.deltaTime);
-        shakeIntensity[deviceIndex] = shakeIntensity[deviceIndex] * decay + movement;
+        float newIntensity = shakeIntensity[deviceIndex] * decay + movement;
+
+        // Cap so a single big shake spike can't swing/end the match by itself -
+        // sustained shaking is required to hold a strong advantage.
+        shakeIntensity[deviceIndex] = Mathf.Min(newIntensity, maxShakeIntensity);
 
         return shakeIntensity[deviceIndex];
     }
