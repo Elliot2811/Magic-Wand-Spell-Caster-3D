@@ -2,16 +2,10 @@ using UnityEngine;
 
 public class ShieldSpellProjHandler : MonoBehaviour
 {
-    private Vector3 normalizedDirection;
     private ScriptableObjectSpell spell;
     public void Init(ScriptableObjectSpell spell)
     {
         this.spell = spell;
-        // Determine direction of shield
-        Vector3 direction = transform.position.x < 0
-            ? Vector3.right
-            : Vector3.left;
-        normalizedDirection = direction.normalized;
     }
 
     private void OnTriggerEnter(Collider other)
