@@ -44,8 +44,8 @@ public class GameConstants : MonoBehaviour
 
     public const bool CursorVisible = false;
 
-    public const float HorizontalFovDeg = 45f;
-    public const float VerticalFovDeg = 30f;
+    public const float HorizontalFovDeg = 50f;
+    public const float VerticalFovDeg = 28.125f; // 50 * (9/16), for 16:9
     #endregion
 
     #region Game Play settings
