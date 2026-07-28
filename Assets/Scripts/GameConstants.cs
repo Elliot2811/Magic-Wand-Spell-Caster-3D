@@ -24,8 +24,8 @@ public class GameConstants : MonoBehaviour
     public const float DisplayShapePercentage = 0.75f;
     public static readonly Vector2 DisplayShapeOffset = Vector2.zero;
 
-    public static readonly Color LeftDrawingColor = Color.blue;
-    public static readonly Color RightDrawingColor = Color.red;
+    public static readonly Color LeftDrawingColor = Color.red;
+    public static readonly Color RightDrawingColor = Color.blue;
     [Range(0.1f, 1f)] public const float PlayerDrawDarkenFactor = 0.7f; //player's raw stroke is darker than the system-drawn shape
 
     [Header("Shape Draw Animation")]
@@ -44,8 +44,8 @@ public class GameConstants : MonoBehaviour
 
     public const bool CursorVisible = false;
 
-    public const float HorizontalFovDeg = 45f;
-    public const float VerticalFovDeg = 30f;
+    public const float HorizontalFovDeg = 50f;
+    public const float VerticalFovDeg = 28.125f; // 50 * (9/16), for 16:9
     #endregion
 
     #region Game Play settings
