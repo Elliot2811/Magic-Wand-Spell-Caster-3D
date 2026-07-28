@@ -24,5 +24,5 @@ MonoBehaviour:
   castVolume: 0.5
   randomizePitch: 1
   pitchVariance: 0.05
-  prefab: {fileID: 2375220837706918120, guid: a8bc54a7696e3cf4eb42d8e0631e4576, type: 3}
+  prefab: {fileID: 1481964501936662229, guid: de826498b0c771d47aff16bfac51331d, type: 3}
   spellChargeEffect: {fileID: 0}

@@ -23,8 +23,15 @@ public class CharacterEntity : MonoBehaviour
         if (spriteController == null)
             spriteController = GetComponentInChildren<CharacterSpriteController>();
     }
-    public virtual void CastSpell(ScriptableObjectSpell spell, float damageMultiplier = 1f)  
+    public virtual void CastSpell(ScriptableObjectSpell spell, float damageMultiplier = 1f, int playerNumber = -1)  
     {
+        if (playerNumber == -1)
+        {
+            Debug.LogError("Player Number/id not set");
+            return;
+        }
+        Debug.Log(playerNumber);
+
         if (spell == null || spell.prefab == null)
         {
             Debug.LogError("Spell or prefab is null!");
@@ -46,17 +53,20 @@ public class CharacterEntity : MonoBehaviour
             spriteController?.PlayAttack();
             shieldGameObj = Instantiate(spell.prefab);
             shieldGameObj.transform.SetParent(transform);
-            if (transform.position.x < 0)
+            if (playerNumber == 0)
             {
                 shieldGameObj.transform.localPosition = GameConstants.ProjectileSpawn.shieldRelativePos;
+                shieldGameObj.transform.localRotation = Quaternion.Euler(0f, -60f, 0f);
+
             }
-            else if (transform.position.x > 0)
+            else if (playerNumber == 1)
             {
                 shieldGameObj.transform.localPosition = new Vector3(-GameConstants.ProjectileSpawn.shieldRelativePos.x, GameConstants.ProjectileSpawn.shieldRelativePos.y, GameConstants.ProjectileSpawn.shieldRelativePos.z);
+                shieldGameObj.transform.localRotation = Quaternion.Euler(0f, 60f, 0f);
             }
             else
             {
-                Debug.LogError("Warning - position of player = 0 so direcion cannot be determined");
+                Debug.LogError("Warning - Id of player /= 0 or /= 1 so direcion cannot be determined");
             }
             shieldGameObj.transform.localScale = GameConstants.ProjectileSpawn.shieldScale * spell.spellScale;
 
@@ -70,13 +80,20 @@ public class CharacterEntity : MonoBehaviour
         }
         else
         {
-            spellCoroutine = StartCoroutine(FireProjAfterDelay(spell, spell.spellDelay, damageMultiplier));
+            spellCoroutine = StartCoroutine(FireProjAfterDelay(spell, spell.spellDelay, damageMultiplier, playerNumber));
         }
         AudioManager.Instance?.PlaySFX(spell.castSFX, spell.castVolume, spell.randomizePitch, spell.pitchVariance);
     }
 
-    private IEnumerator FireProjAfterDelay(ScriptableObjectSpell spell, float delay, float damageMultiplier = 1f)
+    private IEnumerator FireProjAfterDelay(ScriptableObjectSpell spell, float delay, float damageMultiplier = 1f, int playerNumber = -1)
     {
+        if (playerNumber == -1)
+        {
+            Debug.LogError("Player Number/id not set");
+            yield break;
+        }
+        Debug.Log(playerNumber);
+
         spellEffectPrefab = null;
 
         if ((spell.spellChargeEffect != null) && (spell.destroyLowerTierSpells == true))
@@ -106,17 +123,18 @@ public class CharacterEntity : MonoBehaviour
         spellProj = Instantiate(spell.prefab);
         spellProj.transform.SetParent(transform);
         //If player left, cast spells from x = pos, right then -x = pos
-        if (transform.position.x < 0)
+        if (playerNumber == 0)
         {
             spellProj.transform.localPosition = GameConstants.ProjectileSpawn.spellRelativePos;
         }
-        else if (transform.position.x > 0)
+        else if (playerNumber == 1)
         {
             spellProj.transform.localPosition = new Vector3(-GameConstants.ProjectileSpawn.spellRelativePos.x, GameConstants.ProjectileSpawn.spellRelativePos.y, GameConstants.ProjectileSpawn.spellRelativePos.z);
+            spellProj.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
         }
         else
         {
-            Debug.LogError("Warning - position of player = 0 so direcion cannot be determined");
+            Debug.LogError("Warning - Id of player /= 0 or /= 1 so direcion cannot be determined");
         }
         spellProj.transform.localScale = GameConstants.ProjectileSpawn.spellScale * spell.spellScale;
 
