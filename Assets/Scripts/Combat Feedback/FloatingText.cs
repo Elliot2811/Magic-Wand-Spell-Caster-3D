@@ -21,6 +21,8 @@ public class FloatingText : MonoBehaviour
         textMesh.text = text;
         baseColor = color;
         textMesh.color = color;
+        textMesh.enableWordWrapping = false;
+        textMesh.overflowMode = TextOverflowModes.Overflow;
     }
 
     private void Update()

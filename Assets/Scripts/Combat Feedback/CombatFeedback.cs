@@ -60,7 +60,7 @@ public class CombatFeedback : MonoBehaviour
 
         AudioManager.Instance?.PlaySFX(sfx, vol, 1f);
         Shake(intensity, duration);
-        //SpawnFloatingText(worldPosition, shieldBreakText, shieldBreakTextColor);
+        SpawnFloatingText(worldPosition, shieldBreakText, shieldBreakTextColor);
     }
 
     public void PlayPlayerHit(Vector3 worldPosition, float damage, ScriptableObjectSpell spell = null)
@@ -72,7 +72,7 @@ public class CombatFeedback : MonoBehaviour
 
         AudioManager.Instance?.PlaySFX(sfx, vol, 1f);
         Shake(intensity, duration);
-        //SpawnFloatingText(worldPosition, Mathf.RoundToInt(damage).ToString(), playerHitTextColor);
+        SpawnFloatingText(worldPosition, Mathf.RoundToInt(damage).ToString(), playerHitTextColor);
     }
 
     private void Shake(float intensity, float duration)
@@ -103,20 +103,20 @@ public class CombatFeedback : MonoBehaviour
         shakeCoroutine = null;
     }
 
-    //private void SpawnFloatingText(Vector3 worldPosition, string text, Color color)
-    //{
-    //    if (floatingTextPrefab == null) return;
+    private void SpawnFloatingText(Vector3 worldPosition, string text, Color color)
+    {
+        if (floatingTextPrefab == null) return;
 
-    //    Quaternion rot = targetCamera != null
-    //        ? Quaternion.LookRotation(-targetCamera.transform.forward, targetCamera.transform.up)
-    //        : Quaternion.identity;
+        Quaternion rot = targetCamera != null
+            ? Quaternion.LookRotation(-targetCamera.transform.forward, targetCamera.transform.up)
+            : Quaternion.identity;
 
-    //    FloatingText instance = Instantiate(floatingTextPrefab, worldPosition + floatingTextOffset, rot);
+        FloatingText instance = Instantiate(floatingTextPrefab, worldPosition + floatingTextOffset, rot);
 
-    //    Vector3 scale = instance.transform.localScale;
-    //    scale.x *= -1f;
-    //    instance.transform.localScale = scale;
+        Vector3 scale = instance.transform.localScale;
+        scale.x *= -1f;
+        instance.transform.localScale = scale;
 
-    //    instance.Init(text, color);
-    //}
+        instance.Init(text, color);
+    }
 }
