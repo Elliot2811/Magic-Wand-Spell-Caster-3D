@@ -5,7 +5,6 @@ TagManager:
   serializedVersion: 2
   tags:
   - spell
-  - Border
   layers:
   - Default
   - TransparentFX
@@ -42,7 +41,4 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: Mid Game Event
-    uniqueID: 2818587709
     locked: 0

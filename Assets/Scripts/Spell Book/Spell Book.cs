@@ -98,7 +98,7 @@ public class SpellBook : MonoBehaviour
                 Debug.Log($"[SpellBook] player {playerNumber}: circle bonus applied (x{damageMultiplier}).");
             }
             // Function to cast spell
-            playerEntity.CastSpell(spell, damageMultiplier, playerNumber);
+            playerEntity.CastSpell(spell, damageMultiplier);
         }
     }
 

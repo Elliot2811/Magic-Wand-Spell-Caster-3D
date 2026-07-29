@@ -11,7 +11,6 @@ public class Wand : MonoBehaviour
     private bool initialized = false;
 
     public LineRenderer lineRenderer;
-    [SerializeField] private Renderer wandModelRenderer;
     private JoyConTracker joyConTracker;
 
     [Space(10)]
@@ -27,8 +26,6 @@ public class Wand : MonoBehaviour
     private List<Vector2> points = new List<Vector2>();
     private List<Vector2> catmullPoints = new List<Vector2>();
     private List<Vector2[]> renderedPoints = new List<Vector2[]>();
-    private List<Vector2> renderedCatmullPoints = new List<Vector2>();
-    public IReadOnlyList<Vector2> RenderedCatmullPoints => renderedCatmullPoints;
 
     private float zClipPlane = 0;
 
@@ -46,8 +43,6 @@ public class Wand : MonoBehaviour
     //CircleBonusEvent) should read this instead of calling ConvertToViewportPos
     //themselves, so they always match what this Wand is really drawing with.
     public Vector2 CurrentScreenPos { get; private set; }
-
-    public IReadOnlyList<Vector2> CatmullPoints => catmullPoints;
 
     private void Start()
     {
@@ -107,21 +102,6 @@ public class Wand : MonoBehaviour
 
             lineRenderer.startWidth = GameConstants.LineWidth;
             lineRenderer.endWidth = GameConstants.LineWidth;
-
-            //Tint the 3D wand model
-            Transform modelChild = FindChildRecursive(transform, "pCube1");
-            if (modelChild != null)
-                wandModelRenderer = modelChild.GetComponent<Renderer>();
-
-            if (wandModelRenderer != null)
-            {
-                Color modelColor = deviceIndex == 0 ? GameConstants.LeftWandModelColor : GameConstants.RightWandModelColor;
-                wandModelRenderer.material.color = modelColor;
-            }
-            else
-            {
-                Debug.LogWarning($"{nameof(Wand)}: No wandModelRenderer assigned on {gameObject.name}, model won't be tinted.");
-            }
         }
 
         if (UsingController && joyConTracker != null && joyConTracker.gameObject.activeInHierarchy && joyConTracker.count != 0)
@@ -160,20 +140,6 @@ public class Wand : MonoBehaviour
         //are spawned at runtime in the gameplay scene, so there's no Inspector
         //slot to drag this into — registration has to happen here instead.
         CircleBonusEvent.Instance?.RegisterWand(this);
-    }
-
-    private Transform FindChildRecursive(Transform parent, string name)
-    {
-        foreach (Transform child in parent)
-        {
-            if (child.name == name)
-                return child;
-
-            Transform result = FindChildRecursive(child, name);
-            if (result != null)
-                return result;
-        }
-        return null;
     }
 
     public Vector2[] listToArray(List<Vector3> list)
@@ -245,16 +211,14 @@ public class Wand : MonoBehaviour
 
         int m = catmullPoints.Count - 1;
 
-        Vector2[] segment =
+        renderedPoints.Add(
             PointsManipulation.EvaluateCatmullSegment(
-            catmullPoints[m - 3],
-            catmullPoints[m - 2],
-            catmullPoints[m - 1],
-            catmullPoints[m],
-            GameConstants.CatmullResolution);
-
-        renderedPoints.Add(segment);
-        renderedCatmullPoints.AddRange(segment);
+                catmullPoints[m - 3],
+                catmullPoints[m - 2],
+                catmullPoints[m - 1],
+                catmullPoints[m],
+                GameConstants.CatmullResolution
+                ));
     }
 
     private void FlushCatmullTail()
@@ -276,7 +240,6 @@ public class Wand : MonoBehaviour
         );
 
         renderedPoints.Add(segment);
-        renderedCatmullPoints.AddRange(segment);
         //LineRendererInterface.RemovePoint(lineRenderer);  
         LineRendererInterface.AddPoints(lineRenderer, renderedPoints, zClipPlane);
 
@@ -369,11 +332,10 @@ public class Wand : MonoBehaviour
             return;
 
         drawActive = true;
-        OnDrawStarted?.Invoke();
+        OnDrawStarted?.Invoke(); // NEW
 
         points.Clear();
         catmullPoints.Clear();
-        renderedCatmullPoints.Clear();
         renderedPoints.Clear();
         lastProcessedIndex = -1;
 
@@ -402,11 +364,13 @@ public class Wand : MonoBehaviour
         deleteDrawing = StartCoroutine(EraseBackground());
 
         drawActive = false;
-
-        FlushCatmullTail();
-
+        //fire before Flush/SendData so anything listening for "did the
+        //in-progress draw hit its bonus target" (e.g. CircleBonusEvent) can
+        //check drawActive/CurrentScreenPos state consistently before the
+        //drawing is finalized.
         OnDrawStopped?.Invoke();
 
+        FlushCatmullTail();
         SendData();
     }
 

@@ -549,7 +549,7 @@ public static class PointsManipulation
     /// size of the player's original drawing. originalDrawnPoints must be in
     /// the same world-space coordinates the drawing was rendered in.
     /// </summary>
-    public static Vector3[] FitToOriginalDrawing(Vector2[] shapePoints, Vector2[] originalDrawnPoints, float zDepth, Camera camera, Rect boundsViewportRect, float renderDistance)
+    public static Vector3[] FitToOriginalDrawing(Vector2[] shapePoints, Vector2[] originalDrawnPoints, float zDepth)
     {
         if (shapePoints == null || shapePoints.Length <= 1 ||
             originalDrawnPoints == null || originalDrawnPoints.Length == 0)
@@ -562,36 +562,11 @@ public static class PointsManipulation
             (drawnBounds.MinY + drawnBounds.MaxY) * 0.5f
             );
 
+        // Uniform scale (keeps the template shape's proportions) sized to
+        // whichever axis the player drew bigger along.
         float scale = Mathf.Max(drawnBounds.Width, drawnBounds.Height);
         if (scale <= 0f)
-            scale = 1f; //fallback for a near-single-point drawing
-
-        if (camera != null)
-        {
-            //Work out the world-space box the shape is allowed to occupy
-            //(the player's drawing area), so it can never render off-screen.
-            Vector3 worldBottomLeft = camera.ViewportToWorldPoint(new Vector3(boundsViewportRect.xMin, boundsViewportRect.yMin, renderDistance));
-            Vector3 worldTopRight = camera.ViewportToWorldPoint(new Vector3(boundsViewportRect.xMax, boundsViewportRect.yMax, renderDistance));
-
-            float allowedWidth = worldTopRight.x - worldBottomLeft.x;
-            float allowedHeight = worldTopRight.y - worldBottomLeft.y;
-            float maxAllowedScale = Mathf.Max(0.01f, Mathf.Min(allowedWidth, allowedHeight));
-
-            //Never let the system-drawn shape be bigger than the allowed area,
-            //even if the player physically drew larger than that.
-            scale = Mathf.Min(scale, maxAllowedScale);
-
-            //Clamp the centre so the shape's bounding box stays fully inside
-            //the allowed world rect.
-            float halfScale = scale * 0.5f;
-            float minCentreX = worldBottomLeft.x + halfScale;
-            float maxCentreX = worldTopRight.x - halfScale;
-            float minCentreY = worldBottomLeft.y + halfScale;
-            float maxCentreY = worldTopRight.y - halfScale;
-
-            drawnCentre.x = minCentreX <= maxCentreX ? Mathf.Clamp(drawnCentre.x, minCentreX, maxCentreX) : (worldBottomLeft.x + worldTopRight.x) * 0.5f;
-            drawnCentre.y = minCentreY <= maxCentreY ? Mathf.Clamp(drawnCentre.y, minCentreY, maxCentreY) : (worldBottomLeft.y + worldTopRight.y) * 0.5f;
-        }
+            scale = 1f; // fallback for a near-single-point drawing
 
         Vector2[] centredShape = CenterPoints(shapePoints);
 

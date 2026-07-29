@@ -198,18 +198,10 @@ public class WandListener : MonoBehaviour
             return;
         }
 
-        Vector2[] resampledData = PointsManipulation.ResampleAndNormalize(shapeData, GameConstants.PointCount);
-        Vector2[] finalPoints = PointsManipulation.CatmullRomLine(resampledData);
+        Vector2[] catmulledData = PointsManipulation.CatmullRomLine(shapeData);
+        Vector2[] finalPoints = PointsManipulation.ResampleAndNormalize(catmulledData, GameConstants.PointCount);
         float zDepth = Camera.main.transform.position.z + GameConstants.DistanceToCamera;
-        Rect drawingRect = wand.deviceIndex == 0 ? GameConstants.DrawingRectLeft : GameConstants.DrawingRectRight;
-        Vector3[] rescaledData = PointsManipulation.FitToOriginalDrawing(
-            finalPoints,
-            originalDrawnPoints,
-            zDepth,
-            Camera.main,
-            drawingRect,
-            GameConstants.DistanceToCamera
-        );
+        Vector3[] rescaledData = PointsManipulation.FitToOriginalDrawing(finalPoints, originalDrawnPoints, zDepth);
 
         if (rescaledData == null || rescaledData.Length == 0)
         {

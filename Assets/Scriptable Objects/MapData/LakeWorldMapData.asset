@@ -21,7 +21,7 @@ MonoBehaviour:
     pitchVariance: 0
   leftPos: {x: -18, y: 10, z: 9}
   leftRot: {x: 0, y: 0, z: 0}
-  leftScale: {x: 2, y: 2, z: 2}
+  leftScale: {x: 2, y: 2, z: 1}
   rightPos: {x: 18, y: 10, z: 9}
   rightRot: {x: 0, y: 0, z: 0}
-  rightScale: {x: 2, y: 2, z: 2}
+  rightScale: {x: 2, y: 2, z: 1}
