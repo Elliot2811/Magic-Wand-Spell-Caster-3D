@@ -26,6 +26,8 @@ public class GameConstants : MonoBehaviour
 
     public static readonly Color LeftDrawingColor = Color.red;
     public static readonly Color RightDrawingColor = Color.blue;
+    public static readonly Color LeftWandModelColor = new Color(1f, 0.35f, 0.35f);
+    public static readonly Color RightWandModelColor = new Color(0.35f, 0.35f, 1.8f);
     [Range(0.1f, 1f)] public const float PlayerDrawDarkenFactor = 0.7f; //player's raw stroke is darker than the system-drawn shape
 
     [Header("Shape Draw Animation")]
