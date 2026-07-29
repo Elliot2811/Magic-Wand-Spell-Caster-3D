@@ -155,6 +155,7 @@ public class CharacterEntity : MonoBehaviour
     {
         EntityDmgTaken += damage;
         damageTakenMessage?.Invoke(damage);
+
         if (chargingHeavySpell)
         {
             if (spellEffectPrefab != null)

@@ -31,6 +31,12 @@ public class ScriptableObjectSpell : ScriptableObject
     public bool randomizePitch = true;
     [Range(0f, 0.2f)] public float pitchVariance = 0.05f;
 
+    [Header("Impact Feedback (optional — leave blank/-1 to use CombatFeedback defaults)")]
+    public AudioClip hitSFX;
+    [Range(0f, 1f)] public float hitVolume = 1f;
+    public float hitShakeIntensity = -1f;
+    public float hitShakeDuration = -1f;
+
     public GameObject prefab;
     public GameObject spellChargeEffect;
 }

@@ -24,5 +24,9 @@ MonoBehaviour:
   castVolume: 0.5
   randomizePitch: 1
   pitchVariance: 0.05
+  hitSFX: {fileID: 8300000, guid: 0c177bb397cd86f44878700008a33cac, type: 3}
+  hitVolume: 1
+  hitShakeIntensity: -1
+  hitShakeDuration: -1
   prefab: {fileID: 4132212761999745207, guid: 6a628251a90e0354baf31f13cc07665e, type: 3}
   spellChargeEffect: {fileID: 0}

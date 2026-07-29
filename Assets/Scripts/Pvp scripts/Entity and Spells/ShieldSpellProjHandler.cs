@@ -10,6 +10,8 @@ public class ShieldSpellProjHandler : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        //Debug.Log($"[Shield] OnTriggerEnter fired with {other.name}, tag={other.tag}");
+
         //return if collision isnt with a spell or the spell has the same parent as the shield
         if ((!other.CompareTag("spell")) || (other.transform.parent == transform.parent))
         {
@@ -18,20 +20,19 @@ public class ShieldSpellProjHandler : MonoBehaviour
 
         SpellProjHandler otherProjHandler = other.GetComponent<SpellProjHandler>();
         CharacterEntity character = transform.parent.gameObject.GetComponent<CharacterEntity>();
+        character.entityShielded = false;
+
         if (otherProjHandler.spell.spellPriority <= spell.spellPriority)
         {
-            character.entityShielded = false;
             Destroy(other.gameObject);
-            Destroy(gameObject);
             Debug.Log("Shield blocked projectile");
-            return;
         }
         else
         {
-            character.entityShielded = false;
-            Destroy(gameObject);
             Debug.Log("Shield has been destroyed");
-            return;
         }
+
+        Destroy(gameObject);
+        CombatFeedback.Instance?.PlayShieldBreak(transform.position, otherProjHandler.spell);
     }
 }
