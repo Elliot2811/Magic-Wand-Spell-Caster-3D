@@ -1,4 +1,5 @@
 using UnityEngine;
+using static CompareShapes;
 
 public class SpellRecognisionTest : MonoBehaviour
 {
@@ -89,12 +90,22 @@ public class SpellRecognisionTest : MonoBehaviour
     {
         Vector2[] processedPoints = PointsManipulation.ResampleAndNormalize(points, GameConstants.PointCount);
 
-        ShapeInfoSO shapeInfo = CompareShapes.FindBestMatch(processedPoints, shapesCollection);
+        //ShapeInfoSO shapeInfo = CompareShapes.FindBestMatch(processedPoints, shapesCollection);
 
-        PrintBestShape(shapeInfo);
+        //PrintBestShape(shapeInfo);
+
+        //if (GameConstants.DisplayBestShape)
+        //    DisplayBestShape(shapeInfo, lineRenderer, left);
+
+        ShapeMatchResult match = CompareShapes.FindBestMatch(processedPoints, shapesCollection);
+
+        PrintBestShape(match.shape);
+
+        Debug.Log($"Accuracy: {(match.accuracy * 100f):F0}%");
+        Debug.Log(CompareShapes.GetFeedback(match.accuracy));
 
         if (GameConstants.DisplayBestShape)
-            DisplayBestShape(shapeInfo, lineRenderer, left);
+            DisplayBestShape(match.shape, lineRenderer, left);
     }
 
     private void UpdateDrawingLeft(Vector2[] receivedPoints) 

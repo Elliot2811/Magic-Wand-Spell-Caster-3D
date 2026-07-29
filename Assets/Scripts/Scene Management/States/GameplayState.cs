@@ -287,7 +287,24 @@ public class GamePlayState : GameState
         var leftDrawn = new HashSet<ShapeInfoSO>();
         var rightDrawn = new HashSet<ShapeInfoSO>();
 
-        Action<ShapeInfoSO> onLeftMatch = shape =>
+        //Action<ShapeInfoSO> onLeftMatch = shape =>
+        //{
+        //    if (shape != null)
+        //    {
+        //        leftDrawn.Add(shape);
+        //        HowToPlayPanelController.Instance?.MarkLeftDrawn(shape);
+        //    }
+        //};
+        //Action<ShapeInfoSO> onRightMatch = shape =>
+        //{
+        //    if (shape != null)
+        //    {
+        //        rightDrawn.Add(shape);
+        //        HowToPlayPanelController.Instance?.MarkRightDrawn(shape);
+        //    }
+        //};
+
+        Action<ShapeInfoSO, float> onLeftMatch = (shape, accuracy) =>
         {
             if (shape != null)
             {
@@ -295,7 +312,8 @@ public class GamePlayState : GameState
                 HowToPlayPanelController.Instance?.MarkLeftDrawn(shape);
             }
         };
-        Action<ShapeInfoSO> onRightMatch = shape =>
+
+        Action<ShapeInfoSO, float> onRightMatch = (shape, accuracy) =>
         {
             if (shape != null)
             {

@@ -154,20 +154,29 @@ public class WandListener : MonoBehaviour
         if (!initialized)
         {
             Debug.LogWarning("[WandListener]: No ShapesCollectionSO to compare to.");
-            MatchedShape?.Invoke(null);
+            MatchedShape?.Invoke(null, 0f);
             return;
         }
 
         Vector2[] processedPoints = PointsManipulation.ResampleAndNormalize(points, GameConstants.PointCount);
 
-        ShapeInfoSO shapeInfo = CompareShapes.FindBestMatch(processedPoints, shapes);
+        //ShapeInfoSO shapeInfo = CompareShapes.FindBestMatch(processedPoints, shapes);
+        CompareShapes.ShapeMatchResult result = CompareShapes.FindBestMatch(processedPoints, shapes);
+        
+        Debug.Log(
+            $"Accuracy: {(result.accuracy * 100f):F1}% | " +
+            $"Feedback: {CompareShapes.GetFeedback(result.accuracy)} | " +
+            $"Matched: {(result.shape != null ? result.shape.ShapeName : "No Match")}"
+        );
 
-        MatchedShape?.Invoke(shapeInfo);
+        //MatchedShape?.Invoke(shapeInfo);
+        MatchedShape?.Invoke(result.shape, result.accuracy);
 
         if (AllRenderers().Any())
         {
             wand.ClearDrawnLine();
-            DisplayBestShape(shapeInfo, points); //pass the raw points, not processedPoints
+            //DisplayBestShape(shapeInfo, points); //pass the raw points, not processedPoints
+            DisplayBestShape(result.shape, points);
         }
     }
 
@@ -292,5 +301,5 @@ public class WandListener : MonoBehaviour
         this.shapes = shapes;
     }
 
-    public event Action<ShapeInfoSO> MatchedShape;
+    public event Action<ShapeInfoSO, float> MatchedShape;
 }

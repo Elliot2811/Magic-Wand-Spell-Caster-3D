@@ -177,7 +177,7 @@ public class CoinInsertState : GameState
     //    helperFunc.Reset();
     //}
 
-    private void CheckLeftDrawing(ShapeInfoSO shapeInfo)
+    private void CheckLeftDrawing(ShapeInfoSO shapeInfo, float accuracy)
     {
         if (shapeInfo != null)
         {
@@ -186,7 +186,7 @@ public class CoinInsertState : GameState
         }
     }
 
-    private void CheckRightDrawing(ShapeInfoSO shapeInfo)
+    private void CheckRightDrawing(ShapeInfoSO shapeInfo, float accuracy)
     {
         if (shapeInfo != null)
         {
