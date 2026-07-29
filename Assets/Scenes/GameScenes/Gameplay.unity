@@ -3591,6 +3591,7 @@ GameObject:
   - component: {fileID: 916443336}
   - component: {fileID: 916443335}
   - component: {fileID: 916443334}
+  - component: {fileID: 916443337}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -3672,6 +3673,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -0.7, y: 0, z: 0}
+--- !u!114 &916443337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 916443333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 475dbeb5803a351449a16c15666a765b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetCamera: {fileID: 916443335}
+  floatingTextPrefab: {fileID: 5227404537037390416, guid: 37182ff50be994c49a2c32e70376ebcd, type: 3}
+  floatingTextOffset: {x: 0, y: 2, z: 0}
+  shieldBreakSFX: {fileID: 8300000, guid: bf8dc6a7647ca56488dc089179c1f7e4, type: 3}
+  shieldBreakSFXVolume: 1
+  shieldBreakShakeIntensity: 0.3
+  shieldBreakShakeDuration: 0.25
+  shieldBreakText: BLOCKED!
+  shieldBreakTextColor: {r: 0, g: 0.645283, b: 0.4051848, a: 1}
+  playerHitSFX: {fileID: 8300000, guid: bf8dc6a7647ca56488dc089179c1f7e4, type: 3}
+  playerHitSFXVolume: 1
+  playerHitShakeIntensity: 0.15
+  playerHitShakeDuration: 0.12
+  playerHitTextColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &922023191
 GameObject:
   m_ObjectHideFlags: 0

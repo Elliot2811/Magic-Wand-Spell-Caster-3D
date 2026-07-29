@@ -20,9 +20,13 @@ MonoBehaviour:
   spellScale: 2
   shieldSpell: 0
   destroyLowerTierSpells: 1
-  castSFX: {fileID: 8300000, guid: d0b59d8b22bcced4bb28dba5059711ca, type: 3}
+  castSFX: {fileID: 8300000, guid: 1c7208cc39926b54291651d413329c43, type: 3}
   castVolume: 0.5
   randomizePitch: 1
   pitchVariance: 0.05
+  hitSFX: {fileID: 8300000, guid: 1a514fea108859b4080088a84992e534, type: 3}
+  hitVolume: 1
+  hitShakeIntensity: 0.6
+  hitShakeDuration: 1
   prefab: {fileID: 4529831980563234222, guid: 95624d3512f1cad4b97d13eaef9bb61b, type: 3}
   spellChargeEffect: {fileID: 6280475943631958520, guid: 54c8b59d7b4c5684ba8f8aec5122823f, type: 3}
