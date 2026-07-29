@@ -17,11 +17,16 @@ MonoBehaviour:
   spellDamage: 0
   spellSpeed: 0
   spellDelay: 0
+  spellScale: 3
   shieldSpell: 1
   destroyLowerTierSpells: 0
   castSFX: {fileID: 0}
   castVolume: 0.5
   randomizePitch: 1
   pitchVariance: 0.05
-  prefab: {fileID: 3486244923626809280, guid: f60316685abb0734d950ff8eac7afd9d, type: 3}
+  hitSFX: {fileID: 8300000, guid: 0c177bb397cd86f44878700008a33cac, type: 3}
+  hitVolume: 1
+  hitShakeIntensity: -1
+  hitShakeDuration: -1
+  prefab: {fileID: 4132212761999745207, guid: 6a628251a90e0354baf31f13cc07665e, type: 3}
   spellChargeEffect: {fileID: 0}

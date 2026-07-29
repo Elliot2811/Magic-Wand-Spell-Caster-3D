@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class ShapeChecklistUI : MonoBehaviour
 {
@@ -15,26 +16,66 @@ public class ShapeChecklistUI : MonoBehaviour
     [SerializeField] private Color undrawnColor = new Color(0.35f, 0.35f, 0.35f);
     [SerializeField] private Color drawnColor = Color.white;
 
+    [Header("Status Text")]
+    [SerializeField] private TMP_Text statusText;
+    [SerializeField] private int playerIndex = 0; // set 0 for player1's checklist, 1 for player2's in the Inspector
+
+    private HashSet<ShapeInfoSO> drawnShapes = new HashSet<ShapeInfoSO>();
+
     private void Awake()
     {
         foreach (var icon in icons)
             icon.image.color = undrawnColor;
+
+        if (statusText != null)
+            statusText.text = "";
+    }
+
+    private void OnEnable()
+    {
+        TutorialProgressTracker.OnBothPlayersDone += HandleBothPlayersDone;
+    }
+
+    private void OnDisable()
+    {
+        TutorialProgressTracker.OnBothPlayersDone -= HandleBothPlayersDone;
     }
 
     public void MarkDrawn(ShapeInfoSO shape)
     {
-        Debug.Log($"[ShapeChecklistUI] MarkDrawn entered on {gameObject.name} with shape={shape?.ShapeName ?? "null"}, icons.Length={icons.Length}");
         if (shape == null) return;
 
         foreach (var icon in icons)
         {
-            Debug.Log($"  comparing against icon slot: {icon.shape?.ShapeName ?? "null"}, match={icon.shape == shape}");
             if (icon.shape == shape)
             {
                 icon.image.color = drawnColor;
-                Debug.Log($"  -> color set to drawnColor");
+                drawnShapes.Add(shape);
                 break;
             }
         }
+
+        CheckIfChecklistComplete();
+    }
+
+    private void CheckIfChecklistComplete()
+    {
+        if (drawnShapes.Count >= icons.Length)
+        {
+            TutorialProgressTracker.ReportDone(playerIndex);
+
+            if (statusText != null)
+            {
+                statusText.text = TutorialProgressTracker.BothDone
+                    ? "Tutorial completed!"
+                    : "Waiting for other player...";
+            }
+        }
+    }
+
+    private void HandleBothPlayersDone()
+    {
+        if (statusText != null)
+            statusText.text = "Tutorial completed!";
     }
 }
