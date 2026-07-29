@@ -12,7 +12,7 @@ public class GameConstants : MonoBehaviour
     public const float LineWeightage = 0.10f; // initial: 0.10
 
     public const float MinAccuracy = 0.70f;
-    public const float MinAccDiff = 0.10f;
+    public const float MinAccDiff = 0.8f;
     #endregion
 
     #region Display settings

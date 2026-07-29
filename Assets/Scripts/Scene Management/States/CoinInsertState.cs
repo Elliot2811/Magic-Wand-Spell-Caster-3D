@@ -104,7 +104,8 @@ public class CoinInsertState : GameState
 
             if (leftSideConfirmation && rightSideConfirmation)
             {
-                TransitionToFightState();
+                //TransitionToFightState();
+                TransitionToMapSelectState();
                 DisplayCountdown = false;
             }
             else if (Countdown > 0f)
@@ -129,7 +130,8 @@ public class CoinInsertState : GameState
         {
             if ((LeftCoin && leftSideConfirmation && !RightCoin) || (RightCoin && rightSideConfirmation && !LeftCoin))
             {
-                TransitionToFightState();
+                //TransitionToFightState();
+                TransitionToMapSelectState();
                 DisplayCountdown = false;
                 return;
             }
@@ -203,6 +205,16 @@ public class CoinInsertState : GameState
         if (transitionTimer <= 0)
         {
             stateManager.TransitionToState(GameStateManager.StateEnum.Fight);
+        }
+    }
+
+    private void TransitionToMapSelectState()
+    {
+        transitionTimer -= Time.deltaTime;
+        DisplayTransitionTimer = true;
+        if (transitionTimer <= 0)
+        {
+            stateManager.TransitionToState(GameStateManager.StateEnum.MapSelect);
         }
     }
 }

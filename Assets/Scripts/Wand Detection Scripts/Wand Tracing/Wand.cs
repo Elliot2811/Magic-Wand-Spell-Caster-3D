@@ -26,6 +26,8 @@ public class Wand : MonoBehaviour
     private List<Vector2> points = new List<Vector2>();
     private List<Vector2> catmullPoints = new List<Vector2>();
     private List<Vector2[]> renderedPoints = new List<Vector2[]>();
+    private List<Vector2> renderedCatmullPoints = new List<Vector2>();
+    public IReadOnlyList<Vector2> RenderedCatmullPoints => renderedCatmullPoints;
 
     private float zClipPlane = 0;
 

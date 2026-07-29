@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameStateManager : MonoBehaviour
 {
@@ -47,6 +48,7 @@ public class GameStateManager : MonoBehaviour
 
     public ShapesCollectionSO allShapesCollectionSO;
     public ShapesCollectionSO squareOnlyShapeCollection;
+    public ShapesCollectionSO triangleOnlyShapeCollection;
 
     private Dictionary<StateEnum, Func<GameState>> dict = new Dictionary<StateEnum, Func<GameState>>();
 
@@ -54,6 +56,9 @@ public class GameStateManager : MonoBehaviour
     public int gameScenario = 0;
     [HideInInspector]
     public int mapIndex = 0;
+    //public List<Image> imageList;
+    public List<(Image mapImage, MapData mapData)> imageAndMapList;
+
 
     private void Awake()
     {
@@ -66,6 +71,7 @@ public class GameStateManager : MonoBehaviour
 
             dict.Add(StateEnum.Init, () => new InitializationState());
             dict.Add(StateEnum.PlayersSelect, () => new CoinInsertState());
+            dict.Add(StateEnum.MapSelect, () => new MainMenuState());
             dict.Add(StateEnum.Fight, () => new GamePlayState());
             dict.Add(StateEnum.Winner, () => new VictoryState());
 
