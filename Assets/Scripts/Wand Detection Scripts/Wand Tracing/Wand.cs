@@ -11,6 +11,7 @@ public class Wand : MonoBehaviour
     private bool initialized = false;
 
     public LineRenderer lineRenderer;
+    [SerializeField] private Renderer wandModelRenderer;
     private JoyConTracker joyConTracker;
 
     [Space(10)]
@@ -106,6 +107,21 @@ public class Wand : MonoBehaviour
 
             lineRenderer.startWidth = GameConstants.LineWidth;
             lineRenderer.endWidth = GameConstants.LineWidth;
+
+            //Tint the 3D wand model
+            Transform modelChild = FindChildRecursive(transform, "pCube1");
+            if (modelChild != null)
+                wandModelRenderer = modelChild.GetComponent<Renderer>();
+
+            if (wandModelRenderer != null)
+            {
+                Color modelColor = deviceIndex == 0 ? GameConstants.LeftWandModelColor : GameConstants.RightWandModelColor;
+                wandModelRenderer.material.color = modelColor;
+            }
+            else
+            {
+                Debug.LogWarning($"{nameof(Wand)}: No wandModelRenderer assigned on {gameObject.name}, model won't be tinted.");
+            }
         }
 
         if (UsingController && joyConTracker != null && joyConTracker.gameObject.activeInHierarchy && joyConTracker.count != 0)
@@ -144,6 +160,20 @@ public class Wand : MonoBehaviour
         //are spawned at runtime in the gameplay scene, so there's no Inspector
         //slot to drag this into — registration has to happen here instead.
         CircleBonusEvent.Instance?.RegisterWand(this);
+    }
+
+    private Transform FindChildRecursive(Transform parent, string name)
+    {
+        foreach (Transform child in parent)
+        {
+            if (child.name == name)
+                return child;
+
+            Transform result = FindChildRecursive(child, name);
+            if (result != null)
+                return result;
+        }
+        return null;
     }
 
     public Vector2[] listToArray(List<Vector3> list)
