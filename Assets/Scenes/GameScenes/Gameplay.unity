@@ -3693,7 +3693,7 @@ MonoBehaviour:
   shieldBreakShakeIntensity: 0.3
   shieldBreakShakeDuration: 0.25
   shieldBreakText: BLOCKED!
-  shieldBreakTextColor: {r: 0, g: 0.645283, b: 0.4051848, a: 1}
+  shieldBreakTextColor: {r: 0, g: 0.78867924, b: 0.022048889, a: 1}
   playerHitSFX: {fileID: 8300000, guid: bf8dc6a7647ca56488dc089179c1f7e4, type: 3}
   playerHitSFXVolume: 1
   playerHitShakeIntensity: 0.15
