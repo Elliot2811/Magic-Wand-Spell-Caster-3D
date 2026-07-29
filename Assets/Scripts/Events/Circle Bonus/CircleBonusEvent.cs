@@ -4,21 +4,15 @@ using UnityEngine;
 
 //<summary>
 //Mid-match "hit the circle" minigame. A target circle floats around in each
-//player's drawing area; if a player's draw passes through their circle, that
-//cast becomes bonus-eligible (SpellBook should call ConsumeBonus() when it
-//resolves damage for a cast). No winner — always resolves as a draw (0),
-//and unlike TugOfWar, it does NOT pause the main match timer.
-
-//circles are plain world-space Transform + SpriteRenderer instead
-//of UI Image/RectTransform under an Overlay canvas. This is so the player-drawn
-//LineRenderer spell can render ON TOP of the circle via sortingLayer/sortingOrder
-//(Overlay-canvas UI always draws on top of everything in the scene, regardless
-//of sorting values, which was the original problem).
-
-//All the existing pixel-space math (wander/bounce/bounds) is untouched — it
-//still operates in screen pixels exactly as before. The only new piece is a
-//screen<->world conversion at the boundary where a position is actually applied
-//to/read from the circle's Transform.
+//player's drawing area; a cast is bonus-eligible if enough of the draw's path
+//stayed inside the circle (SpellBook calls ConsumeBonus() to check/consume this
+//when resolving damage). Always resolves as a draw (0) and, unlike TugOfWar,
+//does not pause the main match timer.
+//
+//Circles are world-space Transform + SpriteRenderer (not UI Image) so the
+//player's LineRenderer spell can draw on top of them via sorting layer/order.
+//All wander/bounce math still operates in screen pixels; only PositionCircle
+//converts to world space at the boundary.
 //</summary>
 public class CircleBonusEvent : MonoBehaviour, IMidGameEvent
 {
@@ -49,6 +43,9 @@ public class CircleBonusEvent : MonoBehaviour, IMidGameEvent
     public float retargetIntervalMax = 6f;
     public Color hitFlashColor = Color.white;
     public float hitFlashDuration = 0.15f;
+
+    [Tooltip("Fraction (0-1) of a draw's sampled cursor positions that must be inside the circle for that cast to count as bonus-eligible.")]
+    [Range(0f, 1f)] public float requiredInsidePercent = 0.75f;
 
     [Header("Visual")]
     [Range(0f, 1f)] public float circleIdleAlpha = 0.35f; //let the spell drawing show through the circle
@@ -296,14 +293,46 @@ public class CircleBonusEvent : MonoBehaviour, IMidGameEvent
 
     private void HandleDrawStopped(int playerIndex)
     {
-        if (!IsActive) return;
+        if (!IsActive)
+            return;
 
-        //Bonus is only armed here, once the draw has actually finished, and only
-        //if CheckHit confirmed a real pass-through while that draw was live —
-        //this is what stops a bonus being granted just for the circle happening
-        //to be near the cursor at some unrelated moment.
-        if (touchedCircleThisDraw[playerIndex])
-            pendingBonus[playerIndex] = true;
+        Wand wand = playerWands[playerIndex];
+
+        if (wand == null || wand.RenderedCatmullPoints.Count == 0)
+            return;
+
+        Transform circle =
+            playerIndex == 0 ? leftCircle : rightCircle;
+
+        Vector2 circlePos = circle.position;
+
+        SpriteRenderer sr =
+            playerIndex == 0 ? leftCircleImage : rightCircleImage;
+
+        float radius = sr.bounds.extents.x;
+
+        int inside = 0;
+
+        foreach (Vector2 point in wand.RenderedCatmullPoints)
+        {
+            if (Vector2.Distance(point, circlePos) <= radius)
+                inside++;
+        }
+
+        float insideFraction =
+            (float)inside / wand.RenderedCatmullPoints.Count;
+
+        pendingBonus[playerIndex] =
+            insideFraction >= requiredInsidePercent;
+
+        Debug.Log(
+            $"Player {playerIndex + 1}: " +
+            $"{inside}/{wand.RenderedCatmullPoints.Count}" +
+            $"({insideFraction:P0}) inside");
+
+        Debug.Log($"Circle: {circlePos}");
+        Debug.Log($"First spell point: {wand.RenderedCatmullPoints[0]}");
+        Debug.Log($"Radius: {radius}");
     }
 
     private void CheckHit(Wand wand, Transform circle, int playerNumber)
@@ -320,11 +349,6 @@ public class CircleBonusEvent : MonoBehaviour, IMidGameEvent
         Vector2 cursorScreenPos = wand.CurrentScreenPos;
         Vector2 circleScreenPos = playerNumber == 1 ? leftScreenPos : rightScreenPos;
         bool isInside = Vector2.Distance(cursorScreenPos, circleScreenPos) <= GetCircleRadius(circle);
-
-        //live containment drives the bonus directly each frame, so moving back
-        //out of the circle before releasing cancels the bonus instead of it
-        //staying armed forever once touched
-        pendingBonus[playerIndex] = isInside;
 
         if (isInside)
         {
@@ -503,7 +527,7 @@ public class CircleBonusEvent : MonoBehaviour, IMidGameEvent
     private void PositionCircle(Transform circle, Vector2 screenPos, bool left)
     {
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(
-            new Vector3(screenPos.x, screenPos.y, circleDistanceFromCamera));
+            new Vector3(screenPos.x, screenPos.y, GameConstants.DistanceToCamera));
         circle.position = worldPos;
 
         if (left) leftScreenPos = screenPos;

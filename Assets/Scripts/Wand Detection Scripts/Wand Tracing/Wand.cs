@@ -26,6 +26,8 @@ public class Wand : MonoBehaviour
     private List<Vector2> points = new List<Vector2>();
     private List<Vector2> catmullPoints = new List<Vector2>();
     private List<Vector2[]> renderedPoints = new List<Vector2[]>();
+    private List<Vector2> renderedCatmullPoints = new List<Vector2>();
+    public IReadOnlyList<Vector2> RenderedCatmullPoints => renderedCatmullPoints;
 
     private float zClipPlane = 0;
 
@@ -43,6 +45,8 @@ public class Wand : MonoBehaviour
     //CircleBonusEvent) should read this instead of calling ConvertToViewportPos
     //themselves, so they always match what this Wand is really drawing with.
     public Vector2 CurrentScreenPos { get; private set; }
+
+    public IReadOnlyList<Vector2> CatmullPoints => catmullPoints;
 
     private void Start()
     {
@@ -211,14 +215,16 @@ public class Wand : MonoBehaviour
 
         int m = catmullPoints.Count - 1;
 
-        renderedPoints.Add(
+        Vector2[] segment =
             PointsManipulation.EvaluateCatmullSegment(
-                catmullPoints[m - 3],
-                catmullPoints[m - 2],
-                catmullPoints[m - 1],
-                catmullPoints[m],
-                GameConstants.CatmullResolution
-                ));
+            catmullPoints[m - 3],
+            catmullPoints[m - 2],
+            catmullPoints[m - 1],
+            catmullPoints[m],
+            GameConstants.CatmullResolution);
+
+        renderedPoints.Add(segment);
+        renderedCatmullPoints.AddRange(segment);
     }
 
     private void FlushCatmullTail()
@@ -240,6 +246,7 @@ public class Wand : MonoBehaviour
         );
 
         renderedPoints.Add(segment);
+        renderedCatmullPoints.AddRange(segment);
         //LineRendererInterface.RemovePoint(lineRenderer);  
         LineRendererInterface.AddPoints(lineRenderer, renderedPoints, zClipPlane);
 
@@ -332,10 +339,11 @@ public class Wand : MonoBehaviour
             return;
 
         drawActive = true;
-        OnDrawStarted?.Invoke(); // NEW
+        OnDrawStarted?.Invoke();
 
         points.Clear();
         catmullPoints.Clear();
+        renderedCatmullPoints.Clear();
         renderedPoints.Clear();
         lastProcessedIndex = -1;
 
@@ -364,13 +372,11 @@ public class Wand : MonoBehaviour
         deleteDrawing = StartCoroutine(EraseBackground());
 
         drawActive = false;
-        //fire before Flush/SendData so anything listening for "did the
-        //in-progress draw hit its bonus target" (e.g. CircleBonusEvent) can
-        //check drawActive/CurrentScreenPos state consistently before the
-        //drawing is finalized.
-        OnDrawStopped?.Invoke();
 
         FlushCatmullTail();
+
+        OnDrawStopped?.Invoke();
+
         SendData();
     }
 
