@@ -29,7 +29,7 @@ public class TugOfWarController : MonoBehaviour, IMidGameEvent
     public float shakeNoiseFloor = 0.005f;
 
     [Tooltip("Hard cap on a single player's accumulated shake intensity. Prevents one big shake spike from swinging (or ending) the match instantly - forces sustained shaking to keep an advantage.")]
-    public float maxShakeIntensity = 0.5f;
+    public float maxShakeIntensity = 0.8f;
 
     [Tooltip("How much harder the bar is to push the closer it gets to a win (0 = no extra resistance at the edges, 1 = fully stuck). Creates the 'last stretch is the hardest' feel instead of a flat slide to victory.")]
     [Range(0f, 0.95f)]

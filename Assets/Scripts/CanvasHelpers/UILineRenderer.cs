@@ -37,7 +37,7 @@ public class UILineRenderer : MaskableGraphic
 
     private void Start()
     {
-        transform.SetAsLastSibling();
+        //transform.SetAsLastSibling();
     }
 
     protected override void OnPopulateMesh(VertexHelper vh)
