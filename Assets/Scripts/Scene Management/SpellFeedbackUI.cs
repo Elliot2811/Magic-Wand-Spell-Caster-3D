@@ -16,6 +16,8 @@ public class SpellFeedbackUI : MonoBehaviour
 
     private void Awake()
     {
+        Debug.Log("SpellFeedbackUI Awake");
+
         Instance = this;
 
         leftFeedbackText.text = "";

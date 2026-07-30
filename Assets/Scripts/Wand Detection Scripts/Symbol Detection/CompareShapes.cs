@@ -319,19 +319,19 @@ public static class CompareShapes
     {
         float percent = accuracy * 100f;
 
-        if (percent < 30f)
+        if (percent < 70f)
             return 0f;
 
-        if (percent < 50f)
-            return Mathf.Lerp(0f, 0.2f, (percent - 30f) / 20f);
+        //if (percent < 75f)
+        //    return Mathf.Lerp(0f, 0.2f, (percent - 30f) / 20f);
 
-        if (percent < 60f)
+        if (percent <= 80f)
             return Mathf.Lerp(0.2f, 0.5f, (percent - 50f) / 10f);
 
-        if (percent < 75f)
-            return Mathf.Lerp(0.5f, 0.7f, (percent - 60f) / 15f);
+        //if (percent < 85f)
+        //    return Mathf.Lerp(0.5f, 0.7f, (percent - 60f) / 15f);
 
-        if (percent < 90f)
+        if (percent <= 90f)
             return Mathf.Lerp(0.7f, 1f, (percent - 75f) / 15f);
 
         return 1f;
@@ -344,15 +344,15 @@ public static class CompareShapes
         if (percent < 70f)
             return "Miss";
 
-        if (percent <= 75f)
-            return "OK";
+        //if (percent <= 75f)
+        //    return "OK";
 
         if (percent <= 80f)
             return "Good";
 
         if (percent <= 90f)
-            return "Amazing";
+            return "Amazing!";
 
-        return "Perfect";
+        return "Perfect!";
     }
 }

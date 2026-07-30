@@ -28,7 +28,7 @@ public class SpellBook : MonoBehaviour
     [SerializeField]
     private int playerNumber = 0; // 0 = left, 1 = right must match CircleBonusEvent's player1Index/player2Index mapping
 
-    private bool newData = true;
+    private bool newData = false;
     private ShapeInfoSO shape;
     private float drawingAccuracy;
 
@@ -178,6 +178,8 @@ public class SpellBook : MonoBehaviour
 
     private void playerDrawing(ShapeInfoSO shape, float accuracy)
     {
+        Debug.Log($"playerDrawing called. Shape={shape?.ShapeName}, Accuracy={accuracy}");
+
         newData = true;
         this.shape = shape;
         drawingAccuracy = accuracy;
