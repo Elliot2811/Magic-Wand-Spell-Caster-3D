@@ -87,6 +87,13 @@ public class SpellBook : MonoBehaviour
 
             Debug.Log($"Player {playerNumber + 1}: {feedback}");
 
+            if (GameplayUIState.BlockSpellFeedback)
+                return;
+
+            Debug.Log("Spell feedback called");
+            Debug.Log("Blocked = " + GameplayUIState.BlockSpellFeedback);
+            Debug.Log("Shape = " + (shape == null));
+
             SpellFeedbackUI.Instance.ShowFeedback(playerNumber, feedback);
         }
 
@@ -294,5 +301,11 @@ public class SpellBook : MonoBehaviour
         castableShapes = ShapesCollectionSO.CreateInstance<ShapesCollectionSO>();
         castableShapes.shapes = arr;
         castableShapes.BuildShapesSet();
+    }
+
+    //so it wont show during mid-game events
+    public static class GameplayUIState
+    {
+        public static bool BlockSpellFeedback = false;
     }
 }
