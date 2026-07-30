@@ -330,9 +330,9 @@ public class CircleBonusEvent : MonoBehaviour, IMidGameEvent
             $"{inside}/{wand.RenderedCatmullPoints.Count}" +
             $"({insideFraction:P0}) inside");
 
-        Debug.Log($"Circle: {circlePos}");
-        Debug.Log($"First spell point: {wand.RenderedCatmullPoints[0]}");
-        Debug.Log($"Radius: {radius}");
+        //Debug.Log($"Circle: {circlePos}");
+        //Debug.Log($"First spell point: {wand.RenderedCatmullPoints[0]}");
+        //Debug.Log($"Radius: {radius}");
     }
 
     private void CheckHit(Wand wand, Transform circle, int playerNumber)
