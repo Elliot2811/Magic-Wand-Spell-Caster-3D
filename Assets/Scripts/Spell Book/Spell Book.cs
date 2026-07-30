@@ -30,6 +30,7 @@ public class SpellBook : MonoBehaviour
 
     private bool newData = true;
     private ShapeInfoSO shape;
+    private float drawingAccuracy;
 
     private HashSet<ShapeInfoSO> shapesAlreadyReplacing;
 
@@ -51,12 +52,49 @@ public class SpellBook : MonoBehaviour
             return;
 
         ScriptableObjectSpell spell = FindProjectile(shape);
+
+        Debug.Log($"[Spell Accuracy] " +
+            $"Shape: {shape?.ShapeName} | " +
+            $"Accuracy: {drawingAccuracy:F3} ({drawingAccuracy * 100f:F1}%) | " +
+            $"Damage Multiplier: {CompareShapes.GetDamageMultiplier(drawingAccuracy):F2}x | " +
+            $"Feedback: {CompareShapes.GetFeedback(drawingAccuracy)}"
+        );
+
+        //string feedback = CompareShapes.GetFeedback(drawingAccuracy);
+        //SpellFeedbackUI.Instance?.ShowFeedback(feedback);
+
+        // Always show feedback
+        //SpellFeedbackUI.Instance?.ShowFeedback(CompareShapes.GetFeedback(drawingAccuracy));
+
+        if (SpellFeedbackUI.Instance == null)
+        {
+            Debug.LogError("SpellFeedbackUI.Instance is NULL!");
+        }
+        else
+        {
+            string feedback;
+
+            if (shape == null)
+            {
+                feedback = "Miss";
+            }
+            else
+            {
+                feedback = CompareShapes.GetFeedback(drawingAccuracy);
+            }
+
+            Debug.Log($"Player {playerNumber + 1}: {feedback}");
+
+            SpellFeedbackUI.Instance.ShowFeedback(playerNumber, feedback);
+        }
+
         if (spell != null)
         {
-            float damageMultiplier = 1f;
+            float damageMultiplier = CompareShapes.GetDamageMultiplier(drawingAccuracy);
+
             if (CircleBonusEvent.Instance != null && CircleBonusEvent.Instance.ConsumeBonus(playerNumber))
             {
-                damageMultiplier = CircleBonusEvent.Instance.bonusDamageMultiplier;
+                damageMultiplier *= CircleBonusEvent.Instance.bonusDamageMultiplier;
                 Debug.Log($"[SpellBook] player {playerNumber}: circle bonus applied (x{damageMultiplier}).");
             }
             // Function to cast spell
@@ -138,10 +176,11 @@ public class SpellBook : MonoBehaviour
         initialized = true;
     }
 
-    private void playerDrawing(ShapeInfoSO shape)
+    private void playerDrawing(ShapeInfoSO shape, float accuracy)
     {
         newData = true;
         this.shape = shape;
+        drawingAccuracy = accuracy;
     }
 
     private ScriptableObjectSpell FindProjectile(ShapeInfoSO shapeInfo)

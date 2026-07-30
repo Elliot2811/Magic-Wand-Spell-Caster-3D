@@ -267,24 +267,7 @@ public class GamePlayState : GameState
 
         stateManager.renderSpellBookSpell = true; //gameplay is live — safe for SpellBook to render/cast now
     }
-    //private IEnumerator WaitForHowToPlayConfirmation(bool leftActive, bool rightActive)
-    //{
-    //    bool leftReady = !leftActive;   //inactive side auto-satisfied
-    //    bool rightReady = !rightActive;
 
-    //    Action<ShapeInfoSO> onLeftMatch = shape => { if (shape != null) leftReady = true; };
-    //    Action<ShapeInfoSO> onRightMatch = shape => { if (shape != null) rightReady = true; };
-
-    //    if (leftActive) stateManager.wandListenerLeft.MatchedShape += onLeftMatch;
-    //    if (rightActive) stateManager.wandListenerRight.MatchedShape += onRightMatch;
-
-    //    yield return new WaitUntil(() => leftReady && rightReady);
-
-    //    if (leftActive) stateManager.wandListenerLeft.MatchedShape -= onLeftMatch;
-    //    if (rightActive) stateManager.wandListenerRight.MatchedShape -= onRightMatch;
-    //}
-
-    //If tutorial requires players to draw all four spells once
     private IEnumerator WaitForHowToPlayConfirmation(bool leftActive, bool rightActive)
     {
         var allShapes = GameConstants.Instance.allShapes.GetAllShapes();
@@ -293,7 +276,7 @@ public class GamePlayState : GameState
         var leftDrawn = new HashSet<ShapeInfoSO>();
         var rightDrawn = new HashSet<ShapeInfoSO>();
 
-        Action<ShapeInfoSO> onLeftMatch = shape =>
+        Action<ShapeInfoSO, float> onLeftMatch = (shape, accuracy) =>
         {
             if (shape != null)
             {
@@ -301,7 +284,7 @@ public class GamePlayState : GameState
                 HowToPlayPanelController.Instance?.MarkLeftDrawn(shape);
             }
         };
-        Action<ShapeInfoSO> onRightMatch = shape =>
+        Action<ShapeInfoSO, float> onRightMatch = (shape, accuracy) =>
         {
             if (shape != null)
             {

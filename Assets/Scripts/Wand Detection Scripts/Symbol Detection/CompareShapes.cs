@@ -5,6 +5,12 @@ using UnityEngine;
 // TODO: REMOVE REUSED FINDBESTMATCH CODE AFTER DEPENDENCY ON SHAPESSOTRAGESO REMOVAL
 public static class CompareShapes
 {
+    public struct ShapeMatchResult
+    {
+        public ShapeInfoSO shape;
+        public float accuracy;
+    }
+
     private const float sqrt2 = 1.41421356f;
 
     /// <summary>
@@ -18,17 +24,20 @@ public static class CompareShapes
     /// <returns>
     /// ShapeInfoSO object that has shape name information
     /// </returns>
-    public static ShapeInfoSO FindBestMatch(Vector2[] playerPoints, IEnumerable<ShapeInfoSO> availableShapes)
+    public static ShapeMatchResult FindBestMatch(Vector2[] playerPoints, IEnumerable<ShapeInfoSO> availableShapes)
     {
-        //Debug.Log("CompareShapes.FindBestMatch is called");
+        ShapeMatchResult result = new ShapeMatchResult
+        {
+            shape = null,
+            accuracy = 0
+        };
 
         if (
             playerPoints == null ||
             availableShapes == null ||
-            playerPoints.Length <= 1 ||
-            availableShapes == null
+            playerPoints.Length <= 1
             )
-            return null;
+            return result;
 
         ShapeInfoSO bestMatch = null;
         float bestShapeAccuracy = 0;
@@ -36,8 +45,6 @@ public static class CompareShapes
 
         foreach (ShapeInfoSO shape in availableShapes)
         {
-            //Debug.Log($"Parsing through {shape.ShapeName}");
-
             foreach (ShapeVariantSO variant in shape)
             {
                 float averageAcc = CaculateScore(playerPoints, variant, shape.RotSymmetries);
@@ -54,15 +61,14 @@ public static class CompareShapes
             }
         }
 
-        //if (bestMatch != null)
-            //Debug.Log($"Best shape accuracy of {bestShapeAccuracy} from {bestMatch.ShapeName}");
+        result.accuracy = bestShapeAccuracy;
 
-        //Debug.Log($"Second best shape accuracy of {secondBestShapeAccuracy}");
+        if (PassedMinAccuracy(bestShapeAccuracy) && UniqueEnough(bestShapeAccuracy, secondBestShapeAccuracy))
+        {
+            result.shape = bestMatch;
+        }
 
-        return
-            (PassedMinAccuracy(bestShapeAccuracy) && UniqueEnough(bestShapeAccuracy, secondBestShapeAccuracy)) ?
-            bestMatch :
-            null;
+        return result;
     }
 
     /// <summary>
@@ -252,4 +258,45 @@ public static class CompareShapes
     private static bool PassedMinAccuracy(float acc) => acc >= GameConstants.MinAccuracy;
 
     private static bool UniqueEnough(float bestAcc, float secondBestAcc) => (bestAcc - secondBestAcc) > GameConstants.MinAccDiff;
+
+    public static float GetDamageMultiplier(float acc)
+    {
+        float percent = acc * 100f;
+
+        if (percent < 30f)
+            return 0f;
+
+        if (percent < 50f)
+            return Mathf.Lerp(0f, 0.2f, (percent - 30f) / 20f);
+
+        if (percent < 60f)
+            return Mathf.Lerp(0.2f, 0.5f, (percent - 50f) / 10f);
+
+        if (percent < 75f)
+            return Mathf.Lerp(0.5f, 0.7f, (percent - 60f) / 15f);
+
+        if (percent < 90f)
+            return Mathf.Lerp(0.7f, 1f, (percent - 75f) / 15f);
+
+        return 1f;
+    }
+
+    public static string GetFeedback(float accuracy)
+    {
+        float percent = accuracy * 100f;
+
+        if (percent < 70f)
+            return "Miss";
+
+        if (percent <= 75f)
+            return "OK";
+
+        if (percent <= 80f)
+            return "Good";
+
+        if (percent <= 90f)
+            return "Amazing";
+
+        return "Perfect";
+    }
 }
