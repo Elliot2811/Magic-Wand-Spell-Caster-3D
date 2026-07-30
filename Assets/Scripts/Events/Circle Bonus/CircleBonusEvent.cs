@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using static SpellBook;
 
 //<summary>
 //Mid-match "hit the circle" minigame. A target circle floats around in each
@@ -201,6 +202,8 @@ public class CircleBonusEvent : MonoBehaviour, IMidGameEvent
 
     public void StartEvent()
     {
+        GameplayUIState.BlockSpellFeedback = true;
+
         if (tracker == null) tracker = JoyConTracker.Instance;
 
         if (leftCircle == null || rightCircle == null)
@@ -267,6 +270,7 @@ public class CircleBonusEvent : MonoBehaviour, IMidGameEvent
 
     private void EndEvent()
     {
+        GameplayUIState.BlockSpellFeedback = false;
         IsActive = false;
         if (panel != null) panel.SetActive(false);
         pendingBonus[0] = false;//clear any bonus armed but never consumed before the event ended

@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using static SpellBook;
 
 //<summary>
 //Mid-match tug-of-war minigame.
@@ -99,6 +100,8 @@ public class TugOfWarController : MonoBehaviour, IMidGameEvent
 
     public void StartTugOfWar()
     {
+        GameplayUIState.BlockSpellFeedback = true;
+
         if (tracker == null)
             tracker = JoyConTracker.Instance;
 
@@ -184,6 +187,7 @@ public class TugOfWarController : MonoBehaviour, IMidGameEvent
 
         if (maxDuration > 0f && elapsed >= maxDuration)
         {
+            GameplayUIState.BlockSpellFeedback = false;
             IsActive = false;
 
             if (panel != null)
@@ -227,6 +231,8 @@ public class TugOfWarController : MonoBehaviour, IMidGameEvent
     //</summary>
     private void EndWithWinner(int deviceIndex)
     {
+        GameplayUIState.BlockSpellFeedback = false;
+
         IsActive = false;
 
         if (panel != null)

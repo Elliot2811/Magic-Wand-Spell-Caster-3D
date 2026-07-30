@@ -259,26 +259,42 @@ public static class CompareShapes
 
     private static bool UniqueEnough(float bestAcc, float secondBestAcc) => (bestAcc - secondBestAcc) > GameConstants.MinAccDiff;
 
-    public static float GetDamageMultiplier(float acc)
+    //public static float GetDamageMultiplier(float acc)
+    //{
+    //    float percent = acc * 100f;
+
+    //    if (percent < 70f)
+    //        return 0f;
+
+    //    if (percent < 70f)
+    //        return Mathf.Lerp(0f, 0.2f, (percent - 30f) / 20f);
+
+    //    if (percent < 60f)
+    //        return Mathf.Lerp(0.2f, 0.5f, (percent - 50f) / 10f);
+
+    //    if (percent < 75f)
+    //        return Mathf.Lerp(0.5f, 0.7f, (percent - 60f) / 15f);
+
+    //    if (percent < 90f)
+    //        return Mathf.Lerp(0.7f, 1f, (percent - 75f) / 15f);
+
+    //    return 1f;
+    //}
+
+    public static float GetDamageMultiplier(float accuracy)
     {
-        float percent = acc * 100f;
+        float percent = accuracy * 100f;
 
-        if (percent < 30f)
-            return 0f;
+        if (percent < 70f)
+            return 0f; // Miss
 
-        if (percent < 50f)
-            return Mathf.Lerp(0f, 0.2f, (percent - 30f) / 20f);
+        if (percent <= 75f)
+            return 0.6f; // OK
 
-        if (percent < 60f)
-            return Mathf.Lerp(0.2f, 0.5f, (percent - 50f) / 10f);
+        if (percent <= 90f)
+            return 0.85f; // Great
 
-        if (percent < 75f)
-            return Mathf.Lerp(0.5f, 0.7f, (percent - 60f) / 15f);
-
-        if (percent < 90f)
-            return Mathf.Lerp(0.7f, 1f, (percent - 75f) / 15f);
-
-        return 1f;
+        return 1f; // Perfect
     }
 
     public static string GetFeedback(float accuracy)
@@ -291,12 +307,9 @@ public static class CompareShapes
         if (percent <= 75f)
             return "OK";
 
-        if (percent <= 80f)
-            return "Good";
-
         if (percent <= 90f)
-            return "Amazing";
+            return "Great";
 
-        return "Perfect";
+        return "Perfect!";
     }
 }
