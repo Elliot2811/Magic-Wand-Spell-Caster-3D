@@ -89,21 +89,27 @@ public class MapSelectionState : GameState
 
     private void CheckMoveToNextMap()
     {
-        int mapChoice = playerMapChoices[0];
-
-        if (mapChoice == -1)
+        // Wait until both players have made a choice
+        foreach (int choice in playerMapChoices)
         {
-            transitioning = false;
-            return;
-        }
-
-        for (int i = 1; i < playerMapChoices.Length; i++)
-        {
-            if (playerMapChoices[i] != mapChoice)
+            if (choice == -1)
             {
                 transitioning = false;
                 return;
             }
+        }
+
+        int mapChoice;
+        if (playerMapChoices[0] == playerMapChoices[1])
+        {
+            // Both picked the same map
+            mapChoice = playerMapChoices[0];
+        }
+        else
+        {
+            // Different maps -> randomly pick one of the two
+            mapChoice = playerMapChoices[UnityEngine.Random.Range(0, playerMapChoices.Length)];
+            Debug.Log("Players chose different maps, randomly selected map " + mapChoice);
         }
 
         stateManager.mapIndex = mapChoice;
