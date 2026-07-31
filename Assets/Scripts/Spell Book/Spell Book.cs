@@ -87,14 +87,23 @@ public class SpellBook : MonoBehaviour
 
             Debug.Log($"Player {playerNumber + 1}: {feedback}");
 
-            if (GameplayUIState.BlockSpellFeedback)
-                return;
+            if (!GameplayUIState.BlockSpellFeedback)
+            {
+                Debug.Log("Spell feedback called");
+                SpellFeedbackUI.Instance.ShowFeedback(playerNumber, feedback);
+            }
+        }
 
-            Debug.Log("Spell feedback called");
-            Debug.Log("Blocked = " + GameplayUIState.BlockSpellFeedback);
-            Debug.Log("Shape = " + (shape == null));
+        if (spell != null)
+        {
+            float damageMultiplier = CompareShapes.GetDamageMultiplier(drawingAccuracy);
 
-            SpellFeedbackUI.Instance.ShowFeedback(playerNumber, feedback);
+            if (CircleBonusEvent.Instance != null && CircleBonusEvent.Instance.ConsumeBonus(playerNumber + 1))
+            {
+                damageMultiplier *= CircleBonusEvent.Instance.bonusDamageMultiplier;
+                Debug.Log($"[SpellBook] player {playerNumber}: circle bonus applied (x{damageMultiplier}).");
+            }
+            playerEntity.CastSpell(spell, damageMultiplier, playerNumber);
         }
 
         if (spell != null)
