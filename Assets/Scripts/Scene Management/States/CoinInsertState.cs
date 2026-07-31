@@ -104,7 +104,7 @@ public class CoinInsertState : GameState
 
             if (leftSideConfirmation && rightSideConfirmation)
             {
-                TransitionToFightState();
+                TransitionToNextState();
                 DisplayCountdown = false;
             }
             else if (Countdown > 0f)
@@ -117,7 +117,7 @@ public class CoinInsertState : GameState
                 RightCoin = false;
                 coinInsertListener.Reset();
                 Countdown = GameConstants.coinInsertionCountdownTime;
-                GameStateManager.Instance.ResetGameAndWand();
+                stateManager.ResetGameAndWand();
                 DisplayCountdown = false;
                 DisplayTransitionTimer = false;
                 leftSideConfirmation = false;
@@ -129,7 +129,7 @@ public class CoinInsertState : GameState
         {
             if ((LeftCoin && leftSideConfirmation && !RightCoin) || (RightCoin && rightSideConfirmation && !LeftCoin))
             {
-                TransitionToFightState();
+                TransitionToNextState();
                 DisplayCountdown = false;
                 return;
             }
@@ -143,7 +143,7 @@ public class CoinInsertState : GameState
                 RightCoin = false;
                 coinInsertListener.Reset();
                 Countdown = GameConstants.coinInsertionCountdownTime;
-                GameStateManager.Instance.ResetGameAndWand();
+                stateManager.ResetGameAndWand();
                 DisplayCountdown = false;
                 DisplayTransitionTimer = false;
                 leftSideConfirmation = false;
@@ -195,14 +195,14 @@ public class CoinInsertState : GameState
         }
     }
 
-    private void TransitionToFightState()
+    private void TransitionToNextState()
     {
         transitionTimer -= Time.deltaTime;
         DisplayTransitionTimer = true;
 
         if (transitionTimer <= 0)
         {
-            stateManager.TransitionToState(GameStateManager.StateEnum.Fight);
+            stateManager.TransitionToState(GameStateManager.StateEnum.MapSelect);
         }
     }
 }

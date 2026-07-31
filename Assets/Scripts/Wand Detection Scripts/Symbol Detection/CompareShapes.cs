@@ -203,7 +203,7 @@ public static class CompareShapes
         return result;
     }
 
-    private static Vector2 Centroid(Vector2[] points)
+    public static Vector2 Centroid(Vector2[] points)
     {
         Vector2 c = Vector2.zero;
 

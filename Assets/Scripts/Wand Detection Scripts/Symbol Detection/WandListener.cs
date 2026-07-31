@@ -158,6 +158,7 @@ public class WandListener : MonoBehaviour
             return;
         }
 
+
         Vector2[] processedPoints = PointsManipulation.ResampleAndNormalize(points, GameConstants.PointCount);
 
         //ShapeInfoSO shapeInfo = CompareShapes.FindBestMatch(processedPoints, shapes);
@@ -170,6 +171,7 @@ public class WandListener : MonoBehaviour
         );
 
         MatchedShape?.Invoke(result.shape, result.accuracy);
+        PointsForMatchedShape?.Invoke(points);
 
         if (AllRenderers().Any())
         {
@@ -309,4 +311,5 @@ public class WandListener : MonoBehaviour
     }
 
     public event Action<ShapeInfoSO, float> MatchedShape;
+    public event Action<Vector2[]> PointsForMatchedShape;
 }
