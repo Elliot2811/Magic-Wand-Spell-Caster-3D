@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using static SpellBook;
 
 public class MidGameEventInstructionController : MonoBehaviour
 {
@@ -43,6 +44,9 @@ public class MidGameEventInstructionController : MonoBehaviour
     //</summary>
     public IEnumerator ShowInstructions(string title, string message)
     {
+        GameplayUIState.BlockSpellFeedback = true;
+        Debug.Log("BLOCK ON: Instruction Panel");
+
         if (instructionPanel == null || bannerRect == null)
         {
             Debug.LogWarning("[MidGameEventInstructionController]: no instructionPanel assigned — skipping.");
@@ -70,6 +74,9 @@ public class MidGameEventInstructionController : MonoBehaviour
 
         instructionPanel.SetActive(false);
         bannerRect.anchoredPosition = onScreenPos; //reset for next time, since it's currently sitting off-screen bottom
+        
+        GameplayUIState.BlockSpellFeedback = false;
+        Debug.Log("BLOCK OFF: Instruction Panel");
     }
 
     private IEnumerator SlidePosition(Vector2 from, Vector2 to, float duration)

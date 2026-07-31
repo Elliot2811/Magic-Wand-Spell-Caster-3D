@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using static SpellBook;
 
 [RequireComponent(typeof(RectTransform))]
 public class MidGameEventBannerController : MonoBehaviour
@@ -44,6 +45,9 @@ public class MidGameEventBannerController : MonoBehaviour
     //</summary>
     public IEnumerator ShowBanner(string message, Action onComplete)
     {
+        GameplayUIState.BlockSpellFeedback = true;
+        Debug.Log("BLOCK ON: Title Panel");
+
         if (bannerPanel == null || bannerRect == null)
         {
             Debug.LogWarning("[MidGameEventBannerController]: no bannerPanel assigned — skipping banner.");
@@ -72,6 +76,9 @@ public class MidGameEventBannerController : MonoBehaviour
         bannerRect.anchoredPosition = onScreenPos; //reset for next time, since it's currently sitting off-screen bottom
 
         onComplete?.Invoke();
+
+        GameplayUIState.BlockSpellFeedback = false;
+        Debug.Log("BLOCK ON: Title Panel");
     }
 
     private IEnumerator SlidePosition(Vector2 from, Vector2 to, float duration)

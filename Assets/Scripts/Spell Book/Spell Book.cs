@@ -26,7 +26,9 @@ public class SpellBook : MonoBehaviour
     private CharacterEntity playerEntity;
 
     [SerializeField]
-    private int playerNumber = 0; // 0 = left, 1 = right must match CircleBonusEvent's player1Index/player2Index mapping
+    private int playerNumber = 0; // 0 = left, 1 = right (device index convention).
+                                  // Note: CircleBonusEvent.ConsumeBonus expects 1 = left, 2 = right,
+                                  // so callers must pass playerNumber + 1.
 
     private bool newData = true;
     private ShapeInfoSO shape;
@@ -85,6 +87,13 @@ public class SpellBook : MonoBehaviour
 
             Debug.Log($"Player {playerNumber + 1}: {feedback}");
 
+            if (GameplayUIState.BlockSpellFeedback)
+                return;
+
+            Debug.Log("Spell feedback called");
+            Debug.Log("Blocked = " + GameplayUIState.BlockSpellFeedback);
+            Debug.Log("Shape = " + (shape == null));
+
             SpellFeedbackUI.Instance.ShowFeedback(playerNumber, feedback);
         }
 
@@ -92,7 +101,7 @@ public class SpellBook : MonoBehaviour
         {
             float damageMultiplier = CompareShapes.GetDamageMultiplier(drawingAccuracy);
 
-            if (CircleBonusEvent.Instance != null && CircleBonusEvent.Instance.ConsumeBonus(playerNumber))
+            if (CircleBonusEvent.Instance != null && CircleBonusEvent.Instance.ConsumeBonus(playerNumber + 1))
             {
                 damageMultiplier *= CircleBonusEvent.Instance.bonusDamageMultiplier;
                 Debug.Log($"[SpellBook] player {playerNumber}: circle bonus applied (x{damageMultiplier}).");
@@ -292,5 +301,11 @@ public class SpellBook : MonoBehaviour
         castableShapes = ShapesCollectionSO.CreateInstance<ShapesCollectionSO>();
         castableShapes.shapes = arr;
         castableShapes.BuildShapesSet();
+    }
+
+    //so it wont show during mid-game events
+    public static class GameplayUIState
+    {
+        public static bool BlockSpellFeedback = false;
     }
 }

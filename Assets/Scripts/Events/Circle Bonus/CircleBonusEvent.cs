@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using static SpellBook;
 
 //<summary>
 //Mid-match "hit the circle" minigame. A target circle floats around in each
@@ -57,7 +58,7 @@ public class CircleBonusEvent : MonoBehaviour, IMidGameEvent
     public bool PausesMainTimer => false;
 
     public string EventTitle => "DOUBLE DAMAGE!";
-    public string EventInstructions => "DRAW INSIDE THE CIRCLE FOR X2 DAMAGE BONUS!";
+    public string EventInstructions => "DRAW THROUGH THE CIRCLE FOR X2 DAMAGE BONUS!";
 
     public event Action<int> OnEventCompleted;   //always invoked with 0
     public event Action<int> OnCircleHit;        //playerNumber, for FX/sound hooks
@@ -201,6 +202,8 @@ public class CircleBonusEvent : MonoBehaviour, IMidGameEvent
 
     public void StartEvent()
     {
+        GameplayUIState.BlockSpellFeedback = true;
+
         if (tracker == null) tracker = JoyConTracker.Instance;
 
         if (leftCircle == null || rightCircle == null)
@@ -267,6 +270,7 @@ public class CircleBonusEvent : MonoBehaviour, IMidGameEvent
 
     private void EndEvent()
     {
+        GameplayUIState.BlockSpellFeedback = false;
         IsActive = false;
         if (panel != null) panel.SetActive(false);
         pendingBonus[0] = false;//clear any bonus armed but never consumed before the event ended
@@ -330,9 +334,9 @@ public class CircleBonusEvent : MonoBehaviour, IMidGameEvent
             $"{inside}/{wand.RenderedCatmullPoints.Count}" +
             $"({insideFraction:P0}) inside");
 
-        Debug.Log($"Circle: {circlePos}");
-        Debug.Log($"First spell point: {wand.RenderedCatmullPoints[0]}");
-        Debug.Log($"Radius: {radius}");
+        //Debug.Log($"Circle: {circlePos}");
+        //Debug.Log($"First spell point: {wand.RenderedCatmullPoints[0]}");
+        //Debug.Log($"Radius: {radius}");
     }
 
     private void CheckHit(Wand wand, Transform circle, int playerNumber)
