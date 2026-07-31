@@ -14,7 +14,7 @@ public class GamePlayState : GameState
     public CharacterEntity rightCharacter { get; private set; }
 
     public bool timerRunning = false;
-    public float timer = 100;
+    public float timer = 90;
     public float displayPercentage = 0.5f;
 
     private SpellBook leftSpellBook;
@@ -262,7 +262,7 @@ public class GamePlayState : GameState
             Debug.LogWarning("GamePlayState: no CountdownController in scene — skipping countdown.");
 
         timerRunning = true;
-        timer = 100;
+        timer = GameConstants.totalTime;
         initialTimer = timer;
 
         stateManager.renderSpellBookSpell = true; //gameplay is live — safe for SpellBook to render/cast now

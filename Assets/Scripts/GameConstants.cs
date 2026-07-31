@@ -56,6 +56,7 @@ public class GameConstants : MonoBehaviour
 
     public const float globalSfxVolume = 0.08f;
     public const float globalMusicVolume = 0.08f;
+    public const float totalTime = 90f;
 
 
     public static class ProjectileSpawn
