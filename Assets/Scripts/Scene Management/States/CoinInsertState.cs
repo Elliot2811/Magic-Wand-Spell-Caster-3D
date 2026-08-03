@@ -161,6 +161,8 @@ public class CoinInsertState : GameState
     public override void ExitState()
     {
         base.ExitState();
+        GameStateManager.Instance.wandLeftInit = LeftCoin;
+        GameStateManager.Instance.wandRightInit = RightCoin;
     }
 
 

@@ -29,11 +29,18 @@ public class GameStateManager : MonoBehaviour
     [HideInInspector]
     public Wand wandRight;
 
+    [HideInInspector]
+    public bool wandLeftInit;
+    [HideInInspector]
+    public bool wandRightInit;
+
     public WandListener wandListenerPrefab;
     [HideInInspector]
     public WandListener wandListenerLeft;
     [HideInInspector]
     public WandListener wandListenerRight;
+    [HideInInspector]
+    public BotPVP botPVP;
 
     [HideInInspector]
     public bool leftWon = false;

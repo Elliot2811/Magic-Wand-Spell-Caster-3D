@@ -23,6 +23,9 @@ public class SpellBook : MonoBehaviour
     private WandListener wandListener;
 
     [SerializeField]
+    private BotPVP botPVP;
+
+    [SerializeField]
     private CharacterEntity playerEntity;
 
     [SerializeField]
@@ -57,7 +60,7 @@ public class SpellBook : MonoBehaviour
 
         Debug.Log($"[Spell Accuracy] " +
             $"Shape: {shape?.ShapeName} | " +
-            $"Accuracy: {drawingAccuracy:F3} ({drawingAccuracy * 100f:F1}%) | " +
+            $"Accuracy: {drawingAccuracy * 100f:F1}% | " +
             $"Damage Multiplier: {CompareShapes.GetDamageMultiplier(drawingAccuracy):F2}x | " +
             $"Feedback: {CompareShapes.GetFeedback(drawingAccuracy)}"
         );
@@ -85,14 +88,11 @@ public class SpellBook : MonoBehaviour
                 feedback = CompareShapes.GetFeedback(drawingAccuracy);
             }
 
-            Debug.Log($"Player {playerNumber + 1}: {feedback}");
-
             if (GameplayUIState.BlockSpellFeedback)
                 return;
 
-            Debug.Log("Spell feedback called");
-            Debug.Log("Blocked = " + GameplayUIState.BlockSpellFeedback);
-            Debug.Log("Shape = " + (shape == null));
+            //Debug.Log("Spell feedback called: Blocked = " + GameplayUIState.BlockSpellFeedback + ", Shape = " + (shape != null));
+            Debug.Log("Spell feedback called: Shape exist? = " + (shape != null) + ", Event block spell? = " + GameplayUIState.BlockSpellFeedback);
 
             SpellFeedbackUI.Instance.ShowFeedback(playerNumber, feedback);
         }
@@ -115,6 +115,8 @@ public class SpellBook : MonoBehaviour
     {
         if (wandListener != null)
             wandListener.MatchedShape -= playerDrawing;
+        if (botPVP != null)
+            botPVP.BotRandomShape -= playerDrawing;
     }
 
     private void Init()
@@ -122,11 +124,11 @@ public class SpellBook : MonoBehaviour
         Init(wandListener, playerEntity, spellLookupTable, drawableSpells, playerNumber);
     }
 
-    public void Init(WandListener wandListener, CharacterEntity playerEntity, SpellProjectileLookUpTable lookUpTable, ShapesCollectionSO allShapes, int playerNumber)
+    public void Init(BotPVP botPVP, CharacterEntity playerEntity, SpellProjectileLookUpTable lookUpTable, ShapesCollectionSO allShapes, int playerNumber)
     {
-        if (wandListener == null)
+        if (botPVP == null)
         {
-            Debug.LogWarning("[SpellBook]: No reference to wandListener.");
+            Debug.LogWarning("[SpellBook]: No reference to BotPVP");
             gameObject.SetActive(false);
             return;
         }
@@ -152,8 +154,72 @@ public class SpellBook : MonoBehaviour
             return;
         }
 
+        // Assigning values from Init function to this script's variables
+        this.botPVP = botPVP;
         this.playerNumber = playerNumber;
+        this.playerEntity = playerEntity;
+        this.spellLookupTable = lookUpTable;
+        this.drawableSpells = allShapes;
+
+        botPVP.BotRandomShape += playerDrawing;
+
+        allShapesInfo = drawableSpells.GetAllShapes();
+
+        bag = new List<ShapeInfoSO>();
+        RefillBag();
+        CreateCastableShapes(2);
+
+        gamePlayState = (GamePlayState)GameStateManager.Instance.CurrentState;
+
+        if (playerNumber == 0)
+        {
+            gamePlayState.leftSpellCollection = castableShapes;
+        }
+        else
+        {
+            gamePlayState.rightSpellCollection = castableShapes;
+        }
+        gamePlayState.redrawFlag = true;
+
+        botPVP.shapesCollection = castableShapes;
+
+        shapesAlreadyReplacing = new HashSet<ShapeInfoSO>();
+
+        initialized = true;
+    }
+    public void Init(WandListener wandListener, CharacterEntity playerEntity, SpellProjectileLookUpTable lookUpTable, ShapesCollectionSO allShapes, int playerNumber)
+    {
+        if (wandListener == null)
+        {
+            Debug.LogWarning("[SpellBook]: No reference to wandListener");
+            gameObject.SetActive(false);
+            return;
+        }
+
+        if (playerEntity == null)
+        {
+            Debug.LogWarning("[SpellBook]: No reference to player entity");
+            gameObject.SetActive(false);
+            return;
+        }
+
+        if (lookUpTable == null)
+        {
+            Debug.LogWarning("[SpellBook]: No spell look up table to compare shapes and find projectile");
+            gameObject.SetActive(false);
+            return;
+        }
+
+        if (allShapes == null)
+        {
+            Debug.LogWarning("[SpellBook]: No spell collection to compare shapes and find best shape");
+            gameObject.SetActive(false);
+            return;
+        }
+
+        // Assigning values from Init function to this script's variables
         this.wandListener = wandListener;
+        this.playerNumber = playerNumber;
         this.playerEntity = playerEntity;
         this.spellLookupTable = lookUpTable;
         this.drawableSpells = allShapes;
@@ -211,7 +277,7 @@ public class SpellBook : MonoBehaviour
             return;
 
         shapesAlreadyReplacing.Add(shapeInfo);
-        StartCoroutine(waitTimeReplaceSpell(shapeInfo, 3f));
+        StartCoroutine(waitTimeReplaceSpell(shapeInfo, GameConstants.spellBookRefreshTime));
     }
 
     private IEnumerator waitTimeReplaceSpell(ShapeInfoSO shapeInfo, float time)

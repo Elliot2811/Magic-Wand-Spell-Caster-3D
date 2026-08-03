@@ -30,7 +30,6 @@ public class CharacterEntity : MonoBehaviour
             Debug.LogError("Player Number/id not set");
             return;
         }
-        Debug.Log(playerNumber);
 
         if (spell == null || spell.prefab == null)
         {
@@ -92,7 +91,6 @@ public class CharacterEntity : MonoBehaviour
             Debug.LogError("Player Number/id not set");
             yield break;
         }
-        Debug.Log(playerNumber);
 
         spellEffectPrefab = null;
 

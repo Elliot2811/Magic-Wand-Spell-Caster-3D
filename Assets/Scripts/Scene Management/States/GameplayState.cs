@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -247,11 +248,31 @@ public class GamePlayState : GameState
         if (HowToPlayPanelController.Instance != null)
             yield return HowToPlayPanelController.Instance.ShowRecapThenHide();
 
-        leftSpellBook = new GameObject("Left Spell Book").AddComponent<SpellBook>();
-        leftSpellBook.Init(stateManager.wandListenerLeft, leftCharacter, GameConstants.Instance.lookUpTable, GameConstants.Instance.allShapes, 0);
+        if (stateManager.wandLeftInit)
+        {
+            leftSpellBook = new GameObject("Left Spell Book").AddComponent<SpellBook>();
+            leftSpellBook.Init(stateManager.wandListenerLeft, leftCharacter, GameConstants.Instance.lookUpTable, GameConstants.Instance.allShapes, 0);
+        }
+        else
+        {
+            BotPVP botPVP = leftCharacter.AddComponent<BotPVP>();
+            botPVP.Init(GameConstants.Instance.allShapes);
+            leftSpellBook = new GameObject("Left Spell Book").AddComponent<SpellBook>();
+            leftSpellBook.Init(botPVP, leftCharacter, GameConstants.Instance.lookUpTable, GameConstants.Instance.allShapes, 0);
+        }
 
-        rightSpellBook = new GameObject("Right Spell Book").AddComponent<SpellBook>();
-        rightSpellBook.Init(stateManager.wandListenerRight, rightCharacter, GameConstants.Instance.lookUpTable, GameConstants.Instance.allShapes, 1);
+        if (stateManager.wandRightInit)
+        {
+            rightSpellBook = new GameObject("Right Spell Book").AddComponent<SpellBook>();
+            rightSpellBook.Init(stateManager.wandListenerRight, rightCharacter, GameConstants.Instance.lookUpTable, GameConstants.Instance.allShapes, 1);
+        }
+        else
+        {
+            BotPVP botPVP = rightCharacter.AddComponent<BotPVP>();
+            botPVP.Init(GameConstants.Instance.allShapes);
+            rightSpellBook = new GameObject("Right Spell Book").AddComponent<SpellBook>();
+            rightSpellBook.Init(botPVP, rightCharacter, GameConstants.Instance.lookUpTable, GameConstants.Instance.allShapes, 1);
+        }
 
         DiscoverMidGameEvents();
 

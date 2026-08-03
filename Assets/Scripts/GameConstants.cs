@@ -57,6 +57,7 @@ public class GameConstants : MonoBehaviour
     public const float globalSfxVolume = 0.08f;
     public const float globalMusicVolume = 0.08f;
 
+    public const float spellBookRefreshTime = 0.1f;
 
     public static class ProjectileSpawn
     {
