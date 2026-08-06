@@ -29,6 +29,7 @@ public class SpellBook : MonoBehaviour
     private int playerNumber = 0; // 0 = left, 1 = right (device index convention).
                                   // Note: CircleBonusEvent.ConsumeBonus expects 1 = left, 2 = right,
                                   // so callers must pass playerNumber + 1.
+    private bool spellCanBeCast = true;
 
     private bool newData = true;
     private ShapeInfoSO shape;
@@ -94,7 +95,7 @@ public class SpellBook : MonoBehaviour
             }
         }
 
-        if (spell != null)
+        if (spellCanBeCast && spell != null)
         {
             float damageMultiplier = CompareShapes.GetDamageMultiplier(drawingAccuracy);
 
@@ -103,19 +104,7 @@ public class SpellBook : MonoBehaviour
                 damageMultiplier *= CircleBonusEvent.Instance.bonusDamageMultiplier;
                 Debug.Log($"[SpellBook] player {playerNumber}: circle bonus applied (x{damageMultiplier}).");
             }
-            playerEntity.CastSpell(spell, damageMultiplier, playerNumber);
-        }
 
-        if (spell != null)
-        {
-            float damageMultiplier = CompareShapes.GetDamageMultiplier(drawingAccuracy);
-
-            if (CircleBonusEvent.Instance != null && CircleBonusEvent.Instance.ConsumeBonus(playerNumber + 1))
-            {
-                damageMultiplier *= CircleBonusEvent.Instance.bonusDamageMultiplier;
-                Debug.Log($"[SpellBook] player {playerNumber}: circle bonus applied (x{damageMultiplier}).");
-            }
-            // Function to cast spell
             playerEntity.CastSpell(spell, damageMultiplier, playerNumber);
         }
     }
@@ -124,6 +113,11 @@ public class SpellBook : MonoBehaviour
     {
         if (wandListener != null)
             wandListener.MatchedShape -= playerDrawing;
+    }
+
+    public void SetDrawEnabled(bool enabledFlag)
+    {
+        spellCanBeCast = enabledFlag;
     }
 
     private void Init()

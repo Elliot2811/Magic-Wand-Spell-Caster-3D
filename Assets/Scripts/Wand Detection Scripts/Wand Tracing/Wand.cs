@@ -39,6 +39,7 @@ public class Wand : MonoBehaviour
 
     private WandInputActions inputActions;
 
+    public bool firstPointIgnored = false;
     public bool drawActive = false;
 
     //last screen-space cursor position actually used this frame, sourced from
@@ -333,7 +334,10 @@ public class Wand : MonoBehaviour
         zClipPlane = Camera.main.gameObject.transform.position.z + GameConstants.DistanceToCamera;
         while (drawActive)
         {
-            TryRecordCurrentPos(GetCurrentPos());
+            if (firstPointIgnored)
+                TryRecordCurrentPos(GetCurrentPos());
+            else
+                firstPointIgnored = true;
 
             yield return new WaitForSeconds(GameConstants.sampleSpeedSec);
         }
@@ -368,6 +372,7 @@ public class Wand : MonoBehaviour
         if (handle != -1 && handle != deviceIndex)
             return;
 
+        firstPointIgnored = false;
         drawActive = true;
         OnDrawStarted?.Invoke();
 

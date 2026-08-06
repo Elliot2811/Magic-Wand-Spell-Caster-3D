@@ -73,6 +73,8 @@ public class CircleBonusEvent : MonoBehaviour, IMidGameEvent
 
     private Wand[] playerWands = new Wand[2];
 
+    private GamePlayState currentState;
+
     public void RegisterWand(Wand wand)
     {
         if (wand == null) return;
@@ -175,6 +177,8 @@ public class CircleBonusEvent : MonoBehaviour, IMidGameEvent
     {
         if (autoStartForTesting)
             StartCoroutine(AutoStartWhenReady());
+
+        currentState = (GamePlayState)GameStateManager.Instance.CurrentState;
     }
 
     private IEnumerator AutoStartWhenReady()
@@ -211,7 +215,6 @@ public class CircleBonusEvent : MonoBehaviour, IMidGameEvent
             Debug.LogError("CircleDrawEvent: leftCircle/rightCircle not assigned in the Inspector.");
             return;
         }
-
         //(re)discover both players' Wands right as the event starts, instead
         //of relying purely on each Wand finding CircleBonusEvent.Instance during
         //its own Init(). Wands are spawned at runtime in another scene, so that
@@ -220,6 +223,9 @@ public class CircleBonusEvent : MonoBehaviour, IMidGameEvent
         //them here is a reliable fallback (and covers a Wand that registered
         //before this component's Instance existed, or never registered at all).
         DiscoverWands();
+
+        currentState.leftSpellBook?.SetDrawEnabled(true);
+        currentState.rightSpellBook?.SetDrawEnabled(true);
 
         elapsed = 0f;
         Array.Clear(touchedCircleThisDraw, 0, touchedCircleThisDraw.Length);
@@ -245,6 +251,9 @@ public class CircleBonusEvent : MonoBehaviour, IMidGameEvent
         Wand[] foundWands = FindObjectsOfType<Wand>();
         foreach (Wand wand in foundWands)
             RegisterWand(wand);
+
+        RegisterWand(GameStateManager.Instance.wandLeft);
+        RegisterWand(GameStateManager.Instance.wandRight);
 
         if (playerWands[0] == null)
             Debug.LogWarning("CircleBonusEvent: no Wand found with deviceIndex 0 (player1/left) when the event started.");

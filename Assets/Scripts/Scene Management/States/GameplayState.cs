@@ -17,8 +17,10 @@ public class GamePlayState : GameState
     public float timer = 90;
     public float displayPercentage = 0.5f;
 
-    private SpellBook leftSpellBook;
-    private SpellBook rightSpellBook;
+    [HideInInspector]
+    public SpellBook leftSpellBook { get; private set; }
+    [HideInInspector]
+    public SpellBook rightSpellBook { get; private set; }
 
     public bool redrawFlag = false;
     public ShapesCollectionSO leftSpellCollection;
@@ -129,7 +131,12 @@ public class GamePlayState : GameState
     private IEnumerator RunPreEventSequence()
     {
         if (MidGameEventBannerController.Instance != null)
+        {
+            leftSpellBook.SetDrawEnabled(false);
+            rightSpellBook.SetDrawEnabled(false);
+
             yield return MidGameEventBannerController.Instance.ShowBanner(activeMidGameEvent.EventTitle, () => { });
+        }
         else
             Debug.LogWarning("GamePlayState: no MidGameEventBannerController in scene — skipping banner.");
 

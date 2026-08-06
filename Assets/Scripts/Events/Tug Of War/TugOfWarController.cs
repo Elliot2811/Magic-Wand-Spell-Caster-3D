@@ -62,6 +62,8 @@ public class TugOfWarController : MonoBehaviour, IMidGameEvent
     private Vector2[] prevViewportPos = new Vector2[16];
     private float[] shakeIntensity = new float[16];
 
+    private GamePlayState currentState;
+
     private void Awake()
     {
         tracker = JoyConTracker.Instance;
@@ -76,6 +78,8 @@ public class TugOfWarController : MonoBehaviour, IMidGameEvent
 
         if (autoStartForTesting)
             StartCoroutine(AutoStartWhenReady());
+
+        currentState = (GamePlayState)GameStateManager.Instance.CurrentState;
     }
 
     private System.Collections.IEnumerator AutoStartWhenReady()
@@ -152,6 +156,9 @@ public class TugOfWarController : MonoBehaviour, IMidGameEvent
 
         if (panel != null)
             panel.SetActive(false);
+
+        currentState.leftSpellBook?.SetDrawEnabled(true);
+        currentState.rightSpellBook?.SetDrawEnabled(true);
     }
 
     private void Update()

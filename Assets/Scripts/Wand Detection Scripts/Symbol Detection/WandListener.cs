@@ -170,15 +170,19 @@ public class WandListener : MonoBehaviour
             $"Matched: {(result.shape != null ? result.shape.ShapeName : "No Match")}"
         );
 
+        bool renderersFound = AllRenderers().Any();
+
+        if (renderersFound)
+            wand.ClearDrawnLine();
+
+        if (result.shape == null)
+            return;
+
         MatchedShape?.Invoke(result.shape, result.accuracy);
         PointsForMatchedShape?.Invoke(points);
 
         if (AllRenderers().Any())
-        {
-            wand.ClearDrawnLine();
-            //DisplayBestShape(shapeInfo, points); //pass the raw points, not processedPoints
             DisplayBestShape(result.shape, points);
-        }
     }
 
     private void DisplayBestShape(ShapeInfoSO shapeInfo, Vector2[] originalDrawnPoints)
