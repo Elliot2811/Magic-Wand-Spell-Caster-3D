@@ -88,11 +88,12 @@ public class SpellBook : MonoBehaviour
 
             Debug.Log($"Player {playerNumber + 1}: {feedback}");
 
-            if (!GameplayUIState.BlockSpellFeedback)
+            if (GameplayUIState.BlockSpellFeedback)
             {
+                return;
+            }
                 Debug.Log("Spell feedback called");
                 SpellFeedbackUI.Instance.ShowFeedback(playerNumber, feedback);
-            }
         }
 
         if (spellCanBeCast && spell != null)
@@ -214,7 +215,7 @@ public class SpellBook : MonoBehaviour
             return;
 
         shapesAlreadyReplacing.Add(shapeInfo);
-        StartCoroutine(waitTimeReplaceSpell(shapeInfo, 3f));
+        StartCoroutine(waitTimeReplaceSpell(shapeInfo, 0.1f));
     }
 
     private IEnumerator waitTimeReplaceSpell(ShapeInfoSO shapeInfo, float time)
