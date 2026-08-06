@@ -156,9 +156,6 @@ public class TugOfWarController : MonoBehaviour, IMidGameEvent
 
         if (panel != null)
             panel.SetActive(false);
-
-        currentState.leftSpellBook?.SetDrawEnabled(true);
-        currentState.rightSpellBook?.SetDrawEnabled(true);
     }
 
     private void Update()
@@ -246,6 +243,9 @@ public class TugOfWarController : MonoBehaviour, IMidGameEvent
             panel.SetActive(false);
 
         int playerNumber = (deviceIndex == player1Index) ? 1 : 2;
+
+        currentState.leftSpellBook?.SetDrawEnabled(true);
+        currentState.rightSpellBook?.SetDrawEnabled(true);
 
         OnTugOfWarWon?.Invoke(playerNumber);
         OnEventCompleted?.Invoke(playerNumber);

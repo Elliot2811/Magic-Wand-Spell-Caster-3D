@@ -17,3 +17,5 @@ MonoBehaviour:
   variants:
   - {fileID: 11400000, guid: 54330a35a7dd499459124502fdd5a82e, type: 2}
   - {fileID: 11400000, guid: 02627d436c1a76645a78723b43fe0058, type: 2}
+  - {fileID: 11400000, guid: b0dd33bc8e7682047a6f0e287edad0d4, type: 2}
+  - {fileID: 11400000, guid: 1ff29c675403c3f498db98787fd9606c, type: 2}
