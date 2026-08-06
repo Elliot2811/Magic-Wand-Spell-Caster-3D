@@ -38,6 +38,7 @@ public class CoinInsertState : GameState
 
         Countdown = GameConstants.coinInsertionCountdownTime;
         coinInsertListener = new CoinInsertListener();
+        coinInsertListener.Reset();
     }
 
     public override void UpdateState()
