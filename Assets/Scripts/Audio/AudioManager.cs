@@ -39,7 +39,7 @@ public class AudioManager : MonoBehaviour
         if (musicSource.clip != clip)
         {
             musicSource.clip = clip;
-            musicSource.volume = musicClipVolume * GameConstants.globalMusicVolume;
+            musicSource.volume = musicClipVolume * GameConstants.GlobalMusicVolume;
             musicSource.pitch = randomizePitch ? 1f + Random.Range(-pitchVariance, pitchVariance) : pitch;
             musicSource.Play();
         }
@@ -55,6 +55,6 @@ public class AudioManager : MonoBehaviour
         if (clip == null) return;
 
         sfxSource.pitch = randomizePitch ? 1f + Random.Range(-pitchVariance, pitchVariance) : pitch;
-        sfxSource.PlayOneShot(clip, clipVolume * GameConstants.globalSfxVolume);
+        sfxSource.PlayOneShot(clip, clipVolume * GameConstants.GlobalSfxVolume);
     }
 }

@@ -239,7 +239,7 @@ public static class PointsManipulation
         for (int i = 2; i < points.Length;i++)
         {
             catmullPoints.Add(points[i - 1]);
-            if (Angle(points[i - 2], points[i - 1], points[i]) > GameConstants.sharpAngleThreshold)
+            if (Angle(points[i - 2], points[i - 1], points[i]) > GameConstants.SharpAngleThreshold)
                 catmullPoints.Add(points[i - 1]);
         }
 
@@ -465,82 +465,82 @@ public static class PointsManipulation
         return results;
     }
 
-    #region Scale To Screen Functions
-    /// <summary>
-    /// Rescales points to certain area of the viewPort.
-    /// </summary>
-    public static Vector3[] ScaleToViewPort(Vector2[] points, Camera mainCamera, float renderDistance, Rect viewportRect, float displayPercent)
-    {
-        if (points == null || points.Length <= 1)
-            return null;
+    //#region Scale To Screen Functions
+    ///// <summary>
+    ///// Rescales points to certain area of the viewPort.
+    ///// </summary>
+    //public static Vector3[] ScaleToViewPort(Vector2[] points, Camera mainCamera, float renderDistance, Rect viewportRect, float displayPercent)
+    //{
+    //    if (points == null || points.Length <= 1)
+    //        return null;
 
-        Vector3 bottomLeft = mainCamera.ViewportToWorldPoint(new Vector3(
-            viewportRect.xMin,
-            viewportRect.yMin,
-            renderDistance
-            ));
-        Vector3 topRight = mainCamera.ViewportToWorldPoint(new Vector3(
-            viewportRect.xMax,
-            viewportRect.yMax,
-            renderDistance
-            ));
+    //    Vector3 bottomLeft = mainCamera.ViewportToWorldPoint(new Vector3(
+    //        viewportRect.xMin,
+    //        viewportRect.yMin,
+    //        renderDistance
+    //        ));
+    //    Vector3 topRight = mainCamera.ViewportToWorldPoint(new Vector3(
+    //        viewportRect.xMax,
+    //        viewportRect.yMax,
+    //        renderDistance
+    //        ));
 
-        float rectWorldWidth = topRight.x - bottomLeft.x;
-        float rectWorldHeight = topRight.y - bottomLeft.y;
+    //    float rectWorldWidth = topRight.x - bottomLeft.x;
+    //    float rectWorldHeight = topRight.y - bottomLeft.y;
 
-        float displayWidth = rectWorldWidth * displayPercent;
-        float displayHeight = rectWorldHeight * displayPercent;
+    //    float displayWidth = rectWorldWidth * displayPercent;
+    //    float displayHeight = rectWorldHeight * displayPercent;
 
-        Vector2 rectWorldCentre = new Vector2(
-            (bottomLeft.x + topRight.x) * 0.5f,
-            (bottomLeft.y + topRight.y) * 0.5f
-            );
+    //    Vector2 rectWorldCentre = new Vector2(
+    //        (bottomLeft.x + topRight.x) * 0.5f,
+    //        (bottomLeft.y + topRight.y) * 0.5f
+    //        );
 
-        float scale = Mathf.Min(displayWidth, displayHeight);
+    //    float scale = Mathf.Min(displayWidth, displayHeight);
 
-        Vector2[] centred = CenterPoints(points);
+    //    Vector2[] centred = CenterPoints(points);
 
-        Vector3[] results = new Vector3[centred.Length];
-        for (int i = 0; i < points.Length; i++)
-        {
-            results[i] = new Vector3(
-                (centred[i].x - 0.5f) * scale + rectWorldCentre.x,
-                (centred[i].y - 0.5f) * scale + rectWorldCentre.y,
-                bottomLeft.z
-                );
-        }
+    //    Vector3[] results = new Vector3[centred.Length];
+    //    for (int i = 0; i < points.Length; i++)
+    //    {
+    //        results[i] = new Vector3(
+    //            (centred[i].x - 0.5f) * scale + rectWorldCentre.x,
+    //            (centred[i].y - 0.5f) * scale + rectWorldCentre.y,
+    //            bottomLeft.z
+    //            );
+    //    }
 
-        return results;
-    }
-    #endregion
+    //    return results;
+    //}
+    //#endregion
 
-    /// <summary>
-    /// Prints points to the console in rows of 5 
-    /// </summary>
-    public static void PrintPoints(Vector2[] points)
-    {
-        string result = "Points:";
+    ///// <summary>
+    ///// Prints points to the console in rows of 5 
+    ///// </summary>
+    //public static void PrintPoints(Vector2[] points)
+    //{
+    //    string result = "Points:";
 
-        if (points == null)
-        {
-            Debug.Log(result);
-            return;
-        }
+    //    if (points == null)
+    //    {
+    //        Debug.Log(result);
+    //        return;
+    //    }
 
-        for (int i = 0;  i < points.Length; i++)
-        {
-            if (i % 5 == 0)
-            {
-                result += "\n";
-            }
+    //    for (int i = 0;  i < points.Length; i++)
+    //    {
+    //        if (i % 5 == 0)
+    //        {
+    //            result += "\n";
+    //        }
 
-            Vector2 point = points[i];
+    //        Vector2 point = points[i];
 
-            result += $"({point.x}, {point.y})".PadRight(10);
-        }
+    //        result += $"({point.x}, {point.y})".PadRight(10);
+    //    }
 
-        Debug.Log(result);
-    }
+    //    Debug.Log(result);
+    //}
     #endregion
 
     #region Scale displayed drawn spell

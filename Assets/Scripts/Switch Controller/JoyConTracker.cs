@@ -232,7 +232,7 @@ public class JoyConTracker : MonoBehaviour
             JSL.JslStartContinuousCalibration(handles[i]);
         }
 
-        yield return new WaitForSeconds(GameConstants.controllerCallibrationTime);
+        yield return new WaitForSeconds(GameConstants.ControllerCallibrationTime);
 
         for (int i = 0; i < count; i++)
         {

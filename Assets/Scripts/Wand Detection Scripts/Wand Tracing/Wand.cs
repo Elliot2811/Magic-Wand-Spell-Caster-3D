@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 public class Wand : MonoBehaviour
 {
     [SerializeField]
-    private bool instatiated = true;
+    private bool instantiated = true;
     private bool initialized = false;
 
     public LineRenderer lineRenderer;
@@ -42,20 +42,17 @@ public class Wand : MonoBehaviour
     public bool firstPointIgnored = false;
     public bool drawActive = false;
 
-    //last screen-space cursor position actually used this frame, sourced from
-    //whichever input path is live (controller gyro or mouse). Other systems (e.g.
-    //CircleBonusEvent) should read this instead of calling ConvertToViewportPos
-    //themselves, so they always match what this Wand is really drawing with.
     public Vector2 CurrentScreenPos { get; private set; }
-
-    public IReadOnlyList<Vector2> CatmullPoints => catmullPoints;
 
     private void Start()
     {
-        if (!instatiated)
+        if (!instantiated)
         {
             Init();
+            return;
         }
+
+        initialized = true;
     }
 
     private void Update()
@@ -76,7 +73,6 @@ public class Wand : MonoBehaviour
         }
 
         transform.position = GetCurrentPos();
-        //Debug.Log("Wand position: " + transform.position);
     }
 
     private void Init()
@@ -239,7 +235,7 @@ public class Wand : MonoBehaviour
         if (n < 2) return;
 
         catmullPoints.Add(points[n - 1]);
-        if (PointsManipulation.Angle(points[n - 2], points[n - 1], points[n]) > GameConstants.sharpAngleThreshold)
+        if (PointsManipulation.Angle(points[n - 2], points[n - 1], points[n]) > GameConstants.SharpAngleThreshold)
             catmullPoints.Add(points[n - 1]);
 
         if (catmullPoints.Count < 4) return;
@@ -339,7 +335,7 @@ public class Wand : MonoBehaviour
             else
                 firstPointIgnored = true;
 
-            yield return new WaitForSeconds(GameConstants.sampleSpeedSec);
+            yield return new WaitForSeconds(GameConstants.SampleSpeedSec);
         }
     }
     #endregion

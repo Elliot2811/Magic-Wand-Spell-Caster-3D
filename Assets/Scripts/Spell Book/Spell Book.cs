@@ -112,7 +112,7 @@ public class SpellBook : MonoBehaviour
     private void OnDisable()
     {
         if (wandListener != null)
-            wandListener.MatchedShape -= playerDrawing;
+            wandListener.MatchedShape -= PlayerDrawing;
     }
 
     public void SetDrawEnabled(bool enabledFlag)
@@ -161,7 +161,7 @@ public class SpellBook : MonoBehaviour
         this.spellLookupTable = lookUpTable;
         this.drawableSpells = allShapes;
 
-        wandListener.MatchedShape += playerDrawing;
+        wandListener.MatchedShape += PlayerDrawing;
 
         allShapesInfo = drawableSpells.GetAllShapes();
 
@@ -188,7 +188,7 @@ public class SpellBook : MonoBehaviour
         initialized = true;
     }
 
-    private void playerDrawing(ShapeInfoSO shape, float accuracy)
+    private void PlayerDrawing(ShapeInfoSO shape, float accuracy)
     {
         newData = true;
         this.shape = shape;
@@ -214,10 +214,10 @@ public class SpellBook : MonoBehaviour
             return;
 
         shapesAlreadyReplacing.Add(shapeInfo);
-        StartCoroutine(waitTimeReplaceSpell(shapeInfo, 0.1f));
+        StartCoroutine(WaitTimeReplaceSpell(shapeInfo, 0.1f));
     }
 
-    private IEnumerator waitTimeReplaceSpell(ShapeInfoSO shapeInfo, float time)
+    private IEnumerator WaitTimeReplaceSpell(ShapeInfoSO shapeInfo, float time)
     {
         yield return new WaitForSeconds(time);
 

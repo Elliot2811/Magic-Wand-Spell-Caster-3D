@@ -52,7 +52,6 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// TODO: reset game. 
 public class VictoryState : GameState
 {
     protected override AudioPair Music => stateManager?.audioLibrary?.victoryMusic;

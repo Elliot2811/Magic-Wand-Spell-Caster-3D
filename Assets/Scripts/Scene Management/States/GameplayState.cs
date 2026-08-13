@@ -8,8 +8,6 @@ using UnityEngine.SceneManagement;
 public class GamePlayState : GameState
 {
     private MapData mapData;
-    private CharacterEntity characterPrefab;
-
     public CharacterEntity leftCharacter { get; private set; }
     public CharacterEntity rightCharacter { get; private set; }
 
@@ -38,7 +36,6 @@ public class GamePlayState : GameState
     private IMidGameEvent activeMidGameEvent;
     private bool midGameEventTriggered = false;
     private bool activeEventPausedTimer;
-    private float initialTimer;
 
     public override void EnterState(GameStateManager gameManager)
     {
@@ -65,7 +62,7 @@ public class GamePlayState : GameState
         {
             timer -= Time.deltaTime;
 
-            if (!midGameEventTriggered && timer <= initialTimer * 0.5f)
+            if (!midGameEventTriggered && timer <= GameConstants.TotalGameTime * 0.5f)
             {
                 TriggerMidGameEvent();
             }
@@ -74,7 +71,7 @@ public class GamePlayState : GameState
         if (timer <= 0 || displayPercentage <= 0 || displayPercentage >= 1)
         {
             Debug.Log($"Timer: {timer}\nDisplay Percentage: {displayPercentage}");
-            onWin(displayPercentage);
+            OnWin(displayPercentage);
         }
     }
 
@@ -183,7 +180,7 @@ public class GamePlayState : GameState
         // winningPlayer == 0 (draw/timeout): no shift
     }
 
-    public void onWin(float sliderPercent)
+    public void OnWin(float sliderPercent)
     {
         Debug.Log($"On win called, sliderPercent: {sliderPercent}");
 
@@ -269,8 +266,7 @@ public class GamePlayState : GameState
             Debug.LogWarning("GamePlayState: no CountdownController in scene — skipping countdown.");
 
         timerRunning = true;
-        timer = GameConstants.totalTime;
-        initialTimer = timer;
+        timer = GameConstants.TotalGameTime;
 
         stateManager.renderSpellBookSpell = true; //gameplay is live — safe for SpellBook to render/cast now
     }

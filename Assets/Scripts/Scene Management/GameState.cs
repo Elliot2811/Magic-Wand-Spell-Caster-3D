@@ -19,10 +19,10 @@ public abstract class GameState
     public virtual void UpdateState() { }
     public virtual void ExitState()
     {
-        clearWand();
+        ClearWand();
     }
 
-    public void clearWand()
+    public void ClearWand()
     {
         if (stateManager.wandLeft != null)
             if (stateManager.wandLeft.lineRenderer != null)

@@ -36,7 +36,7 @@ public class CoinInsertState : GameState
         if (SceneManager.GetActiveScene().name != "CoinInsert")
             SceneManager.LoadScene("CoinInsert");
 
-        Countdown = GameConstants.coinInsertionCountdownTime;
+        Countdown = GameConstants.CoinInsertionCountdownTime;
         coinInsertListener = new CoinInsertListener();
         coinInsertListener.Reset();
     }
@@ -50,7 +50,7 @@ public class CoinInsertState : GameState
             LeftCoin = true;
             stateManager.gameScenario += 0b_1;
 
-            Countdown = GameConstants.coinInsertionCountdownTime;
+            Countdown = GameConstants.CoinInsertionCountdownTime;
             DisplayCountdown = true;
             transitionTimer = transitionTime;
             DisplayTransitionTimer = false;
@@ -74,7 +74,7 @@ public class CoinInsertState : GameState
             RightCoin = true;
             stateManager.gameScenario += 0b_10;
             
-            Countdown = GameConstants.coinInsertionCountdownTime;
+            Countdown = GameConstants.CoinInsertionCountdownTime;
             DisplayCountdown = true;
             transitionTime = transitionTimer;
             DisplayTransitionTimer = false;
@@ -117,7 +117,7 @@ public class CoinInsertState : GameState
                 LeftCoin = false;
                 RightCoin = false;
                 coinInsertListener.Reset();
-                Countdown = GameConstants.coinInsertionCountdownTime;
+                Countdown = GameConstants.CoinInsertionCountdownTime;
                 stateManager.ResetGameAndWand();
                 DisplayCountdown = false;
                 DisplayTransitionTimer = false;
@@ -143,7 +143,7 @@ public class CoinInsertState : GameState
                 LeftCoin = false;
                 RightCoin = false;
                 coinInsertListener.Reset();
-                Countdown = GameConstants.coinInsertionCountdownTime;
+                Countdown = GameConstants.CoinInsertionCountdownTime;
                 stateManager.ResetGameAndWand();
                 DisplayCountdown = false;
                 DisplayTransitionTimer = false;

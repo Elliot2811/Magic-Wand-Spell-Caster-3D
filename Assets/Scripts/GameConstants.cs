@@ -3,26 +3,22 @@ using UnityEngine;
 public class GameConstants : MonoBehaviour
 {
     #region Shape Matching settings
-    public const float sampleSpeedSec = 0.01f;
-    public const int PointCount = 128;
+    public const float SampleSpeedSec = 0.01f; // Time for controller to sample next point of drawing.
+
+    public const int PointCount = 128; // Drawing is converted to a fixed number of points for shape matching.
 
     // Weightage should add up to 1.
-    public const float DollarWeightage = 0.75f; // initial: 0.75
-    public const float AspectWeightage = 0.15f; // initial: 0.15
-    public const float LineWeightage = 0.10f; // initial: 0.10
+    public const float DollarWeightage = 0.75f; // Weightage for dollar recognizer method
+    public const float AspectWeightage = 0.15f; // Weightage for closeness of aspect ratio
+    public const float LineWeightage = 0.10f; // Weightage for closeness of line length of drawings normalized between 0 to 1
 
-    public const float MinAccuracy = 0.70f;
-    public const float MinAccDiff = 0.10f;
+    public const float MinAccuracy = 0.70f; // Minimum accuracy to match a shape
+    public const float MinAccDiff = 0.10f; // Minimum accuracy difference between best and second best shape
     #endregion
 
     #region Display settings
-    [Range(0f, 0.5f)]
-    public const float DrawingAreaPercentage = 0.90f;
-
     public const bool DisplayBestShape = true;
     public const float LineWidth = 0.1f;
-    public const float DisplayShapePercentage = 0.75f;
-    public static readonly Vector2 DisplayShapeOffset = Vector2.zero;
 
     public static readonly Color LeftDrawingColor = Color.red;
     public static readonly Color RightDrawingColor = Color.blue;
@@ -34,15 +30,11 @@ public class GameConstants : MonoBehaviour
     public LineRenderer shapeLineRendererPrefab;
 
     public const int CatmullResolution = 10;
-    public const float sharpAngleThreshold = 45f;
+    public const float SharpAngleThreshold = 45f;
     #endregion
 
     #region Wand 3D model settings
     public const float DistanceToCamera = 10f;
-    public static Vector3 QuatRotation
-    {
-        get { return new Vector3(0, 0, 15); }
-    }
 
     public const bool CursorVisible = false;
 
@@ -52,11 +44,11 @@ public class GameConstants : MonoBehaviour
 
     #region Game Play settings
 
-    public const float coinInsertionCountdownTime = 100f;
+    public const float CoinInsertionCountdownTime = 100f;
 
-    public const float globalSfxVolume = 0.08f;
-    public const float globalMusicVolume = 0.08f;
-    public const float totalTime = 90f;
+    public const float GlobalSfxVolume = 0.08f;
+    public const float GlobalMusicVolume = 0.08f;
+    public const float TotalGameTime = 90f;
 
 
     public static class ProjectileSpawn
@@ -72,19 +64,9 @@ public class GameConstants : MonoBehaviour
     public static readonly Rect DrawingRectRight = new Rect(0.525f, 0.05f, 0.425f, 0.9f);
     public static readonly Rect DisplayRectLeft = new Rect(0.025f, 0.05f, 0.1f, 0.1f);
     public static readonly Rect DisplayRectRight = new Rect(0.875f, 0.05f, 0.1f, 0.1f);
-
-    #region Lake World
-    public static readonly Vector3 LakeWorldLeftPos = new Vector3(-16F, 5, 8);
-    public static readonly Vector3 LakeWorldLeftRot = new Vector3(0, 90, 0);
-    public static readonly Vector3 LakeWorldLeftScale = new Vector3(5f, 5f, 5f);
-    public static readonly Vector3 LakeWorldRightPos = new Vector3(16F, 5, 8);
-    public static readonly Vector3 LakeWorldRightRot = new Vector3(0, -90, 0);
-    public static readonly Vector3 LakeWorldRightScale = new Vector3(5f, 5f, 5f);
     #endregion
 
-    #endregion
-
-    public const float controllerCallibrationTime = 2f;
+    public const float ControllerCallibrationTime = 2f;
 
     [Tooltip("Seconds for the matched spell shape to fully draw out.")]
     [SerializeField] private float shapeDrawDuration = 0.8f;
