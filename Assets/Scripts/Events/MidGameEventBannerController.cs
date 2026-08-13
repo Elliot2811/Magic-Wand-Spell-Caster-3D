@@ -78,7 +78,7 @@ public class MidGameEventBannerController : MonoBehaviour
         onComplete?.Invoke();
 
         GameplayUIState.BlockSpellFeedback = false;
-        Debug.Log("BLOCK ON: Title Panel");
+        Debug.Log("BLOCK OFF: Title Panel");
     }
 
     private IEnumerator SlidePosition(Vector2 from, Vector2 to, float duration)
