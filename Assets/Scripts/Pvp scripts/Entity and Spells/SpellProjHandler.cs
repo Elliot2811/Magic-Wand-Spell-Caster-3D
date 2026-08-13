@@ -66,7 +66,6 @@ public class SpellProjHandler : MonoBehaviour
             float damage = spell.spellDamage * damageMultiplier;
             Debug.Log($"[SpellProjHandler] '{spell.name}' hit {other.name} for {damage} (base {spell.spellDamage} x{damageMultiplier})");
             character.TakeDamage(damage);
-            CombatFeedback.Instance?.PlayPlayerHit(other.transform.position, damage, spell);
             Destroy(gameObject);
             character.shieldGameObj = null;
             return;
