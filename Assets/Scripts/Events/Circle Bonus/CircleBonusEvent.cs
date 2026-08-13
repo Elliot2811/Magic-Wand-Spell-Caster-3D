@@ -58,7 +58,7 @@ public class CircleBonusEvent : MonoBehaviour, IMidGameEvent
     public bool PausesMainTimer => false;
 
     public string EventTitle => "DOUBLE DAMAGE!";
-    public string EventInstructions => "DRAW THROUGH THE CIRCLE FOR X2 DAMAGE BONUS!";
+    public string EventInstructions => "DRAW IN THE CIRCLE FOR X2 DAMAGE BONUS!";
 
     public event Action<int> OnEventCompleted;   //always invoked with 0
     public event Action<int> OnCircleHit;        //playerNumber, for FX/sound hooks
