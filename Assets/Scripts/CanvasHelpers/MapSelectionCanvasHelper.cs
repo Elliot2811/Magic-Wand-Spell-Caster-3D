@@ -34,7 +34,7 @@ public class MapSelectionCanvasHelper : MonoBehaviour
 
         if (currentState is not MapSelectionState)
         {
-            Debug.LogError("[CoinInsertCanvas]: Incorrect current state. Current state is not MainMenuState");
+            Debug.LogError("[MapSelectionCanvasHelper]: Incorrect current state. Current state is not MapSelectionState");
             return;
         }
 
