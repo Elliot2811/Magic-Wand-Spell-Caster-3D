@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class VictoryCanvas : MonoBehaviour
+public class VictoryCanvasHelper : MonoBehaviour
 {
     [SerializeField]
     private GameObject player1WinPanel;
