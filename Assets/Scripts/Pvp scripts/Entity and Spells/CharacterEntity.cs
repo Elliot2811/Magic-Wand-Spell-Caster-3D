@@ -82,7 +82,7 @@ public class CharacterEntity : MonoBehaviour
         {
             spellCoroutine = StartCoroutine(FireProjAfterDelay(spell, spell.spellDelay, damageMultiplier, playerNumber));
         }
-        AudioManager.Instance?.PlaySFX(spell.castSFX, spell.castVolume, spell.randomizePitch, spell.pitchVariance);
+        AudioManager.Instance?.PlaySFX(spell.castSFX, spell.castVolume, randomizePitch: spell.randomizePitch, pitchVariance: spell.pitchVariance);
     }
 
     private IEnumerator FireProjAfterDelay(ScriptableObjectSpell spell, float delay, float damageMultiplier = 1f, int playerNumber = -1)

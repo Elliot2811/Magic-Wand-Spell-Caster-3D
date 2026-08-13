@@ -12,7 +12,7 @@ public class MainMenuController : MonoBehaviour
         //Play MainMenuMusic
         if (AudioManager.Instance != null)
         {
-            AudioManager.Instance.PlayMusic(mainMenuMusic.clip, mainMenuMusic.volume, mainMenuMusic.randomizePitch, mainMenuMusic.pitchVariance);
+            AudioManager.Instance.PlayMusic(mainMenuMusic.clip, mainMenuMusic.volume, randomizePitch: mainMenuMusic.randomizePitch, pitchVariance: mainMenuMusic.pitchVariance);
         }
     }
 }

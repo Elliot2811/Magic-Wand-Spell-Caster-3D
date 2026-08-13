@@ -49,7 +49,7 @@ public class GamePlayState : GameState
         leftCharacter = GameConstants.Instance.player1Prefab;
         rightCharacter = GameConstants.Instance.player2Prefab;
 
-        AudioManager.Instance.PlayMusic(mapData.mapMusic.clip, mapData.mapMusic.volume, mapData.mapMusic.randomizePitch);
+        AudioManager.Instance.PlayMusic(mapData.mapMusic.clip, mapData.mapMusic.volume, randomizePitch: mapData.mapMusic.randomizePitch);
 
         activeMidGameEvent = null;
         midGameEventTriggered = false;

@@ -12,7 +12,7 @@ public abstract class GameState
         if (Music != null)
         {
             Debug.Log($"AudioManager.Instance = {AudioManager.Instance}");
-            AudioManager.Instance.PlayMusic(Music.clip, Music.volume, Music.randomizePitch, Music.pitchVariance);
+            AudioManager.Instance.PlayMusic(Music.clip, Music.volume, randomizePitch: Music.randomizePitch, pitchVariance: Music.pitchVariance);
         }
     }
 
