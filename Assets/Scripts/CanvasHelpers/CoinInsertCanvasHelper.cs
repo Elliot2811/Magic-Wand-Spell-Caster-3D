@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-public class CoinInsertUI : MonoBehaviour
+public class CoinInsertCanvasHelper : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI countdownText;
 
