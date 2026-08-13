@@ -25,6 +25,7 @@ public class CombatFeedback : MonoBehaviour
     [SerializeField] private float playerHitSFXVolume = 1f;
     [SerializeField] private float playerHitShakeIntensity = 0.15f;
     [SerializeField] private float playerHitShakeDuration = 0.12f;
+    [SerializeField] private Color playerHitTextColor = Color.red;
 
     private Vector3 cameraOriginalLocalPos;
     private Coroutine shakeCoroutine;
@@ -60,6 +61,18 @@ public class CombatFeedback : MonoBehaviour
         AudioManager.Instance?.PlaySFX(sfx, vol, 1f);
         Shake(intensity, duration);
         SpawnFloatingText(worldPosition, shieldBreakText, shieldBreakTextColor);
+    }
+
+    public void PlayPlayerHit(Vector3 worldPosition, float damage, ScriptableObjectSpell spell = null)
+    {
+        AudioClip sfx = spell != null && spell.hitSFX != null ? spell.hitSFX : playerHitSFX;
+        float vol = spell != null && spell.hitSFX != null ? spell.hitVolume : playerHitSFXVolume;
+        float intensity = spell != null && spell.hitShakeIntensity >= 0f ? spell.hitShakeIntensity : playerHitShakeIntensity;
+        float duration = spell != null && spell.hitShakeDuration >= 0f ? spell.hitShakeDuration : playerHitShakeDuration;
+
+        AudioManager.Instance?.PlaySFX(sfx, vol, 1f);
+        Shake(intensity, duration);
+        SpawnFloatingText(worldPosition, Mathf.RoundToInt(damage).ToString(), playerHitTextColor);
     }
 
     private void Shake(float intensity, float duration)
