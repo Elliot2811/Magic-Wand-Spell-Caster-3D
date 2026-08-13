@@ -54,16 +54,16 @@ public class DisplaySpellDrawing : MonoBehaviour
         uiLineRenderer.SetPoints(shapeDataLocalPos);
     }
 
-    public void Redraw()
-    {
-        if (shapeInfoSO = null)
-        {
-            Debug.LogError("[DisplaySpellDrawing]: No ShapeInfoSO scriptable object assigned.");
-            return;
-        }
+    //public void Redraw()
+    //{
+    //    if (shapeInfoSO = null)
+    //    {
+    //        Debug.LogError("[DisplaySpellDrawing]: No ShapeInfoSO scriptable object assigned.");
+    //        return;
+    //    }
 
-        DrawShape();
-    }
+    //    DrawShape();
+    //}
 
     public void Redraw(ShapeInfoSO newShape)
     {

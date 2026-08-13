@@ -40,14 +40,14 @@ public class SpellProjectileLookUpTable : ScriptableObject, IEnumerable<SpellPro
         lookupDictionary.Add(shape, spell);
     }
 
-    public ShapeInfoSO[] GetShapes()
-    {
-        if (lookupDictionary == null)
-            BuildDictionary();
-        ShapeInfoSO[] shapes = new ShapeInfoSO[lookupDictionary.Count];
-        lookupDictionary.Keys.CopyTo(shapes, 0);
-        return shapes;
-    }
+    //public ShapeInfoSO[] GetShapes()
+    //{
+    //    if (lookupDictionary == null)
+    //        BuildDictionary();
+    //    ShapeInfoSO[] shapes = new ShapeInfoSO[lookupDictionary.Count];
+    //    lookupDictionary.Keys.CopyTo(shapes, 0);
+    //    return shapes;
+    //}
 
     public bool TryGetSpell(ShapeInfoSO shape, out ScriptableObjectSpell spell)
     {
