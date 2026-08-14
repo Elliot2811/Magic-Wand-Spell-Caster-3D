@@ -26,7 +26,7 @@ public class CoinInsertCanvasHelper : MonoBehaviour
     {
         currentState = GameStateManager.Instance.CurrentState;
 
-        if (currentState is not MapSelectionState)
+        if (currentState is not CoinInsertState)
         {
             Debug.LogError("[CoinInsertCanvasHelper]: Incorrect current state. Current state is not CoinInsertState");
             return;
